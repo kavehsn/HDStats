@@ -1,0 +1,198 @@
+\documentclass[10pt,handout,english]{beamer}
+\usetheme{Warsaw}
+\usepackage{graphicx}
+\usepackage{placeins}
+\usepackage{tabu}
+\usepackage{bbm}
+\usepackage{booktabs}
+\usepackage[round]{natbib}
+\usepackage{bm}
+\usepackage{ragged2e}
+\usepackage{hyperref}
+\usepackage{amsmath}
+\usepackage{xcolor}
+\usepackage[super]{nth}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=blue,      
+    urlcolor=blue,
+    citecolor=black,
+}
+
+\apptocmd{\frame}{}{\justifying}{} % Allow optional arguments after frame.
+
+\setbeamertemplate{frametitle continuation}{}
+
+\newcommand\setItemnumber[1]{\setcounter{enumi}{\numexpr#1-1\relax}}
+
+\newcommand{\ts}{\textsuperscript}
+\newcommand{\E}{\mathbb{E}}
+
+\title[]{Basic tail and concentration bounds}
+\author[Kaveh S. Nobari]{Kaveh S. Nobari}
+\institute[]{Lectures in High-Dimensional Statistics}
+\date[27/10/2020]
+{Department of Mathematics and Statistics\\ Lancaster University}
+	
+
+\begin{document}
+\begin{frame}
+\titlepage
+\end{frame}
+
+
+\begin{frame}{Contents}
+\tableofcontents
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Motivation}
+It is often of interest to obtain bounds on the tails of a random variable, or two-sided inequalities, which guarantee that the random variable is close to its mean or median. These slides follow the structure of chapter 2 of \citet{wainwright2019high} to shed light on the elementary techniques for obtaining \textcolor{red}{deviation} and \textcolor{red}{concentration} inequalities.
+{\vskip 0.5em}
+One way of controlling a tail probability $P[X\geq t]$ is by controlling the moments of the random variable $X$, where by controlling higher-order moments of the variable $X$, we can obtain sharper bounds on tail probabilities. This motivates the "Classical bounds" section of the notes. 
+{\vskip0.5em}
+We then extend the derivation of bounds to more general functions of the random variables in the "Martingale-based methods" section using \textcolor{red}{martingale decompositions}, as opposed to limiting the techniques to deriving bounds on \textcolor{red}{the sum of independent} random variables.  
+{\vskip  0.5em}
+Finally, the seminar is concluded with a classical result on the concentration properties of Lipschitz functions of Gaussian variables. 
+\end{frame}
+
+\section{Classical bounds}
+\subsection{From Markov to Chernoff}
+\frame{\tableofcontents[currentsection , currentsubsection]}
+
+%------------------------------------------------
+\begin{frame}[allowframebreaks]
+The most elementary tail bound is \textcolor{red}{Markov's inequality}:
+\begin{block}{Markov's inequality}
+Given a non-negative random variable $X$ with finite mean - i.e. $\E[X]<\infty$, we have
+\[
+P[X\geq t]\leq\frac{\E[X]}{t},\quad \forall t>0
+\]
+\end{block}
+It is immediately obvious that Markov's inequality \textcolor{red}{requires only the existence of the first moment}. If the random variable $X$ also has finite variance - i.e. $\text{var}(X)<\infty$, we have \textcolor{red}{Chebyshev's inequality}:
+\begin{block}{Chebyshev's inequality}
+For a random variable $X$ that has a finite mean and variance, we have
+\[
+P[\lvert X-\mu \rvert\geq t]\leq\frac{\text{var}(X)}{t^2},\quad \forall t>0
+\]
+\end{block} 
+\end{frame}
+\begin{frame}
+\begin{proof}
+Chebyshev's inequality follows from Markov's inequality, by considering the variable $(X-\E[X])^2$ and the constant $t^2$. By substituting these in the Markov inequality, we get
+\begin{align}
+P[(X-\E[X])^2\geq t^2]&\leq \frac{\E[(X-\E[X])^2]}{t^2}\\
+P[\lvert X-\E[X] \rvert\geq t]&\leq\frac{\E[(X-\E[X])^2]}{t^2}
+\end{align}
+Since, $\E[X]=\mu$ and $\text{var}(X)=\E[(X-\E[X])^2]$, we get
+\[
+P[\lvert X-\mu \rvert\geq t]\leq\frac{\text{var}(X)}{t^2}
+\]
+\end{proof}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+The earlier results can be generalised as follows:
+\begin{block}{Extensions of Markov's inequality}
+Whenever a variable $X$ has a central moment of order $k$, an application of Markov's inequality to the random variable $\lvert X-\mu\rvert^k$ yields:
+\[
+P[\lvert X-\mu\rvert\geq t]\leq\frac{\E[\lvert X-\mu \rvert]^k}{t^k},\quad \forall t>0.
+\]
+\end{block}
+and this is not limited to polynomials $\lvert X-\mu \rvert^k $:
+
+Suppose $X$ has a mgf in a neighbourhood of zero,such that there is a constant $b>0$ that the functions $\rho(\lambda)=\E[\exp(\lambda(X-\mu))]$ exists for all $\lambda<\lvert b\rvert$. Thus, for any $\lambda\in[0,b]$, we may apply Markov's inequality to the random variable $Y=\exp(\lambda(X-\mu))$, obtaining the upper bound:
+\[
+P[(X-\mu)\geq t]=P[\exp(\lambda(X-\mu))\geq \exp(\lambda t)]\leq\frac{\E[\exp(\lambda(X-\mu))]}{\exp(\lambda t)}
+\]
+By taking the $\log$ of both side of the latter inequality, we get:
+\[
+\log P[(X-\mu)\geq t]\leq \log\E[\exp(\lambda(X-\mu))]-\lambda t
+\]
+Optimising, our choice of $\lambda$, we can obtain the tightest results that yields the Chernoff bound:
+\begin{block}{Chernoff bound}
+\[
+\log P[(X-\mu)\geq t]\leq \inf_{\lambda\in [0,b]}\{\log\E[\exp(\lambda(X-\mu))]-\lambda t\}.
+\]
+\end{block}
+
+\end{frame}
+
+
+\subsection{Sub-Gaussian variables and Hoeffding bounds}
+\frame{\tableofcontents[currentsubsection]}
+
+\begin{frame}[allowframebreaks]
+Evidently, the form of the tail bound obtained using the Chernoff approach depends on the growth rate of the mgf. Naturally, in the study of the tail bounds the random variables are then classified in terms of their mgfs. The simplest type of behaviour is known as sub-Gaussian, which shall be motivated by deriving tail bounds for a Gaussian variables, say, X, such that $X\sim N(\mu,\sigma^2)$, with density
+\[
+f(X)=\frac{1}{\sigma\sqrt{2\pi}}\exp\left(-\frac{(X-\mu)^2}{2\sigma^2}\right)
+\]
+and thus, the mgf
+\[
+\E[\exp(\lambda X)]=\exp\left(\mu\lambda+\frac{\sigma^2\lambda^2}{2}\right),\quad\forall\lambda\in\mathbb{R}
+\]
+\begin{example}[Gaussian tail bounds]
+Let $X\sim N(\mu,\sigma^2)$ be a Gaussian r.v., which has mgf
+\[
+\E[\exp(\lambda X)]=\exp\left(\mu\lambda+\frac{\sigma^2\lambda^2}{2}\right),\quad \forall \lambda\in \mathbb{R}
+\]
+substituting this into the optimising problem of the Chernoff bound, we get
+\begin{equation}\label{eq: optms}
+\inf_{\lambda\geq 0}\{\log\E[\exp(\lambda(X-\mu))-\lambda t]\}=\inf_{\lambda\geq 0}\left\{\frac{\sigma^2\lambda^2}{2}-\lambda t\right\}=-\frac{t^2}{2\sigma^2}
+\end{equation}
+Therefore, we can conclude that any $N(\mu,\sigma^2)$ r.v. satisfies the upper deviation inequality
+\[
+P[X\geq\mu+t]\leq\exp\left(-\frac{t^2}{2\sigma^2}\right)
+\]
+\end{example}
+\end{frame}
+\begin{frame}
+\begin{proof}[Proof of equation (\ref{eq: optms})]
+To solve the optimisation problem below 
+\[
+\inf_{\lambda\geq 0}\left\{\frac{\sigma^2\lambda^2}{2}-\lambda t\right\}
+\]
+we take derivatives to find the optimum of this quadratic function, - i.e.
+\[
+\frac{\partial}{\partial\lambda}\left(\frac{\sigma^2\lambda^2}{2}-\lambda t\right)=0,
+\]
+which leads to $\lambda_{opt}=\frac{t}{\sigma^2}$. Substituting $\lambda_{opt}$ with $\lambda$ in the above equation yields relationship (\ref{eq: optms}).
+\end{proof}
+\end{frame}
+
+\begin{frame}
+\begin{definition}[Sub-Gaussianity]
+A r.v. $X$ with mean $\mu=\E[X]$ is sub-Gaussian if there is a positive number $\sigma$, such that
+\[
+\E[\exp(\lambda(X-\mu))]\leq\exp\left(\frac{\sigma^2\lambda^2}{2}\right),\quad\forall\lambda\in\mathbb{R}
+\]
+where the constant $\sigma$ is referred to as the \textcolor{red}{sub-Gaussian parameter}. Moreover, by the symmetry of the definition, the variable $-X$ is sub-Gaussian iff $X$ is sub-Gaussian, so that we also have lower deviation inequality $P[X\leq\mu-t ]\leq\exp\left(-\frac{t^2}{2\sigma^2}\right), \quad\forall t\geq 0$. Thus, we conclude that any sub-Gaussian variable satisfies the \textcolor{red}{concentration inequality}
+\[
+P[\lvert X-\mu\rvert\geq t]\leq2\exp\left(-\frac{t^2}{2\sigma^2}\right),\quad\forall t\in\mathbb{R}.
+\]
+\end{definition}
+\end{frame}
+
+\subsection{Sub-exponential variables and Bernstein bounds}
+\frame{\tableofcontents[currentsection,currentsubsection]}
+
+\subsection{Some one-sided results}
+\frame{\tableofcontents[currentsection,currentsubsection]}
+
+\section{Martingale-based methods}
+\frame{\tableofcontents[currentsection]}
+
+\section{Lipschitz functions of Gaussian variables}
+\frame{\tableofcontents[currentsection]}
+
+
+
+
+
+\begin{frame}[allowframebreaks]
+\frametitle{References}
+\bibliographystyle{apa}
+\bibliography{References_HDStat}
+\end{frame}
+
+\end{document}
