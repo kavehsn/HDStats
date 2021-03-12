@@ -141,9 +141,9 @@ substituting this into the optimising problem of the Chernoff bound, we get
 \inf_{\lambda\geq 0}\{\log\E[\exp(\lambda(X-\mu))-\lambda t]\}=\inf_{\lambda\geq 0}\left\{\frac{\sigma^2\lambda^2}{2}-\lambda t\right\}=-\frac{t^2}{2\sigma^2}
 \end{equation}
 Therefore, we can conclude that any $N(\mu,\sigma^2)$ r.v. satisfies the upper deviation inequality
-\[
+\begin{equation}\label{eq: Sub-Gaussian TB}
 P[X\geq\mu+t]\leq\exp\left(-\frac{t^2}{2\sigma^2}\right)
-\]
+\end{equation}
 \end{example}
 \end{frame}
 \begin{frame}
@@ -172,9 +172,161 @@ P[\lvert X-\mu\rvert\geq t]\leq2\exp\left(-\frac{t^2}{2\sigma^2}\right),\quad\fo
 \]
 \end{definition}
 \end{frame}
+\begin{frame}
+We may have scenarios in which sub-Gaussian variables are non-Gaussian.
+\begin{example}[Rademacher variables]
+A Rademacher r.v. $\varepsilon$ takes the values $[-1,+1]$ equiprobably -i.e $P[\varepsilon=-1]=P[\varepsilon=+1]=\frac{1}{2}$. Thus, the mgf of $\varepsilon$ is as follows
+\[
+\E[\exp(\lambda \varepsilon)]=\sum_{i\in\{-1,+1\}} \exp(\lambda\varepsilon_i)p(\varepsilon=i)=\frac{1}{2}[\exp(-\lambda)+\exp(\lambda)]
+\]
+where the Maclaurin-series expansion of the terms $\exp(-\lambda)$ and $\exp(\lambda)$ leads gives us
+\begin{align*}
+\E[\exp(\lambda \varepsilon)]=\frac{1}{2}\left[\sum\limits_{k=0}^{\infty}\frac{\lambda^k}{k!}+\sum\limits_{k=0}^{\infty}\frac{(-\lambda)^k}{k!}\right]&=\frac{1}{2}\left[2\sum\limits_{k=0}^{\infty}\frac{\lambda^{2k}}{2k!}\right]=\sum\limits_{k=0}^{\infty}\frac{\lambda^{2k}}{2k!}\\
+&\leq 1+\sum\limits_{k=0}^{\infty}\frac{\lambda^{2k}}{2^kk!}=\exp\left(\frac{\lambda^2}{2}\right)
+\end{align*}
+with the sub-Gaussian parameter $\sigma=1$.
+\end{example}
+\end{frame}
 
+\begin{frame}
+\textbf{Some preliminaries:}  The exponential function $g(z)=\exp(z)$ is convex; thus, Jensen's inequality for convex functions applies as follows
+\[
+g(\E[z])\leq \E[g(z)]
+\] 
+
+A r.v. $Z'$ is an \textcolor{red}{independent copy} of $Z$, if it has a same the same distribution as $Z$, and where $Z$ and $Z'$ are independent. 
+
+Given the above definitions, we provide a simple example of \textcolor{red}{symmetrization argument}, in which first an independent copy of $X$, $X'$ is introduced and the problem is symmetrized using a Rademacher variable.
+\end{frame}
+
+\begin{frame}
+\begin{block}{Symmetrization argument}
+Let $X$ be a r.v. with mean zero - i.e. $\mu=\E_X[X]=0$, with a support on the interval $[a,b]$, and let $X'$ be an independent copy of $X$, for any $\lambda\in\mathbb{R}$, we have
+\[
+\E_X[\exp(\lambda X)]=\E_X[\exp(\lambda(X-\E_{X'}[X']))]
+\]
+since $\E_X[X]=\E_{X'}[X']=0$. Using Jensen's inequality, we further establish that
+\[
+\E_X[\exp(\lambda(X-\E[X']))]\leq \E_{X,X'}[\exp(\lambda(X-X'))] 
+\]
+Further, note that $\varepsilon(X-X')$ and $(X-X')$ possess the same distribution, where $\varepsilon$ is a Rademacher r.v., so that
+\[
+\E_{X,X'}[\exp(\lambda(X-X'))]=\E_{X,X'}[\E_{\varepsilon}[\exp(\lambda\varepsilon(X-X'))]]¸
+\]
+\end{block}
+\end{frame}
+\begin{frame}¸
+\begin{block}{}
+where from the earlier example, we know that
+\[
+\E_{X,X'}[\E_{\varepsilon}[\exp(\lambda\varepsilon(X-X'))]]\leq \E_{X,X'}\left[\exp\left(\frac{\lambda^2(X-X')^2}{2}\right)\right]
+\]
+since $\lvert X-X' \rvert\leq b-a$, we are guaranteed that
+\[
+\E_{X,X'}\left[\exp\left(\frac{\lambda^2(X-X')^2}{2}\right)\right]\leq\exp\left(\frac{\lambda^2(b-a)^2}{2}\right)
+\]
+thus, we have shown that $X$ is sub-Gaussian with sub-Gaussian parameter $\sigma=b-a$
+\end{block}
+\end{frame}
+\begin{frame}
+
+\textbf{Quiz:}
+{\vskip 0.5em}
+\begin{itemize}
+\item[1)]Two independent sub-Gaussian variables $X_1$ and $X_2$ possess the sub-Gaussian parameters $\sigma_1$ and $\sigma_2$ respectively. What is the sub-Gaussian parameter of $X_1+X_2$?
+
+\item[2)] Now once again consider the sub-Gaussian tail bound (\ref{eq: Sub-Gaussian TB}). How is this result extended to the variable $X_1+X_2$?
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+The answers to the above quiz, can be generalised to the variables $X_1,\cdots,X_n$ with mean $\mu_i$ and sub-Gaussian parameters $\sigma_i$ for $i=1,\cdots,n$ leading to the Hoeffding bound 
+\begin{block}{Hoeffding bounds}
+Suppose that the variables $X_1,\cdots,X_n$ each with mean $\mu_1,\cdots,\mu_n$ and sub-Gaussian parameter $\sigma_1,\cdots,\sigma_n$ are independent. Then we have
+\[
+P\left[\sum\limits_{i=1}^n(X_i-\mu_i)\geq t\right]\leq\exp\left\{-\frac{t^2}{2\sum_{i=1}^n\sigma_i^2}\right\}
+\]
+\end{block}
+\end{frame}
+\begin{frame}[allowframebreaks]
+To prove the equivalent characterizations of sub-Gaussian variables, it is of interest to first answer Exercise 2.2 of \citet{wainwright2019high} which introduces \textcolor{red}{Mills ratio}.
+
+\textbf{Exercise 2.2 of \citet{wainwright2019high}:} Let $\phi(z)=\frac{1}{\sqrt{2\pi}}\exp\left(\frac{-z^2}{2}\right)$ be the density function of a standard normal $Z\sim N(0,1)$ variate.
+\begin{itemize}
+\item[1)]Show that $\phi'(z)+z\phi(z)=0$
+\item[2)] Use part 1 to show that
+\[
+\phi(z)\left(\frac{1}{z}-\frac{1}{z^3}\right)\leq P[Z\geq z]\leq\phi(z)\left(\frac{1}{z}-\frac{1}{z^3}+\frac{3}{z^5}\right),\quad \forall z>0
+\]
+\end{itemize}
+\textbf{Solution:}
+
+\underline{Part 1:}
+\[
+\phi'(z)=-\frac{z}{\sqrt{2\pi}}\exp\left(\frac{-z^2}{2}\right)\quad \text{and}\quad z\phi(z)=\frac{z}{\sqrt{2\pi}}\exp\left(\frac{-z^2}{2}\right) 
+\]
+thus,
+\[
+\phi'(z)+z\phi(z)=0
+\]
+\underline{Part 2:} 
+
+Note that $P[Z\geq z]=\int_{z}^{\infty}\phi(t)dt$. Furthermore, from part 1, we know that $\phi(z)=\frac{-\phi'(z)}{z}$. By substituting $\frac{-\phi'(z)}{z}$ into the earlier integral, we get
+\[
+\int_{z}^{\infty}\phi(t)dt=\int_{z}^{\infty}\frac{-\phi'(t)}{t}dt=\left[\frac{-\phi'(t)}{t}\right]_{z}^{\infty}-\int_{z}^{\infty} \frac{\phi(t)}{t^2}dt
+\]
+We know that $\lim_{t\to \infty}\frac{-\phi'(t)}{t}=0$, therefore, we may apply the the above expression can be written as
+\[
+\frac{\phi(z)}{z}-\int_{z}^{\infty} \frac{-\phi'(t)}{t^3}dt
+\] 
+using the substitution derived from Miller's ratio. Using integration by parts yet again, we obtain
+\begin{align*}
+\frac{\phi(z)}{z}-\int_{z}^{\infty} \frac{-\phi'(t)}{t^3}dt&=\frac{\phi(z)}{z}+\left[\frac{\phi(t)}{t^3}\right]_{z}^{\infty}-\int_{z}^{\infty}\frac{-3\phi(t)}{t^4}dt\\
+&=\frac{\phi(z)}{z}+\frac{\phi(z)}{z^3}+\int_{z}^{\infty}\frac{3\phi(t)}{t^4}dt\\
+P[Z\geq z]&=\phi(z)\left(\frac{1}{z}+\frac{1}{z^3}\right)+\underbrace{\int_{z}^{\infty}\frac{3\phi(t)}{t^4}dt}_{\geq0}\\
+		&\geq \phi(z)\left(\frac{1}{z}+\frac{1}{z^3}\right)
+\end{align*}
+Applying the same procedure again will prove the upper inequality. This is left as an exercise to the reader.
+\end{frame}
+\begin{frame}
+\begin{block}{Equivalent characterizations of the sub-Gaussian variables (I-II)}
+\begin{itemize}
+\item[(I)] From the definition of sub-Gaussian variables, a r.v. with $\mu=\E[X]=0$ is sub-Gaussian for $\sigma\geq 0$,
+\[
+\E[\exp(\lambda X)]\leq\exp\left(\frac{\sigma^2\lambda^2}{2}\right),\quad\forall\lambda\in\mathbb{R}
+\]
+\item[(II)] There is a constant $c\geq 0$ and Gaussian r.v. $Z\sim N(0,\tau^2)$, such that
+\[
+P[\lvert X\rvert\geq s]\leq cP[\lvert Z\rvert\geq s],\quad\forall s\geq0.
+\]
+\end{itemize}
+\end{block}
+\end{frame}
 \subsection{Sub-exponential variables and Bernstein bounds}
 \frame{\tableofcontents[currentsection,currentsubsection]}
+\begin{frame}
+The notion of sub-Gaussianity is rather restrictive. We thus now introduce sub-exponential variables, which impose milder conditions on the mgf.
+\begin{definition}{Sub-exponentiality}
+A r.v. $X$ with mean $\mu=\E[X]$ is sub-exponential if there are non-negative parameters $(\nu,\alpha)$, such that
+\[
+\E[\exp(\lambda(X-\mu))]\leq\exp\left(\frac{\nu^2\lambda^2}{2}\right),\quad\forall \lvert\lambda\rvert<\frac{1}{\alpha}
+\]
+It is immediately obvious that any sub-Gaussian variable is also sub-exponential, where the former is a special case of the latter, with $\nu=\sigma$ and $\alpha=0$. However, the converse is not true. 
+\end{definition}
+An example of a case where a variable is sub-exponential but not sub-Gaussian is as follows
+\end{frame}
+
+\begin{frame}
+\begin{example}[sub-exponential but not sub-Gaussian]
+Let $Z\sim N(0,1)$, and consider the r.v. $X=Z^2$, such that $Z\sim \chi^2_1$. Therefore, the mean $\mu=\E[\chi_1^2]=1$. For $\lambda<\frac{1}{2}$, we have the mgf as follows
+\begin{align*}
+\E[\exp(\lambda(X-1))]&=\int_{-\infty}^{+\infty}\exp(\lambda(Z^2-1))f(z)dz\\
+&=\frac{1}{\sqrt{2\pi}}\int_{-\infty}^{+\infty}\exp(\lambda(Z^2-1))\exp\left(\frac{-Z^2}{2}\right)dz\\
+&=\frac{\exp(-\lambda)}{\sqrt{1-2\lambda}}.
+\end{align*}
+for $\lambda\geq\frac{1}{2}$ the mgf is infinite, which reveals that $X$ is not sub-Gaussian.
+\end{example}
+\end{frame}
 
 \subsection{Some one-sided results}
 \frame{\tableofcontents[currentsection,currentsubsection]}
