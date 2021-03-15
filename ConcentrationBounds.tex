@@ -327,6 +327,58 @@ Let $Z\sim N(0,1)$, and consider the r.v. $X=Z^2$, such that $Z\sim \chi^2_1$. T
 for $\lambda\geq\frac{1}{2}$ the mgf is infinite, which reveals that $X$ is not sub-Gaussian.
 \end{example}
 \end{frame}
+\begin{frame}[allowframebreaks]
+To obtain the tail-bounds of sub-exponential variables, we refer to the Chernoff-type approach - i.e.  
+\[
+P[X-\mu\geq t]=P[\exp(\lambda(X-\mu))\geq\exp(t\lambda)]\leq\frac{\E[\exp(\lambda(X-\mu))]}{\exp(\lambda t)}
+\]
+where from the definition of sub-exponential variables, we get the upper bound
+\[
+P[X-\mu\geq t]\leq\frac{\E[\exp(\lambda(X-\mu))]}{\exp(\lambda t)}\leq\exp\left(\frac{\lambda^2\nu^2}{2}-\lambda t\right),\quad\forall \lambda\in\left[0,\frac{1}{\alpha}\right)¸
+\]
+where the Chernoff optimisation problem is
+\[
+\log P[X-\mu\geq t]\leq \inf_{\lambda\in[0,\alpha^{-1}]}\left\{\frac{\lambda^2\nu^2}{2}-\lambda t\right\}
+\]
+where using the same unconstrained optimisation approach as for sub-Gaussian variables, we'd obtain $\lambda_{opt}=\frac{t}{\nu^2}$, which yields the minimum $-\frac{t^2}{2\nu^2}$.
+
+Recall the constraint $0\leq\lambda<\frac{1}{\alpha}$. This implies that the unconstrained optimal $\lambda_{opt}$ must be between $0\leq\frac{t}{\nu^2}<\frac{1}{\alpha}$, which implies that in the interval $0\leq t<\frac{\nu^2}{\alpha^2}$, the unconstrained optimum corresponds to the constrained optimum.
+
+Otherwise for $t\geq \frac{\nu^2}{\alpha^2}$, considering that the function $g(.,t)=\frac{\lambda^2\nu^2}{2}-\lambda t$ is monotonically decreasing, in the interval $[0,\lambda^*)$, the constrained minimum is obtained at the boundary - i.e. $\lambda^\#=\frac{1}{\alpha}$, which leads to the minimum
+\[
+g^*(t)=g(\lambda^\#,t)=-\frac{t}{\alpha}+\frac{1}{2\alpha}\frac{\nu^2}{\alpha}\leq- \frac{t}{2\alpha}
+\]
+where this inequality used the fact that $\frac{\nu^2}{\alpha}\leq t$.
+
+The results above lead to the sub-exponential tail bounds as follows
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+\begin{block}{Sub-exponential tail bounds}
+Suppose $X$ is sub-exponential with parameters $(\nu,\alpha)$. Then
+\[
+P[X-\mu\geq t]\leq
+\begin{cases}
+\exp\left(-\frac{t}{2\nu^2}\right)\quad 0\leq t\leq\frac{\nu^2}{\alpha},\\
+\exp\left(-\frac{t}{2\alpha}\right)\quad t>\frac{\nu^2}{\alpha}.
+\end{cases}
+\]
+\end{block}
+The sub-exponential property can be verified by computing or bounding the mgf, which may not be practical in many different settings. One other approach is based on the control of the polynomial moments of $X$, which leads to the \textcolor{red}{Bernstein condition}
+\begin{block}{Bernstein condition}
+Given a r.v. $X$ with mean $\mu=\E[X]$ and variance $\sigma^2=\E[X^2]-\mu^2$, the Bernstein condition with parameter $b$ holds if
+\[
+\lvert \E[(X-\mu)^k]\rvert\leq\frac{1}{2}k!\sigma^2b^{k-2},\quad k\geq 2
+\]
+\end{block} 
+One sufficient condition for the Bernstein condition to hold is that $X$ is bounded. When $X$ satisfies the Bernstein condition, then it is sub-exponential with parameters $\sigma^2$ and $b$. The Maclaurin-series expansion of the mgf can be expressed as follows
+\begin{align*}
+\E[\exp(\lambda(X-\mu))]&=\E\left\{\sum\limits_{i=0}^{\infty}\frac{f^{(i)}(0)}{i!}\lambda(X-\mu)^i\right\}=\sum\limits_{i=0}^{\infty}\E\left\{\frac{f^{(i)}(0)}{i!}\lambda(X-\mu)^i\right\}\\
+&=1+\lambda\E[(X-\mu)]+\frac{\lambda^2\E[(X-\mu)]^2}{2}+\sum\limits_{i=3}^{\infty}\frac{\lambda^k\E[(X-\mu)^k]}{k!}\\
+&=1+\frac{\lambda^2\sigma^2}{2}+\sum\limits_{i=3}^{\infty}\frac{\lambda^k\E[(X-\mu)^k]}{k!}
+\end{align*}
+\end{frame}
+
 
 \subsection{Some one-sided results}
 \frame{\tableofcontents[currentsection,currentsubsection]}
