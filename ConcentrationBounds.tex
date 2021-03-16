@@ -81,7 +81,8 @@ P[\lvert X-\mu \rvert\geq t]\leq\frac{\text{var}(X)}{t^2},\quad \forall t>0
 \end{block} 
 \end{frame}
 \begin{frame}
-\begin{proof}
+
+\textbf{Proof:}
 Chebyshev's inequality follows from Markov's inequality, by considering the variable $(X-\E[X])^2$ and the constant $t^2$. By substituting these in the Markov inequality, we get
 \begin{align}
 P[(X-\E[X])^2\geq t^2]&\leq \frac{\E[(X-\E[X])^2]}{t^2}\\
@@ -91,7 +92,7 @@ Since, $\E[X]=\mu$ and $\text{var}(X)=\E[(X-\E[X])^2]$, we get
 \[
 P[\lvert X-\mu \rvert\geq t]\leq\frac{\text{var}(X)}{t^2}
 \]
-\end{proof}
+
 \end{frame}
 
 \begin{frame}[allowframebreaks]
@@ -459,9 +460,6 @@ Given a sequence $\{Y_{i}\}_{i=1}^{\infty}$ of r.v.s adapted to a filtration $\{
 \E[\lvert Y_i\rvert]<\infty\quad\text{and}\quad\E[Y_{i+1}\mid\F_{i}]=Y_{i}.
 \]
 \end{block}
-\end{frame}
-
-\begin{frame}[allowframebreaks]
 \begin{example}[Partial sums as martingales]
 Let $\{X_i\}_{i=1}^{\infty}$ be a sequence of i.i.d r.v.s with mean $\mu$, and define the partial sums $S_m:=\sum\limits_{i=1}^mX_i$. Define $\F_{m}=\sigma(X_1,\cdots,X_m)$, the r.v. $S_m$ is measurable wrt to $\F_m$, and, we have
 \begin{align*}
@@ -487,6 +485,20 @@ Let $\{D_i\}_{i=1}^{\infty}$ be a MDS. Then for any martingale sequence $\{Y_i\}
 Y_n-Y_0=\sum\limits_{i=1}^{n}D_i
 \]
 \end{block} 
+\begin{example}[Doob construction]
+Consider the sequence on independent r.v.s $X_1,\cdots,X_n$, recall the sequence $Y_{k}=\E[f(X)\mid X_1,\cdots,X_k]$ previously defined, and suppose that $\E[\lvert f(X) \rvert]<\infty$. We claim that $Y_0,\cdots,Y_n$ is a martingale w.r.t to $X_1,\cdots,X_n$. We have
+\[
+\E[\lvert Y_k\rvert]=\E[\lvert\E[f(X)\mid X_1,\cdots,X_k]\rvert].
+\] 
+From Jensen's inequality, we have 
+\[
+\E[\lvert\E[f(X)\mid X_1,\cdots,X_k]\rvert]\leq\E[\lvert f(X)\rvert]<\infty.
+\] 
+From the 2\ts{nd} property of martingales, we have
+\[ 
+\E[Y_{k+1}\mid X_{1}^k]=\E[\E[f(X)\mid X_{1}^{k+1}]\mid X_{1}^{k}]=\E[f(X)\mid X_{1}^{k}]=Y_k
+\]
+\end{example}
 \end{frame}
 
 \subsection{Concentration bounds for MDS}
@@ -543,9 +555,9 @@ Let $(\{D_i,\F_i\}_{i=1}^{n})$ be a MDS for which there are constants $\{a_i,b_i
 P\left[\lvert\sum\limits_{i=1}^{n}D_i\rvert\geq t\right]\leq2\exp\left(-\frac{2t^2}{\sum_{i=1}^{n}(b_i-a_i)^2}\right)
 \]
 \end{block}
-\begin{proof}
+
+\textbf{Proof:}
 All that needs showing is that the $\E[\exp(\lambda D_i\mid\F_{i-1})]\leq\exp\left(\frac{\lambda^2(b_i-a_i)^2}{8}\right)$ a.s. for each $i=1,\cdots,n$. But since $D_i\in[a_i,b_i]$ a.s., the conditioned variables $(D_i\mid\F_{i-1})$ also belongs to this interval a.s.
-\end{proof}
 \end{frame}
 
 \begin{frame}
@@ -564,13 +576,60 @@ We say that $f:\R^n\to\R$ satisfies the bounded difference property with paramet
 \begin{block}{Bounded differences inequality}
 Suppose that $f$ satisfies the bounded difference property with parameters $(L_1,\cdots,L_n)$ and that the random vector $X=(X_1,X_2,\cdots,X_n)'$ has independent components. Then
 \[
-P[\lvert f(X)-\E[F(X)]\geq t\rvert]\leq 2\exp\left(-\frac{2t^2}{\sum_{i=1}^{n}L_k^2}\right),\quad \forall t\geq 0
+P[\lvert f(X)-\E[f(X)]\geq t\rvert]\leq 2\exp\left(-\frac{2t^2}{\sum_{i=1}^{n}L_k^2}\right),\quad \forall t\geq 0
 \]
 \end{block}
+\end{frame}
+\begin{frame}
+\begin{example}
+Say we have the bounded r.v.s $X_i\in[a,b]$ almost surely, and consider the function $f(x_1,\cdots,x_n)=\sum_{i=1}^n(x_i-\mu_i)$, where $\mu_i=\E[X_i]$ is the mean of the $i$\ts{th} rv. For any index $l\in\{1,\cdots,n\}$, we have
+\begin{align*}
+\lvert f(x)-f(x^{\backslash k})\rvert&=\lvert (x_k-\mu_k)-(x'_k-\mu_k)\rvert\\
+&=\lvert x_k-x'_k\rvert\leq b-a 
+\end{align*}
+which shows that $f$ satisfies the bounded difference inequality in each coordinate with parameter $L=b-a$. Consequently, from the bounded inequality it follows
+\[
+P\left[\lvert\sum\limits_{i=1}^{n}(x_i-\mu_i)\rvert\geq t\right]\leq 2\exp\left(-\frac{2t^2}{n(b-a)^2}\right)
+\]
+which is classical Hoeffding bound for independent r.v.s.
+\end{example}
 \end{frame}
 \section{Lipschitz functions of Gaussian variables}
 \frame{\tableofcontents[currentsection]}
 
+\begin{frame}[allowframebreaks]
+\begin{block}{$L$-Lipschitz functions}
+We say a function $f:\R^n\to\R$ is $L$-Lipschitz w.r.t the Euclidean norm $\lVert.\rVert_2$ if
+\[
+\lvert f(x)-f(y)\rvert\leq L\lVert x-y\rVert_2,\quad\forall x,y\in\R^n
+\]
+\end{block}
+The following guarantees that any such function is sub-Gaussian with parameter at most $L$:
+\begin{block}{}
+Let $(X_1,\cdots,X_n)$ be a vector of i.i.d. standard Gaussian variables, and let $f:\R^n\to\R$ be $L$-Lipschitz w.r.t the Euclidean norm. Then the variable $f(X)-\E[f(X)]$ is sub-Gaussian with parameter at most $L$, and hence
+\[
+P[\lvert f(X)-\E[f(X)]\rvert\geq t]\leq 2\exp\left(-\frac{t^2}{2L^2}\right),\quad\forall t\geq0
+\]
+\end{block}
+
+The earlier result is of great importance, as it guarantees that any $L$-Lipschitz function of a standard  Gaussian random vector, regardless of the dimension, exhibits concentration like a scalar Gaussian variable with variance $L^2$. 
+
+Any Lipschitz function is differentiable almost everywhere and the Lipschitz property further guarantees $\lVert\nabla f(x)\rVert_2\leq L$ for all $x\in\R^n$. Therefore, to prove the earlier results, we first begin by providing the following Lemma:
+\begin{lemma}
+Suppose that $F:\R^n\to\R$ is differentiable. Then for any convex function $\phi:\R\to\R$, we have
+\[
+\E_X[\phi(f(X)-\E(f(X)))]\leq\E_{X,Y}\left[\phi\left(\frac{\pi}{2}\left\langle\nabla f(X),Y\right\rangle\right)\right]
+\]
+where $X,Y\sim N(0,I_n)$ are standard multivariate and independent.
+\end{lemma}
+
+\textbf{Proof:}
+For any fixed $\lambda\in\R$ applying the inequality in above Lemma to the convex function $f: t\to \exp(\lambda t)$ yields
+ \[
+\E_{X}[\exp(\lambda\{f(X)- \E[f(X)]\})]\leq \E_{X,Y}\left[\exp\left(\frac{\pi}{2}\langle \nabla f(X),Y \rangle\right)\right]
+\]
+
+\end{frame}
 
 
 
