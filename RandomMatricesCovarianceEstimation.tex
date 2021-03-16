@@ -1,0 +1,110 @@
+\documentclass[10pt,handout,english]{beamer}
+\usetheme{Warsaw}
+\usepackage{graphicx}
+\usepackage{placeins}
+\usepackage{amsmath}
+\usepackage{tabu}
+\usepackage{bbm}
+\usepackage{booktabs}
+\usepackage[round]{natbib}
+\usepackage{bm}
+\usepackage{ragged2e}
+\usepackage{hyperref}
+\usepackage{amsmath}
+\usepackage{xcolor}
+\usepackage[super]{nth}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=blue,      
+    urlcolor=blue,
+    citecolor=black,
+}
+
+\apptocmd{\frame}{}{\justifying}{} % Allow optional arguments after frame.
+
+\setbeamertemplate{frametitle continuation}{}
+
+\newcommand\setItemnumber[1]{\setcounter{enumi}{\numexpr#1-1\relax}}
+
+\newcommand{\ts}{\textsuperscript}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\F}{\mathcal{F}}
+
+\title[]{Random matrices and covariance estimation}
+\author[Kaveh S. Nobari]{Kaveh S. Nobari}
+\institute[]{Lectures in High-Dimensional Statistics}
+\date[27/10/2020]
+{Department of Mathematics and Statistics\\ Lancaster University}
+	
+
+\begin{document}
+\begin{frame}
+\titlepage
+\end{frame}
+
+
+\begin{frame}{Contents}
+\tableofcontents
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Motivation}
+The issue of covariance estimation is intertwined with random matrix theory, since sample covariance is a particular type of random matrix. These slides follow the structure of chapter 6 of \citet{wainwright2019high} to shed light on random matrices in a \textcolor{red}{non-asymptotic setting}, with the aim of \textcolor{red}{obtaining explicit deviation inequalities that hold for all sample sizes and matrix dimensions.}
+{\vskip 0.5em}
+In the classical framework of covariance matrix estimation the sample size $n$ tends to infinity while the matrix dimension $d$ is fixed; in this setting the behaviour of sample covariance matrix is characterized by the usual limit theory. In contrast, in high-dimensional settings the data dimension is either comparable to the sample size $(d\asymp n)$ or possibly much larger than the sample size $d\gg n$.
+{\vskip0.5em}
+We begin with the simplest case, namely ensembles of Gaussian random matrices, and we then discuss more general sub-Gaussian ensembles, before moving to milder tail conditions.  
+\end{frame}
+
+\section{Preliminaries}
+\frame{\tableofcontents[currentsection]}
+
+
+%------------------------------------------------
+\begin{frame}[allowframebreaks]
+Consider a rectangular matrix $A\in\R^{n\times m}$ with $n\geq m$, the ordered singular values are written as follows
+\[
+\sigma_{\max}(A)=\sigma_1(A)\geq\sigma_{2}(A)\geq\cdots\geq\sigma_m(A)=\sigma_{\min}(A)\geq 0
+\]
+
+\end{frame}
+
+\section{Wishart matrices and their behaviour}
+\frame{\tableofcontents[currentsection]}
+
+
+\section{Covariance matrices from sub-Gaussian ensembles}
+\frame{\tableofcontents[currentsection]}
+
+\section{Bounds for general matrices}
+\subsection{Background on matrix analysis}
+\frame{\tableofcontents[currentsection,currentsubsection]}
+
+
+\subsection{Tail conditions for matrices}
+\frame{\tableofcontents[currentsection,currentsubsection]}
+
+
+\subsection{Matrix Chernoff approach and independent decompositions}
+\frame{\tableofcontents[currentsection,currentsubsection]}
+
+
+\subsection{Upper tail bounds for random matrices}
+\frame{\tableofcontents[currentsection,currentsubsection]}
+
+
+\subsection{Consequences for covariance matrices}
+\frame{\tableofcontents[currentsection,currentsubsection]}
+
+\section{Bounds for structured covariance matrices}
+\subsection{Unknown sparsity and thresholding}
+\frame{\tableofcontents[currentsection,currentsubsection]}
+
+\begin{frame}[allowframebreaks]
+\frametitle{References}
+\bibliographystyle{apa}
+\bibliography{References_HDStat}
+\end{frame}
+
+\end{document}
