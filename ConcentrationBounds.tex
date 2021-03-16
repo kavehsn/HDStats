@@ -2,6 +2,7 @@
 \usetheme{Warsaw}
 \usepackage{graphicx}
 \usepackage{placeins}
+\usepackage{amsmath}
 \usepackage{tabu}
 \usepackage{bbm}
 \usepackage{booktabs}
@@ -28,6 +29,8 @@
 
 \newcommand{\ts}{\textsuperscript}
 \newcommand{\E}{\mathbb{E}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\F}{\mathcal{F}}
 
 \title[]{Basic tail and concentration bounds}
 \author[Kaveh S. Nobari]{Kaveh S. Nobari}
@@ -129,12 +132,12 @@ f(X)=\frac{1}{\sigma\sqrt{2\pi}}\exp\left(-\frac{(X-\mu)^2}{2\sigma^2}\right)
 \]
 and thus, the mgf
 \[
-\E[\exp(\lambda X)]=\exp\left(\mu\lambda+\frac{\sigma^2\lambda^2}{2}\right),\quad\forall\lambda\in\mathbb{R}
+\E[\exp(\lambda X)]=\exp\left(\mu\lambda+\frac{\sigma^2\lambda^2}{2}\right),\quad\forall\lambda\in\R
 \]
 \begin{example}[Gaussian tail bounds]
 Let $X\sim N(\mu,\sigma^2)$ be a Gaussian r.v., which has mgf
 \[
-\E[\exp(\lambda X)]=\exp\left(\mu\lambda+\frac{\sigma^2\lambda^2}{2}\right),\quad \forall \lambda\in \mathbb{R}
+\E[\exp(\lambda X)]=\exp\left(\mu\lambda+\frac{\sigma^2\lambda^2}{2}\right),\quad \forall \lambda\in \R
 \]
 substituting this into the optimising problem of the Chernoff bound, we get
 \begin{equation}\label{eq: optms}
@@ -164,11 +167,11 @@ which leads to $\lambda_{opt}=\frac{t}{\sigma^2}$. Substituting $\lambda_{opt}$ 
 \begin{definition}[Sub-Gaussianity]
 A r.v. $X$ with mean $\mu=\E[X]$ is sub-Gaussian if there is a positive number $\sigma$, such that
 \[
-\E[\exp(\lambda(X-\mu))]\leq\exp\left(\frac{\sigma^2\lambda^2}{2}\right),\quad\forall\lambda\in\mathbb{R}
+\E[\exp(\lambda(X-\mu))]\leq\exp\left(\frac{\sigma^2\lambda^2}{2}\right),\quad\forall\lambda\in\R
 \]
 where the constant $\sigma$ is referred to as the \textcolor{red}{sub-Gaussian parameter}. Moreover, by the symmetry of the definition, the variable $-X$ is sub-Gaussian iff $X$ is sub-Gaussian, so that we also have lower deviation inequality $P[X\leq\mu-t ]\leq\exp\left(-\frac{t^2}{2\sigma^2}\right), \quad\forall t\geq 0$. Thus, we conclude that any sub-Gaussian variable satisfies the \textcolor{red}{concentration inequality}
 \[
-P[\lvert X-\mu\rvert\geq t]\leq2\exp\left(-\frac{t^2}{2\sigma^2}\right),\quad\forall t\in\mathbb{R}.
+P[\lvert X-\mu\rvert\geq t]\leq2\exp\left(-\frac{t^2}{2\sigma^2}\right),\quad\forall t\in\R.
 \]
 \end{definition}
 \end{frame}
@@ -201,7 +204,7 @@ Given the above definitions, we provide a simple example of \textcolor{red}{symm
 
 \begin{frame}
 \begin{block}{Symmetrization argument}
-Let $X$ be a r.v. with mean zero - i.e. $\mu=\E_X[X]=0$, with a support on the interval $[a,b]$, and let $X'$ be an independent copy of $X$, for any $\lambda\in\mathbb{R}$, we have
+Let $X$ be a r.v. with mean zero - i.e. $\mu=\E_X[X]=0$, with a support on the interval $[a,b]$, and let $X'$ be an independent copy of $X$, for any $\lambda\in\R$, we have
 \[
 \E_X[\exp(\lambda X)]=\E_X[\exp(\lambda(X-\E_{X'}[X']))]
 \]
@@ -293,7 +296,7 @@ Applying the same procedure again will prove the upper inequality. This is left 
 \begin{itemize}
 \item[(I)] From the definition of sub-Gaussian variables, a r.v. with $\mu=\E[X]=0$ is sub-Gaussian for $\sigma\geq 0$,
 \[
-\E[\exp(\lambda X)]\leq\exp\left(\frac{\sigma^2\lambda^2}{2}\right),\quad\forall\lambda\in\mathbb{R}
+\E[\exp(\lambda X)]\leq\exp\left(\frac{\sigma^2\lambda^2}{2}\right),\quad\forall\lambda\in\R
 \]
 \item[(II)] There is a constant $c\geq 0$ and Gaussian r.v. $Z\sim N(0,\tau^2)$, such that
 \[
@@ -373,10 +376,56 @@ Given a r.v. $X$ with mean $\mu=\E[X]$ and variance $\sigma^2=\E[X^2]-\mu^2$, th
 \end{block} 
 One sufficient condition for the Bernstein condition to hold is that $X$ is bounded. When $X$ satisfies the Bernstein condition, then it is sub-exponential with parameters $\sigma^2$ and $b$. The Maclaurin-series expansion of the mgf can be expressed as follows
 \begin{align*}
-\E[\exp(\lambda(X-\mu))]&=\E\left\{\sum\limits_{i=0}^{\infty}\frac{f^{(i)}(0)}{i!}\lambda(X-\mu)^i\right\}=\sum\limits_{i=0}^{\infty}\E\left\{\frac{f^{(i)}(0)}{i!}\lambda(X-\mu)^i\right\}\\
-&=1+\lambda\E[(X-\mu)]+\frac{\lambda^2\E[(X-\mu)]^2}{2}+\sum\limits_{i=3}^{\infty}\frac{\lambda^k\E[(X-\mu)^k]}{k!}\\
-&=1+\frac{\lambda^2\sigma^2}{2}+\sum\limits_{i=3}^{\infty}\frac{\lambda^k\E[(X-\mu)^k]}{k!}
+\E[\exp(\lambda(X-\mu))]&=\E\left\{\sum\limits_{i=0}^{\infty}\frac{f^{(i)}(0)}{i!}\left[\lambda(X-\mu)\right]^i\right\}\\
+&=\sum\limits_{i=0}^{\infty}\E\left\{\frac{f^{(i)}(0)}{i!}\left[\lambda(X-\mu)\right]^i\right\}\\
+&=1+\lambda\E[(X-\mu)]+\frac{\lambda^2\E[(X-\mu)]^2}{2}+\sum\limits_{i=3}^{\infty}\frac{\lambda^i\E[(X-\mu)^i]}{i!}\\
+&=1+\frac{\lambda^2\sigma^2}{2}+\sum\limits_{i=3}^{\infty}\frac{\lambda^i\E[(X-\mu)^i]}{i!}
 \end{align*}
+Note that from the definition of Bernstein condition, we have
+\[
+\frac{\lvert \E[(X-\mu)^i]\rvert}{i!}\leq\frac{1}{2}\sigma^2b^{i-2}
+\]
+Therefore,
+\[
+\E[\exp(\lambda(X-\mu))]\leq1+\frac{\lambda^2\sigma^2}{2}+\frac{\lambda^2\sigma^2}{2}\sum\limits_{i=3}^{\infty}(\lvert\lambda \rvert b)^{i-2}
+\]
+For $\lvert\lambda\rvert<\frac{1}{b}$, we sum the geometric series,
+\[
+\sum\limits_{i=3}^{\infty}(\lvert\lambda \rvert b)^{i-2}=\frac{1}{1-\lvert\lambda\rvert b}
+\] 
+which leads to the following inequality
+\[
+\E[\exp(\lambda(X-\mu))]\leq 1+\frac{\lambda^2\sigma^2}{2}+\frac{\lambda^2\sigma^2}{2}\frac{1}{1-\lvert\lambda\rvert b}
+\]
+Noting that 
+\begin{align*}
+\exp\left(\frac{\lambda^2\sigma^2/2}{1-\lvert\lambda\rvert b}\right)&=1+\frac{\lambda^2\sigma^2/2}{1-\lvert\lambda\rvert b}+\cdots\\
+&\geq 1+\frac{\lambda^2\sigma^2/2}{1-\lvert\lambda\rvert b}
+\end{align*}
+leading to \textcolor{red}{Bernstein-type bound}.
+\begin{block}{Bernstein-type bound}
+For any r.v. satisfying the Bernstein condition, we have
+\[
+E[\exp(\lambda(X-\mu))]\leq \exp\left(\frac{\lambda^2\sigma^2/2}{1-\lvert\lambda\rvert b}\right),\quad \forall\lvert\lambda\rvert<\frac{1}{b}
+\]
+\end{block}
+
+As with the sub-Gaussian property, the sub-exponential property is preserved under summation for independent r.v.s. Consider the independent sequence $X_1,\cdots,X_n$, with means $\mu_1,\cdots,\mu_n$ and sub-exponential parameters $(\nu_1,\alpha_1),\cdots,(\nu_n,\alpha_n)$. The mgf can be calculated as follows
+\[
+\E\left[\exp\left(\lambda\sum_{i=1}^n(X_i-\mu_i)\right)\right]=\prod\limits_{i=1}^n\E[\exp(\lambda(X_i-\mu_i))]\leq \prod\limits_{i=1}^n\exp\left(\frac{\lambda^2\nu_i^2}{2}\right)
+\]
+for all $\lvert\lambda\rvert<(\max_{i=1,\cdots,n})^{-1}$. Hence, the variable $\sum_{i=1}^n(X_i-\mu_i)$ is sub-exponential with parameters $(\nu^*,\alpha^*)$, where 
+\[
+\alpha^*:=max_{i=1,\cdots,n}\alpha_i,\quad\text{and}\quad\nu^*:=\sqrt{\sum\limits_{i=1}^{n}\nu_i^2}
+\]
+which  using a Chernoff-type approach as before, leads to upper tail bound
+\[
+P\left[\frac{1}{n}\sum\limits_{i=1}^{n}(X_i-\mu_i)\geq t\right]\leq
+\begin{cases}
+\exp\left(-\frac{nt^2}{2(\nu^{*2}/n)}\right),\quad &0\leq t\leq \frac{\nu^{*2}}{n\alpha^*}\\
+\exp\left(-\frac{nt}{2\alpha^{*}}\right),\quad &t\geq \frac{\nu^{*2}}{n\alpha^*}
+\end{cases}
+\]
 \end{frame}
 
 
@@ -384,8 +433,141 @@ One sufficient condition for the Bernstein condition to hold is that $X$ is boun
 \frame{\tableofcontents[currentsection,currentsubsection]}
 
 \section{Martingale-based methods}
-\frame{\tableofcontents[currentsection]}
+\subsection{Martingales, MDS and telescoping decomposition}
+\frame{\tableofcontents[currentsection,currentsubsection]}
 
+\begin{frame}[allowframebreaks]
+Let us extend the techniques considered for independent r.v.s to more general functions of the variables. One classical approach is based on martingale decomposition. Consider the independent r.vs $X_1,\cdots,X_n$ and consider a function $f(X)=f(X_1,\cdots,X_n)$ with the mapping $f:\R^n\to\R$. Suppose our goal is to obtain bounds on the deviations of $f$ from its mean. To achieve this, let us consider the sequence of r.v.s given by $Y_0=\E[f(X)]$, $Y_n=f(X)$, and
+\[
+Y_k=\E[f(X)\mid X_1,\cdots,X_k]\quad k=1,\cdots,n-1,
+\]
+where $Y_0$ is a constant and the variables $Y_1,\cdots,Y_n$ tend to exhibit more fluctuations as they move along the sequence. Based on this intuition the martingale approach is based on the telescoping decomposition 
+\[
+f(X)-\E[X]=Y_n-Y_0=\sum\limits_{i=1}^n\underbrace{Y_i-Y_{i-1}}_{D_i}
+\]
+Thus,$f(X)-\E[f(X)]$ is expressed as the sum of increments $D_1,\cdots,D_n$. This is a specific example of a martingale sequence, most commonly referred to as Doob martingale, whereas $D_{1},\cdots,D_n$ is a martingale difference sequence (MDS hereafter).
+
+We now provide a general definition of a martingale sequence by first defining a \textcolor{red}{filtration}, as follows
+\begin{block}{Filtration}
+Let $\{\F_i\}_{i=1}^{\infty}$ be a sequence of $\sigma$-fields that are nested, meaning that $\F_{m}\subseteq\F_{n}$ for $n\geq m$. Such a sequence is known as a filtration.
+\end{block}
+In the Doob martingale described earlier, the $\sigma$-field $\sigma(X_1,\cdots,X_m)$ is spanned by the first $m$ variables $X_1,\cdots,X_m$ and plays the role of $\F_m$. Let $\{Y_i\}_{i=1}
+^{\infty}$ be a sequence of r.vs such that $Y_i$ is measurable wrt to the $\sigma$-field $\F_{i}$. We say that $\{Y_i\}_{i=1}^{\infty}$ is \textcolor{red}{adapted} to the filtration $\{\F_{i}\}_{i=1}^{\infty}$. 
+\begin{block}{Martingale}
+Given a sequence $\{Y_{i}\}_{i=1}^{\infty}$ of r.v.s adapted to a filtration $\{\F_i\}_{i=1}^{\infty}$, the pair $\{(Y_i,\F_i)\}_{i=1}^{\infty}$ is a martingale if, for all $i\geq 1$
+\[
+\E[\lvert Y_i\rvert]<\infty\quad\text{and}\quad\E[Y_{i+1}\mid\F_{i}]=Y_{i}.
+\]
+\end{block}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+\begin{example}[Partial sums as martingales]
+Let $\{X_i\}_{i=1}^{\infty}$ be a sequence of i.i.d r.v.s with mean $\mu$, and define the partial sums $S_m:=\sum\limits_{i=1}^mX_i$. Define $\F_{m}=\sigma(X_1,\cdots,X_m)$, the r.v. $S_m$ is measurable wrt to $\F_m$, and, we have
+\begin{align*}
+\E[S_{m+1}\mid \F_{m}]&=\E[X_{m+1}+S_{m}\mid X_1,\cdots,X_m ]\\
+&=\E[X_{m+1}\mid X_1,\cdots,X_m]+\E[S_{m}\mid X_1,\cdots,X_m ]\\
+&=\E[X_{m+1}]+S_m=\mu+S_m.
+\end{align*}
+\end{example}
+A closely related concept is that of the \textcolor{red}{martingale difference sequence}, which is an adapted sequence $\{D_i,\F_{i}\}_{i=1}^{\infty}$ such that, for all $i\geq 1$,
+\[
+\E[\lvert D_i\rvert]<\infty\quad\text{and}\quad\E[D_{i+1}\mid\F_{i}]=0.
+\] 
+Difference sequences arise naturally from martingales. Given a martingale $\{(Y_i,\F_{i})\}_{i=0}^{\infty}$, define $D_i=Y_i-Y_{i-1}$ for $i\geq 1$. We then have
+\begin{align*}
+\E[D_{i+1}\mid\F_{i}]&=\E[Y_{i+1}-Y_{i}\mid\F_i]\\
+&=\E[Y_{i+1}\mid\F_i]-Y_i\\
+&=Y_i-Y_i=0
+\end{align*}
+using the martingale property and the fact that $Y_i$ is measurable wrt to $\F_i$. Thus, for any martingale sequence $\{Y_i\}_{i=0}^{n}$, we have the telescoping decomposition.
+\begin{block}{Telescoping decomposition}
+Let $\{D_i\}_{i=1}^{\infty}$ be a MDS. Then for any martingale sequence $\{Y_i\}_{i=0}^{\infty}$, we have the telescoping decomposition
+\[
+Y_n-Y_0=\sum\limits_{i=1}^{n}D_i
+\]
+\end{block} 
+\end{frame}
+
+\subsection{Concentration bounds for MDS}
+\frame{\tableofcontents[currentsection,currentsubsection]}
+\begin{frame}[allowframebreaks]
+We now turn to the derivation of concentration inequalities for martingales, either
+\begin{itemize}
+\item[1)] as bounds for the difference $Y_n-Y_0$; or
+\item[2)] as bounds for the sum $\sum_{i=1}^nD_i$ of the associated MDS.
+\end{itemize}
+We begin by stating and proving a general Bernstein-type bound for a MDS, based on imposing a sub-exponential condition on the MDS. To do so, \textcolor{red}{we adopt the standard approach of controlling the mgf of $\sum_{i=1}^{n}D_i$ and then applying the Chernoff bound}. Assume that $\E[\exp(\lambda D_i)\mid\F_{i-1}]\leq\exp\left(\frac{\lambda^2\nu^2_i}{2}\right)$ a.s. for any $\lvert\lambda\rvert<\frac{1}{\alpha_i}$
+\begingroup
+\allowdisplaybreaks
+\begin{align*}
+\E[\exp(\lambda\sum_{i=1}^n D_i)]&=\E[\E[\exp(\lambda\sum_{i=1}^n D_i)\mid\F_{n-1}]]\\
+&=\E[\E[\exp(\lambda D_n)\exp(\lambda\sum_{i=1}^{n-1} D_i)\mid\F_{n-1}]]\\
+&=\E[\exp(\lambda\sum_{i=1}^{n-1} D_i)\E[\exp(\lambda D_n)\mid\F_{n-1}]]\\
+&\leq\E[\exp(\lambda\sum_{i=1}^{n-1} D_i)]\exp\left(\frac{\lambda^2\nu^2_n}{2}\right)
+\end{align*} 
+\endgroup
+we may iterate this procedure again for $\E[\exp(\lambda\sum_{i=1}^{n-1} D_i)]$ and we'd obtain,
+\begingroup
+\allowdisplaybreaks
+\begin{align*}
+\E[\exp(\lambda\sum_{i=1}^{n-1} D_i)]&=\E[\E[\exp(\lambda\sum_{i=1}^{n-1} D_i)\mid\F_{n-2}]]\\
+&=\E[\E[\exp(\lambda D_{n-1})\exp(\lambda\sum_{i=1}^{n-2} D_i)\mid\F_{n-2}]]\\
+&=\E[\exp(\lambda\sum_{i=1}^{n-2} D_i)\E[\exp(\lambda D_{n-1})\mid\F_{n-2}]]\\
+&\leq\E[\exp(\lambda\sum_{i=1}^{n-2} D_i)]\exp\left(\frac{\lambda^2\nu^2_{n-1}}{2}\right)
+\end{align*} 
+\endgroup
+Continuously iterating this process yields,
+\[
+\E[\exp(\lambda\sum_{i=1}^n D_i)]\leq\exp\left(\frac{\lambda^2\sum_{i=1}^{n}\nu_i^2}{2}\right), 
+\]
+valid for all $\lvert\lambda\rvert< \frac{1}{\alpha^*}$. Hence, by definition, it can be concluded that $\sum_{i=1}^nD_i$ is sub-exponential with parameters $(\sqrt{\sum_{i=1}^n\nu_i^2},\alpha^*)$.  The tail bounds can be derived by using the Chernoff-type approach as before.
+\begin{block}{Concentration inequalities for MDS}
+Let $\{(D_i,\F_i)\}_{i=1}^{\infty}$ be a MDS, and suppose that $\E[\exp(\lambda D_i)\mid\F_{i-1}]\leq\frac{\lambda^2\nu_i^2}{2}$ a.s. for any $\lvert\lambda\rvert<\frac{1}{\alpha}$. Then the following hold
+\begin{itemize}
+\item The sum $\sum_{i=1}^{n}D_i$ is sub-exponential with parameters $\left(\sqrt{\sum_{i=1}^{n}\nu_i^2},\alpha^*\right)$, where $\alpha^*:=\max_{i=1,\cdots,n}\alpha_i$.
+\item The sum satisfies the concentration inequality
+\[
+P\left[\lvert \sum\limits_{i=1}^nD_i\rvert\geq t\right]\leq
+\begin{cases}
+2\exp\left(-\frac{t^2}{2\sum_{i=1}^{n}\nu_i^2}\right),\quad &0\leq t<\frac{\sum_{i=1}^{n}\nu_i^2}{\alpha^*}\\
+2\exp\left(-\frac{t}{2\alpha^*}\right),\quad &t>\frac{\sum_{i=1}^{n}\nu_i^2}{\alpha^*}
+\end{cases}
+\]
+\end{itemize}
+\end{block}
+For the concentration inequalities to be useful in practice, we must isolate sufficient easily checkable conditions for the differences $D_i$ to be a.s. sub-exponential (or sub-Gaussian when $\alpha=0$). As mentioned earlier, bounded r.v.s are sub-Gaussian, which leads to the following corollary
+\begin{block}{Azuma-Hoeffding}
+Let $(\{D_i,\F_i\}_{i=1}^{n})$ be a MDS for which there are constants $\{a_i,b_i\}_{i=1}^n$ such that $D_i\in[a_i,b_i]$ a.s. for all $k=1,\cdots,n$. Then for all $t\geq0$
+\[
+P\left[\lvert\sum\limits_{i=1}^{n}D_i\rvert\geq t\right]\leq2\exp\left(-\frac{2t^2}{\sum_{i=1}^{n}(b_i-a_i)^2}\right)
+\]
+\end{block}
+\begin{proof}
+All that needs showing is that the $\E[\exp(\lambda D_i\mid\F_{i-1})]\leq\exp\left(\frac{\lambda^2(b_i-a_i)^2}{8}\right)$ a.s. for each $i=1,\cdots,n$. But since $D_i\in[a_i,b_i]$ a.s., the conditioned variables $(D_i\mid\F_{i-1})$ also belongs to this interval a.s.
+\end{proof}
+\end{frame}
+
+\begin{frame}
+\begin{block}{Bounded differences property}
+Given vectors $x,x'\in\R^n$ and an index $k\in\{1,2,\cdots,n\}$, define the vector $\{x^{\backslash k}\in\R^n\}$ via
+\[
+x^{\backslash k}:=(x_1,x_2,\cdots,x_{k-1},x'_k,x_{k+1},\cdots,x_n)'.
+\]
+We say that $f:\R^n\to\R$ satisfies the bounded difference property with parameters $(L_1,\cdots,L_n)$ if, for each $k=1,2,\cdots,n$,
+\[
+\lvert f(x)-f(x^{\backslash k})\rvert\leq L_k\quad \forall x,x'\in\R^n
+\]
+\end{block}
+\end{frame}
+\begin{frame}
+\begin{block}{Bounded differences inequality}
+Suppose that $f$ satisfies the bounded difference property with parameters $(L_1,\cdots,L_n)$ and that the random vector $X=(X_1,X_2,\cdots,X_n)'$ has independent components. Then
+\[
+P[\lvert f(X)-\E[F(X)]\geq t\rvert]\leq 2\exp\left(-\frac{2t^2}{\sum_{i=1}^{n}L_k^2}\right),\quad \forall t\geq 0
+\]
+\end{block}
+\end{frame}
 \section{Lipschitz functions of Gaussian variables}
 \frame{\tableofcontents[currentsection]}
 
