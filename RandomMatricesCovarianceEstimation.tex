@@ -27,6 +27,8 @@
 
 \newcommand\setItemnumber[1]{\setcounter{enumi}{\numexpr#1-1\relax}}
 
+\DeclareMathOperator{\tr}{tr}
+
 \newcommand{\ts}{\textsuperscript}
 \newcommand{\E}{\mathbb{E}}
 \newcommand{\R}{\mathbb{R}}
@@ -134,13 +136,122 @@ Since, each $x_i$ for $i=1,\cdots,n$ has zero mean, it is guaranteed that
 \]
 and the random matrix $\hat{\Sigma}$ is an \textcolor{red}{unbiased} estimator of the population covariance $\Sigma$. Consequently the error matrix $\hat{\Sigma}-\Sigma$ has mean zero, and \textcolor{red}{goal is to obtain bounds on the error measures in $l_2$-norm}. We are essentially seeking a band of the form
 \[
-\vertiii{\hat{\Sigma}-\Sigma}\leq\varepsilon,
+\vertiii{\hat{\Sigma}-\Sigma}_2\leq\varepsilon,
 \]
-where as before, 
+where,
+\begin{align*}
+\vertiii{\hat{\Sigma}-\Sigma}_2&=\max_{v\in S^{d-1}}\left\lvert v'\left\{\frac{1}{n}\sum\limits_{i=1}^{n}x_ix_i'-\Sigma\right\}v \right\rvert\\
+&=\max_{v\in S^{d-1}}\left\lvert\frac{1}{n}\sum\limits_{i=1}^{n}v'x_ix_i'v-v'\Sigma v \right\rvert\\
+&=\max_{v\in S^{d-1}}\left\lvert\frac{1}{n}\sum\limits_{i=1}^{n}\langle x_i,v_i\rangle^2-v'\Sigma v \right\rvert\leq\varepsilon
+\end{align*}
+which suggests that controlling the deviation $\vertiii{\hat{\Sigma}-\Sigma}_2$ is equivalent to establishing a ULLN for the class of functions $x\to\langle x,v \rangle^2$, indexed by vectors $v\in S^{d-1}$.
+
+\begin{definition}[Weyl's Inequality]
+\begin{itemize}
+\item[(I)]Given any \textcolor{red}{real symmetric matrices} A, B,
+\begin{align*}
+\gamma_1(A+B)\geq \gamma_1(A)+\gamma_1(B)\\
+\gamma_n(A+B)\leq\gamma_n(A)+\gamma_n(B)
+\end{align*}
+\item[(II)]Given any \textcolor{red}{real symmetric matrices} A, B,
+\[
+\lvert \gamma_k(A)-\gamma_k(B)\rvert\leq\vertiii{(A-B)}_2
+\]
+(see \citet{dasgupta2008asymptotic}).
+\end{itemize}¸
+\end{definition}
+Control in the operator norm further guarantees that the eigenvalues of $\hat{\Sigma}$ are uniformly close to those of $\Sigma$. Furthermore, given Weyl's inequality II above, we have
+\[
+\max_{j=1,\cdots,d}\lvert \gamma_j(\hat{\Sigma})-\gamma_j(\Sigma)\rvert\leq\vertiii{\hat{\Sigma}-\Sigma}_2
+\]
+Note that the random matrix $X\in\R^{n\times d}$ has the vectors $x_i'$ on its $i\ts{th}$ row and singular values denotes by $\{\sigma_j(X)\}_{j=1}^{\min{n,d}}$. Thus,
+\[
+\hat{\Sigma}=\frac{1}{n}\sum\limits_{i=1}^n x_ix_i'=\frac{1}{n}X'X
+\]
+and hence, the eigenvalues of $\hat{\Sigma}$ are the squares of the singular values of $X/\sqrt{n}$.
 \end{frame}
 \section{Wishart matrices and their behaviour}
 \frame{\tableofcontents[currentsection]}
 
+\begin{frame}
+\begin{definition}[Gaussian ensembles and Wishart distribution]
+Suppose that each sample $x_i$ of a matrix $X\in\R^{n\times d}$ is drawn from an i.i.d multivariate $N(0,\Sigma)$ distribution. In this case we say that the associated matrix $X\in n\times d$, with $x_i'$ and its $i\ts{th}$ row, is drawn from the $\Sigma$-Gaussian ensemble. The associated sample covariance $\hat{\Sigma}=\frac{1}{n}X'X$ is said to follow a multivariate Wishart distribution.
+\end{definition}
+Following \citet{wainwright2019high}, we present deviation inequalities for $\Sigma$-Gaussian ensembles and present a few examples before proving said inequalities.
+\end{frame}
+\begin{frame}
+\begin{theorem}
+Let $X\in\R^{n\times d}$ be drawn according to the $\Sigma$-Gaussian ensemble. Then for $\delta>0$, the maximum singular value $\sigma_{\max}(X)$ satisfies the upper deviation inequality
+\[
+P\left[\frac{\sigma_{\max}(X)}{\sqrt{n}}\geq \gamma_{\max}(\sqrt{\Sigma})(1+\delta)+\sqrt{\frac{\tr(\Sigma)}{n}}\right]\leq\exp\left(-\frac{n\delta^2}{2}\right)
+\]
+Furthermore, for $n\geq d$, the minimum singular value $\sigma_{\min}(X)$ satisfies the lower deviation inequality
+\[
+P\left[\frac{\sigma_{\min}(X)}{\sqrt{n}}\leq \gamma_{\min}(\sqrt{\Sigma})(1-\delta)-\sqrt{\frac{\tr(\Sigma)}{n}}\right]\leq\exp\left(-\frac{n\delta^2}{2}\right)
+\]
+\end{theorem} 
+\end{frame}
+\begin{frame}[allowframebreaks]
+\textbf{Example (Norm bounds for standard Gaussian ensemble):} 
+Consider $W\in\R^{n\times d}$ generated with i.i.d $N(0,1)$ entries, which leads to the $I_d$-Gaussian ensemble. Given the above Theorem, it can be concluded that for $n\geq d$
+\[
+\frac{\sigma_{\max}(W)}{\sqrt{n}}\leq 1+\delta+\sqrt{\frac{d}{n}}\quad\text{and}\quad \frac{\sigma_{\min}(W)}{\sqrt{n}}\geq 1-\delta-\sqrt{\frac{d}{n}}
+\]
+Now it is evident that
+\[
+1-P\left[\frac{\sigma_{\max}(W)}{\sqrt{n}}\geq 1+\delta+\sqrt{\frac{d}{n}}\right]=
+P\left[\frac{\sigma_{\max}(W)}{\sqrt{n}}\leq 1+\delta+\sqrt{\frac{d}{n}}\right]
+\]
+thus according to the earlier Theorem,
+ \[
+P\left[\frac{\sigma_{\max}(W)}{\sqrt{n}}\leq 1+\delta+\sqrt{\frac{d}{n}}\right]\geq1- \exp{\left(-\frac{n\delta^2}{2}\right)}
+\]
+and similarly
+ \[
+P\left[\frac{\sigma_{\min}(W)}{\sqrt{n}}\geq 1-\delta-\sqrt{\frac{d}{n}}\right]\geq 1-\exp{\left(-\frac{n\delta^2}{2}\right)}
+\]
+Thus, it can easily be seen that both bounds hold with probability greater than $1-2\exp\left(-\frac{n\delta^2}{2}\right)$. As we recall, the eigenvalues of the symmetric covariance matrix $\hat{\Sigma}$ is the square of the singular values $W/\sqrt{n}$. Furthermore,
+\begin{align*}
+\vertiii{\hat{\Sigma}-\Sigma}_2&=\max_{v\in S^{d-1}}\left\lvert v'\left\{\frac{1}{n}W'W-I_d\right\}v\right\rvert\\
+&=\max_{v\in S^{d-1}}\left\lvert \frac{1}{n}v'(W'W)v-v'I_dv\right\rvert
+\end{align*}
+Note that $v'I_dv=\lVert v\rVert_2^2=1$. Thus,
+\begin{align*}
+\vertiii{\hat{\Sigma}-\Sigma}_2&=\vertiii{\frac{1}{n}W'W-I_d}_2\\
+&=\max_{v\in S^{d-1}}\left\lvert \frac{1}{n}v'(W'W)v-1\right\rvert
+\end{align*}
+Moreover, we have
+\[
+\frac{\sigma_{\max}(W)}{\sqrt{n}}\leq 1+\delta+\sqrt{\frac{d}{n}}
+\]
+or
+\begin{align*}
+\frac{(\sigma_{\max}(W))^2}{n}&\leq1+2\left(\underbrace{\delta+\sqrt{\frac{d}{n}}}_{\varepsilon}\right)+ \left(\underbrace{\delta+\sqrt{\frac{d}{n}}}_{\varepsilon}\right)^2\\
+\left\{\frac{(\sigma_{\max}(W))^2}{n}-1\right\}&\leq2\varepsilon+ \varepsilon^2
+\end{align*}
+thus,
+\[
+\vertiii{\frac{1}{n}W'W-I_d}_2\leq 2\varepsilon+\varepsilon^2
+\]
+Note that $\frac{d}{n}\to 0$, thus, the sample covariance matrix $\hat{\Sigma}$ is a consistent estimate of the identity matrix $I_d$.
+
+\textbf{Example (Gaussian covariance estimation):} 
+
+Let $X\in\R^{n\times d}$ be a random matrix from the $\Sigma$-Gaussian ensemble. Noting that a if $X\sim N(0,\Sigma)$ it can equivalently be written as $X\sim\sqrt{\Sigma} N(0,I_d)$. So assuming that $W\sim N(0,I_d)$, we may express $X$ as $X=W\sqrt{\Sigma}$. Moreover, 
+\begin{align*}
+\vertiii{\frac{1}{n}X'X-\Sigma}_2&=\vertiii{\sqrt{\Sigma}\left(\frac{1}{n}W'W-I_d\right)\sqrt{\Sigma}}_2\\
+&\leq\vertiii{\Sigma}_2\vertiii{\frac{1}{n}W'W-I_d}_2
+\end{align*}
+Thus, given the earlier example we know that
+\[
+\vertiii{\frac{1}{n}W'W-I_d}_2\leq2\varepsilon+\varepsilon^2,
+\]
+where $\varepsilon=\delta+\sqrt{\frac{d}{n}}$. Therefore, 
+\[
+\frac{\vertiii{\hat{\Sigma}-\Sigma}_2}{\vertiii{\Sigma}_2}\leq 2\varepsilon+\varepsilon^2
+\]
+Therefore, the relative error above converges to zero, so long as $d/n\to 0$.
+\end{frame}
 
 \section{Covariance matrices from sub-Gaussian ensembles}
 \frame{\tableofcontents[currentsection]}
