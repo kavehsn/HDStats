@@ -252,7 +252,67 @@ where $\varepsilon=\delta+\sqrt{\frac{d}{n}}$. Therefore,
 \]
 Therefore, the relative error above converges to zero, so long as $d/n\to 0$.
 \end{frame}
+\begin{frame}[allowframebreaks]
+To show the proof for the earlier Theorem first we recap a concept from the concentration inequalities chapter:
+\begin{block}{Recap (Theorem 2.26 of Wainwright):}
+Let $(X_1,\cdots,X_n)$ be a vector of i.i.d standard Gaussian variables, and let $f:\R^n\to\R$ be $L$-Lipschitz wrt to the Euclidean norm. Then the variable $f(X)-\E[f(X)]$ is sub-Gaussian with parameter at most L, and hence
+ \[
+P[\lvert f(X)-E[f(X)]\rvert\geq t]\leq2\exp\left(-\frac{t^2}{2L^2}\right),\quad \forall t\geq 0
+\]
+\end{block}
 
+\textbf{Example (Singular values of Gaussian random matrices):} For $n > d$, let $X\in \R^{n\times d}$ be a random matrix with i.i.d. $N(0,1)$ entries, and let
+\[
+\sigma_1(X)\geq \sigma_2(X)\geq\cdots\geq\sigma_d(X)\geq 0 
+\]
+are the ordered singular values of the matrix $X$. Referring to Weyl's inequality II, and given another matrix $Y\in\R^{n\times d}$, we have
+\[
+\max_{k=1,\cdots,d}\lvert \sigma_k(X)-\sigma_k(Y)\rvert \leq \vertiii{X-Y}_2\leq\vertiii{X-Y}_F
+\]
+where $\vertiii{.}_F$ denotes the Frobenius norm. Recalling that an $L$-Lipschitz function is one for which
+\[
+\lvert f(X)-f(Y)\rvert\leq L\vertiii{X-Y}_2
+\]
+it can be suggested that $\sigma_k(X)$ for each $k$ is a $1$-Lipschitz function of random matrix.  Furthermore, from Theorem 2.26 of Wainwright it can be shown that
+\[
+P[\lvert\sigma_k(X)-\E[\sigma_k(X)]\rvert\geq \delta ]\leq2\exp\left(-\frac{\delta^2}{2}\right),\quad\forall \delta\geq 0
+\]
+Now we wish to show that for $X\in\R^{n\times d}$ that is drawn according to the $\Sigma$-Gaussian ensemble, the maximum singular value $\sigma_{\max}(X)$ satisfies the upper deviation inequality
+ \[
+P\left[\frac{\sigma_{\max}(X)}{\sqrt{n}}\geq\gamma_{\max}(\sqrt{\Sigma})(1+\delta)+\sqrt{\frac{\tr(\Sigma)}{n}}\right]\leq \exp\left(-\frac{n\delta^2}{2}\right)
+\]
+Let us denote $\bar{\sigma}_{\max}=\gamma_{\max}(\sqrt{\Sigma})$ and recall that we can write $X=W\sqrt{\Sigma}$, where $W\in\R^{n\times d}$ has i.i.d. $N(0,1)$ entries. 
+
+Let us view the mapping $W\to\frac{\sigma_{\max}(W\sqrt{\Sigma})}{\sqrt{n}}$ as a real-valued function on $\R^{nd}$. Noting that
+\begin{align*}
+\frac{\sigma_{\max}(W\sqrt{\Sigma})}{\sqrt{n}}&:= \frac{\vertiii{W\sqrt{\Sigma} }_2}{\sqrt{n}}\\
+&\leq\frac{\vertiii{W}_2\vertiii{\sqrt{\Sigma}}_2}{\sqrt{n}}
+\end{align*}
+Thus, it is evident that this function is Lipschitz function wrt to the Euclidean norm with constant at most $L=\bar{\sigma}_{\max}/\sqrt{n}$. Hence, by concentration of measure for Lipschitz functions of Gaussian random vectors, we conclude that
+\begin{align*}
+P\left[\frac{\sigma_{\max}(X)}{\sqrt{n}}-\frac{\E[\sigma_{\max}(X)]}{\sqrt{n}} \geq \delta\right]&\leq\exp\left(\frac{-\delta^2}{2L^2}\right)
+\end{align*}
+Substituting $\bar{\sigma}_{\max}(X)/\sqrt{n}$ for $L$ and multiplying both sides of the inequality in the probability by $\sqrt{n}$, we obtain
+\begin{align*}
+P[\sigma_{\max}(X)-\E[\sigma_{\max}(X)] \geq \sqrt{n}\delta]&\leq\exp\left(\frac{-n\delta^2 }{2(\bar{\sigma}_{\max})^2}\right)\\
+P[\sigma_{\max}(X)\geq\E[\sigma_{\max}(X)] +\bar{\sigma}_{\max} \sqrt{n}\delta]&\leq\exp\left(\frac{-n\delta^2 }{2}\right)
+\end{align*}
+Therefore, it is sufficient to show that 
+\[
+\E[\sigma_{\max}(X)]\leq\sqrt{n}\bar{\sigma}_{\max}+\sqrt{\tr(\Sigma)}
+\]
+Recall that the maximum singular value has the variational representation
+\[
+\sigma_{\max}(X)=\max_{v'\in S^{d-1}}\lVert Xv'\rVert_2,
+\]
+where $S^{d-1}$ denotes the Euclidean unit sphere in $\R^d$. Since $X=W\sqrt{\Sigma}$, we may write the above expression as follows
+\begin{align*}
+\sigma_{\max}(X)&=\max_{v'\in S^{d-1}}\lVert W\underbrace{\sqrt{\Sigma}v'}_{v}\rVert_2\\
+&=\max_{v\in S^{d-1}(\Sigma^{-1})}\lVert Wv\rVert_2\\
+&=\max_{u\in S^{n-1}}\max_{v\in S^{d-1}(\Sigma^{-1})}u'Wv
+\end{align*}
+where $S^{d-1}(\Sigma^{-1}):=\{v\in\R^d\mid\lVert\Sigma^{-\frac{1}{2}}v\rVert\}_2=1\}$ is an ellipse. 
+\end{frame}
 \section{Covariance matrices from sub-Gaussian ensembles}
 \frame{\tableofcontents[currentsection]}
 
