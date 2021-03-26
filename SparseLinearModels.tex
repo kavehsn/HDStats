@@ -9,6 +9,7 @@
 \usepackage[round]{natbib}
 \usepackage{bm}
 \usepackage{ragged2e}
+\usepackage{bbm}
 \usepackage{hyperref}
 \usepackage{amsmath}
 \usepackage{xcolor}
@@ -177,19 +178,86 @@ y=X\theta+\varepsilon.
 If we were to extend the univariate function above to a multivariate functions in  $D$ dimensions, there are $\binom{k}{D}$ possible multinomials of degree $k$ in dimension $D$. This leads to an exponentially growing model with dimension of the magnitude $D^k$, so that the sparsity assumptions become essential.
 \end{frame}
 
-\begin{frame}[allowframebreaks]
+\section{Recovery in noiseless setting}
+\frame{\tableofcontents[currentsection]}
 
+\begin{frame}[allowframebreaks]
+To build intuition, we start we the simplest case were there observations are noiseless. Essentially, we wish to find a solution $\theta$ to the linear system
+\[
+y=X\theta,
+\]
+where $y\in\R^n$ and $X\in\R^{n\times d}$, such that $d>n$. When $d>n$, this is an \textcolor{red}{undetermined} set of linear equations, so there is a whole subspace of solutions. 
+
+If we have a \textcolor{red}{sparse solution} that means that there is a vector $\theta^*\in\R^d$, with at most $s\ll d$ non-zero entries and such that $y=X\theta^*$.
+
+The goal is to find this sparse solution to the linear system.
 \end{frame}
 
-\section{Recovery in noiseless setting}
 \subsection{$l_1$-based relaxation}
 \frame{\tableofcontents[currentsection,currentsubsection]}
+
+\begin{frame}[allowframebreaks]
+This problem can be expressed as  a non-convex optimization problem involving the $l_0$-\textquotedblleft norm\textquotedblright. 
+
+\textbf{Question:} The $l_0$-norm has been put in quotation marks, as it is not considered a \underline{proper} norm. Why is that?
+
+Let us define
+\[
+\lVert \theta\rVert_0:=\sum\limits_{j=1}^{d}\mathbbm{1}[\theta_j\neq 0]
+\] 
+where $\mathbbm{1}$ is an indicator function. Thus, the optimization problem is
+\[
+\min_{\theta\in\R^d}\lVert \theta\rVert_0\quad\text{such that}\quad X\theta=y
+\]
+Solving this leads to obtaining a solution to the linear equations that has the fewest number of non-zero entries. How can we solve the above optimization problem? The constraint set is simply a subspace, but the cost function is \textcolor{red}{non-differentiable} and \textcolor{red}{non-convex}.
+\end{frame}
+\begin{frame}[allowframebreaks]
+\begin{block}{Algorithm for solving the $l_0$ optimization problem}
+\begin{enumerate}
+\item[1)]  For each subset $S\subset \{1,\cdots,d\}$, we form the matrix $X_{S}\in\R^{\lvert S\rvert}$, consisting of the columns of $X$ indexed by S.
+\item[2)] Examine the linear system $y=X_S\theta$ to see whether it has a solution $\theta\in\R^{\lvert S\rvert}$.
+\item[3)] Iterate over subsets in increasing cardinality, then the first solution found would be the sparsest solution.
+\end{enumerate}
+\end{block}
+
+What would be the computational cost of this optimisation approach be? If the sparsest solution contained $s$ non-zero entries, then we would have to search over at least 
+\[
+\sum\limits_{j=1}^{s-1}\binom{d}{j}
+\]
+subsets before finding it.
+
+The next solution is to replace $l_0$ with the \textcolor{red}{nearest convex member} of the $l_q$ family, namely the $l_1$ norm. 
+\begin{definition}[Convex relaxation]
+When a non-convex optimization problem is approximated by a convex programme.
+\end{definition}
+In this setting this leads to the optimization problem
+\[
+\min_{\theta\in\R^d}\lVert \theta\rVert_1\quad\text{such that}\quad X\theta=y.
+\]
+The constraint sex is a subspace (hence convex), and the cost function is piecewise linear and thus convex as well. The $l_1$ optimisation problem is a linear programme, since any piecewise linear convex cost can always be reformulated as the maximum of a collection of linear functions. The above optimisation problem is referred to as \textcolor{red}{basis pursuit linear programme}.
+\end{frame}
 
 
 \subsection{Exact recovery and restricted null space}
 \frame{\tableofcontents[currentsection,currentsubsection]}
 
+\begin{frame}[allowframebreaks]
+When is solving the basis pursuit problem
+\[
+\min_{\theta\in\R^d}\lVert \theta\rVert_1\quad\text{such that}\quad X\theta=y.
+\]
+equivalent to solving the $l_0$ problem below?
+\[
+\min_{\theta\in\R^d}\lVert \theta\rVert_0\quad\text{such that}\quad X\theta=y
+\]
+Suppose $\theta^*=\R^d$ such that $y=X\theta^*$. Moreover, the vector $\theta^*$ has the support $S\subset\{1,2,\cdots,d\}$, which means that $\theta^*_j=0$ for all $j\in S^C$.
 
+The success of the basis pursuit should depend on how the nullspace of $X$ is related to this support, where by definition
+\[
+\text{null}(X):=\{\Delta\in\R^d\mid X\Delta=0\}.
+\]
+Since $X\theta^*=y$ by assumption, any vector of the form $\theta^*+\Delta$ for some $\Delta\in\text{null}(X)$ is feasible for the basis pursuit programme.
+\end{frame}
 \subsection{Sufficient conditions for restricted null space}
 \frame{\tableofcontents[currentsection,currentsubsection]}
 
@@ -199,10 +267,10 @@ If we were to extend the univariate function above to a multivariate functions i
 \frame{\tableofcontents[currentsection,currentsubsection]}
 
 \subsection{Bounds on $l_2$-error for hard sparse models}
-\frame{\tableofcontents[currentsection]}
+\frame{\tableofcontents[currentsubsection]}
 
 \subsection{Restricted nullspace and eigenvalues for random designs}
-\frame{\tableofcontents[currentsection]}
+\frame{\tableofcontents[currentsubsection]}
 
 \section{Bounds on prediction error}
 \frame{\tableofcontents[currentsection]}
