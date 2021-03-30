@@ -1,0 +1,3756 @@
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass beamer
+\begin_preamble
+\usetheme{Warsaw}
+\usepackage{graphicx}
+\usepackage{placeins}
+\usepackage{tabu}
+\usepackage{bbm}
+\usepackage{booktabs}
+\usepackage{bm}
+\usepackage{ragged2e}
+\usepackage{xcolor}
+\usepackage[super]{nth}
+
+
+\apptocmd{\frame}{}{\justifying}{} % Allow optional arguments after frame.
+
+\setbeamertemplate{frametitle continuation}{}
+
+\newcommand{\setItemnumber}[1]{\setcounter{enumi}{\numexpr#1-1\relax}}
+
+\newcommand{\ts}{\textsuperscript}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\F}{\mathcal{F}}
+
+\title[]{Basic tail and concentration bounds}
+\author[Kaveh S. Nobari]{Kaveh S. Nobari}
+\institute[]{Lectures in High-Dimensional Statistics}
+[27/10/2020]
+{Department of Mathematics and Statistics\\ Lancaster University}
+	
+\end_preamble
+\options handout
+\use_default_options false
+\maintain_unincluded_children false
+\language english
+\language_package none
+\inputencoding auto
+\fontencoding default
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize 10
+\spacing single
+\use_hyperref true
+\pdf_bookmarks false
+\pdf_bookmarksnumbered false
+\pdf_bookmarksopen false
+\pdf_bookmarksopenlevel 1
+\pdf_breaklinks false
+\pdf_pdfborder false
+\pdf_colorlinks true
+\pdf_backref section
+\pdf_pdfusetitle false
+\pdf_quoted_options "linkcolor=blue,filecolor=blue,urlcolor=blue,citecolor=black,"
+\papersize default
+\use_geometry false
+\use_package amsmath 2
+\use_package amssymb 0
+\use_package cancel 0
+\use_package esint 1
+\use_package mathdots 0
+\use_package mathtools 0
+\use_package mhchem 0
+\use_package stackrel 0
+\use_package stmaryrd 0
+\use_package undertilde 0
+\cite_engine natbib
+\cite_engine_type authoryear
+\biblio_style plainnat
+\biblio_options round
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date true
+\justification true
+\use_refstyle 0
+\use_minted 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Frame
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+titlepage
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status collapsed
+
+\begin_layout Plain Layout
+Contents
+\end_layout
+
+\end_inset
+
+
+\begin_inset CommandInset toc
+LatexCommand tableofcontents
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 3
+status collapsed
+
+\begin_layout Plain Layout
+allowframebreaks
+\end_layout
+
+\end_inset
+
+
+\begin_inset Argument 4
+status collapsed
+
+\begin_layout Plain Layout
+Motivation
+\end_layout
+
+\end_inset
+
+It is often of interest to obtain bounds on the tails of a random variable,
+ or two-sided inequalities, which guarantee that the random variable is
+ close to its mean or median.
+ These slides follow the structure of chapter 2 of 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "wainwright2019high"
+literal "false"
+
+\end_inset
+
+ to shed light on the elementary techniques for obtaining 
+\color red
+deviation
+\color inherit
+ and 
+\color red
+concentration
+\color inherit
+ inequalities.
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+{
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+vskip
+\end_layout
+
+\end_inset
+
+ 0.5em
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+ One way of controlling a tail probability 
+\begin_inset Formula $P[X\geq t]$
+\end_inset
+
+ is by controlling the moments of the random variable 
+\begin_inset Formula $X$
+\end_inset
+
+, where by controlling higher-order moments of the variable 
+\begin_inset Formula $X$
+\end_inset
+
+, we can obtain sharper bounds on tail probabilities.
+ This motivates the 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+"
+\end_layout
+
+\end_inset
+
+Classical bounds
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+"
+\end_layout
+
+\end_inset
+
+ section of the notes.
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+{
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+vskip
+\end_layout
+
+\end_inset
+
+0.5em
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+ We then extend the derivation of bounds to more general functions of the
+ random variables in the 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+"
+\end_layout
+
+\end_inset
+
+Martingale-based methods
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+"
+\end_layout
+
+\end_inset
+
+ section using 
+\color red
+martingale decompositions
+\color inherit
+, as opposed to limiting the techniques to deriving bounds on 
+\color red
+the sum of independent
+\color inherit
+ random variables.
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+{
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+vskip
+\end_layout
+
+\end_inset
+
+ 0.5em
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+ Finally, the seminar is concluded with a classical result on the concentration
+ properties of Lipschitz functions of Gaussian variables.
+ 
+\end_layout
+
+\begin_layout Section
+Classical bounds
+\end_layout
+
+\begin_layout Subsection
+From Markov to Chernoff
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+frame{
+\end_layout
+
+\end_inset
+
+
+\begin_inset CommandInset toc
+LatexCommand tableofcontents
+
+\end_inset
+
+[currentsection , currentsubsection]
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+%------------------------------------------------
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 3
+status collapsed
+
+\begin_layout Plain Layout
+allowframebreaks
+\end_layout
+
+\end_inset
+
+The most elementary tail bound is 
+\color red
+Markov's inequality
+\color inherit
+: 
+\end_layout
+
+\begin_deeper
+\begin_layout Block
+\begin_inset Argument 2
+status collapsed
+
+\begin_layout Plain Layout
+Markov's inequality
+\end_layout
+
+\end_inset
+
+Given a non-negative random variable 
+\begin_inset Formula $X$
+\end_inset
+
+ with finite mean - i.e.
+ 
+\begin_inset Formula $\E[X]<\infty$
+\end_inset
+
+, we have 
+\begin_inset Formula 
+\[
+P[X\geq t]\leq\frac{\E[X]}{t},\quad\forall t>0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Frame
+It is immediately obvious that Markov's inequality 
+\color red
+requires only the existence of the first moment
+\color inherit
+.
+ If the random variable 
+\begin_inset Formula $X$
+\end_inset
+
+ also has finite variance - i.e.
+ 
+\begin_inset Formula $\text{var}(X)<\infty$
+\end_inset
+
+, we have 
+\color red
+Chebyshev's inequality
+\color inherit
+: 
+\end_layout
+
+\begin_deeper
+\begin_layout Block
+\begin_inset Argument 2
+status collapsed
+
+\begin_layout Plain Layout
+Chebyshev's inequality
+\end_layout
+
+\end_inset
+
+For a random variable 
+\begin_inset Formula $X$
+\end_inset
+
+ that has a finite mean and variance, we have 
+\begin_inset Formula 
+\[
+P[\lvert X-\mu\rvert\geq t]\leq\frac{\text{var}(X)}{t^{2}},\quad\forall t>0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+
+\end_layout
+
+\begin_layout Frame
+
+\series bold
+Proof:
+\series default
+ Chebyshev's inequality follows from Markov's inequality, by considering
+ the variable 
+\begin_inset Formula $(X-\E[X])^{2}$
+\end_inset
+
+ and the constant 
+\begin_inset Formula $t^{2}$
+\end_inset
+
+.
+ By substituting these in the Markov inequality, we get 
+\begin_inset Formula 
+\begin{align}
+P[(X-\E[X])^{2}\geq t^{2}] & \leq\frac{\E[(X-\E[X])^{2}]}{t^{2}}\\
+P[\lvert X-\E[X]\rvert\geq t] & \leq\frac{\E[(X-\E[X])^{2}]}{t^{2}}
+\end{align}
+
+\end_inset
+
+Since, 
+\begin_inset Formula $\E[X]=\mu$
+\end_inset
+
+ and 
+\begin_inset Formula $\text{var}(X)=\E[(X-\E[X])^{2}]$
+\end_inset
+
+, we get 
+\begin_inset Formula 
+\[
+P[\lvert X-\mu\rvert\geq t]\leq\frac{\text{var}(X)}{t^{2}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 3
+status collapsed
+
+\begin_layout Plain Layout
+allowframebreaks
+\end_layout
+
+\end_inset
+
+The earlier results can be generalised as follows: 
+\end_layout
+
+\begin_deeper
+\begin_layout Block
+\begin_inset Argument 2
+status collapsed
+
+\begin_layout Plain Layout
+Extensions of Markov's inequality
+\end_layout
+
+\end_inset
+
+Whenever a variable 
+\begin_inset Formula $X$
+\end_inset
+
+ has a central moment of order 
+\begin_inset Formula $k$
+\end_inset
+
+, an application of Markov's inequality to the random variable 
+\begin_inset Formula $\lvert X-\mu\rvert^{k}$
+\end_inset
+
+ yields: 
+\begin_inset Formula 
+\[
+P[\lvert X-\mu\rvert\geq t]\leq\frac{\E[\lvert X-\mu\rvert]^{k}}{t^{k}},\quad\forall t>0.
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Frame
+and this is not limited to polynomials 
+\begin_inset Formula $\lvert X-\mu\rvert^{k}$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Frame
+Suppose 
+\begin_inset Formula $X$
+\end_inset
+
+ has a mgf in a neighbourhood of zero,such that there is a constant 
+\begin_inset Formula $b>0$
+\end_inset
+
+ that the functions 
+\begin_inset Formula $\rho(\lambda)=\E[\exp(\lambda(X-\mu))]$
+\end_inset
+
+ exists for all 
+\begin_inset Formula $\lambda<\lvert b\rvert$
+\end_inset
+
+.
+ Thus, for any 
+\begin_inset Formula $\lambda\in[0,b]$
+\end_inset
+
+, we may apply Markov's inequality to the random variable 
+\begin_inset Formula $Y=\exp(\lambda(X-\mu))$
+\end_inset
+
+, obtaining the upper bound: 
+\begin_inset Formula 
+\[
+P[(X-\mu)\geq t]=P[\exp(\lambda(X-\mu))\geq\exp(\lambda t)]\leq\frac{\E[\exp(\lambda(X-\mu))]}{\exp(\lambda t)}
+\]
+
+\end_inset
+
+By taking the 
+\begin_inset Formula $\log$
+\end_inset
+
+ of both side of the latter inequality, we get: 
+\begin_inset Formula 
+\[
+\log P[(X-\mu)\geq t]\leq\log\E[\exp(\lambda(X-\mu))]-\lambda t
+\]
+
+\end_inset
+
+Optimising, our choice of 
+\begin_inset Formula $\lambda$
+\end_inset
+
+, we can obtain the tightest results that yields the Chernoff bound: 
+\end_layout
+
+\begin_deeper
+\begin_layout Block
+\begin_inset Argument 2
+status collapsed
+
+\begin_layout Plain Layout
+Chernoff bound
+\end_layout
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\log P[(X-\mu)\geq t]\leq\inf_{\lambda\in[0,b]}\{\log\E[\exp(\lambda(X-\mu))]-\lambda t\}.
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Subsection
+Sub-Gaussian variables and Hoeffding bounds
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+frame{
+\end_layout
+
+\end_inset
+
+
+\begin_inset CommandInset toc
+LatexCommand tableofcontents
+
+\end_inset
+
+[currentsubsection]
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 3
+status collapsed
+
+\begin_layout Plain Layout
+allowframebreaks
+\end_layout
+
+\end_inset
+
+Evidently, the form of the tail bound obtained using the Chernoff approach
+ depends on the growth rate of the mgf.
+ Naturally, in the study of the tail bounds the random variables are then
+ classified in terms of their mgfs.
+ The simplest type of behaviour is known as sub-Gaussian, which shall be
+ motivated by deriving tail bounds for a Gaussian variables, say, X, such
+ that 
+\begin_inset Formula $X\sim N(\mu,\sigma^{2})$
+\end_inset
+
+, with density 
+\begin_inset Formula 
+\[
+f(X)=\frac{1}{\sigma\sqrt{2\pi}}\exp\left(-\frac{(X-\mu)^{2}}{2\sigma^{2}}\right)
+\]
+
+\end_inset
+
+and thus, the mgf 
+\begin_inset Formula 
+\[
+\E[\exp(\lambda X)]=\exp\left(\mu\lambda+\frac{\sigma^{2}\lambda^{2}}{2}\right),\quad\forall\lambda\in\R
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Example
+\begin_inset Argument 2
+status collapsed
+
+\begin_layout Plain Layout
+Gaussian tail bounds
+\end_layout
+
+\end_inset
+
+Let 
+\begin_inset Formula $X\sim N(\mu,\sigma^{2})$
+\end_inset
+
+ be a Gaussian r.v., which has mgf 
+\begin_inset Formula 
+\[
+\E[\exp(\lambda X)]=\exp\left(\mu\lambda+\frac{\sigma^{2}\lambda^{2}}{2}\right),\quad\forall\lambda\in\R
+\]
+
+\end_inset
+
+substituting this into the optimising problem of the Chernoff bound, we
+ get 
+\begin_inset Formula 
+\begin{equation}
+\inf_{\lambda\geq0}\{\log\E[\exp(\lambda(X-\mu))-\lambda t]\}=\inf_{\lambda\geq0}\left\{ \frac{\sigma^{2}\lambda^{2}}{2}-\lambda t\right\} =-\frac{t^{2}}{2\sigma^{2}}\label{eq: optms}
+\end{equation}
+
+\end_inset
+
+Therefore, we can conclude that any 
+\begin_inset Formula $N(\mu,\sigma^{2})$
+\end_inset
+
+ r.v.
+ satisfies the upper deviation inequality 
+\begin_inset Formula 
+\begin{equation}
+P[X\geq\mu+t]\leq\exp\left(-\frac{t^{2}}{2\sigma^{2}}\right)\label{eq: Sub-Gaussian TB}
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+
+\end_layout
+
+\begin_deeper
+\begin_layout Proof
+\begin_inset Argument 2
+status collapsed
+
+\begin_layout Plain Layout
+Proof of equation (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq: optms"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+)
+\end_layout
+
+\end_inset
+
+To solve the optimisation problem below 
+\begin_inset Formula 
+\[
+\inf_{\lambda\geq0}\left\{ \frac{\sigma^{2}\lambda^{2}}{2}-\lambda t\right\} 
+\]
+
+\end_inset
+
+we take derivatives to find the optimum of this quadratic function, - i.e.
+ 
+\begin_inset Formula 
+\[
+\frac{\partial}{\partial\lambda}\left(\frac{\sigma^{2}\lambda^{2}}{2}-\lambda t\right)=0,
+\]
+
+\end_inset
+
+which leads to 
+\begin_inset Formula $\lambda_{opt}=\frac{t}{\sigma^{2}}$
+\end_inset
+
+.
+ Substituting 
+\begin_inset Formula $\lambda_{opt}$
+\end_inset
+
+ with 
+\begin_inset Formula $\lambda$
+\end_inset
+
+ in the above equation yields relationship (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq: optms"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+).
+ 
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+
+\end_layout
+
+\begin_deeper
+\begin_layout Definition
+\begin_inset Argument 2
+status collapsed
+
+\begin_layout Plain Layout
+Sub-Gaussianity
+\end_layout
+
+\end_inset
+
+A r.v.
+ 
+\begin_inset Formula $X$
+\end_inset
+
+ with mean 
+\begin_inset Formula $\mu=\E[X]$
+\end_inset
+
+ is sub-Gaussian if there is a positive number 
+\begin_inset Formula $\sigma$
+\end_inset
+
+, such that 
+\begin_inset Formula 
+\[
+\E[\exp(\lambda(X-\mu))]\leq\exp\left(\frac{\sigma^{2}\lambda^{2}}{2}\right),\quad\forall\lambda\in\R
+\]
+
+\end_inset
+
+where the constant 
+\begin_inset Formula $\sigma$
+\end_inset
+
+ is referred to as the 
+\color red
+sub-Gaussian parameter
+\color inherit
+.
+ Moreover, by the symmetry of the definition, the variable 
+\begin_inset Formula $-X$
+\end_inset
+
+ is sub-Gaussian iff 
+\begin_inset Formula $X$
+\end_inset
+
+ is sub-Gaussian, so that we also have lower deviation inequality 
+\begin_inset Formula $P[X\leq\mu-t]\leq\exp\left(-\frac{t^{2}}{2\sigma^{2}}\right),\quad\forall t\geq0$
+\end_inset
+
+.
+ Thus, we conclude that any sub-Gaussian variable satisfies the 
+\color red
+concentration inequality
+\color inherit
+ 
+\begin_inset Formula 
+\[
+P[\lvert X-\mu\rvert\geq t]\leq2\exp\left(-\frac{t^{2}}{2\sigma^{2}}\right),\quad\forall t\in\R.
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+We may have scenarios in which sub-Gaussian variables are non-Gaussian.
+ 
+\end_layout
+
+\begin_deeper
+\begin_layout Example
+\begin_inset Argument 2
+status collapsed
+
+\begin_layout Plain Layout
+Rademacher variables
+\end_layout
+
+\end_inset
+
+A Rademacher r.v.
+ 
+\begin_inset Formula $\varepsilon$
+\end_inset
+
+ takes the values 
+\begin_inset Formula $[-1,+1]$
+\end_inset
+
+ equiprobably -i.e 
+\begin_inset Formula $P[\varepsilon=-1]=P[\varepsilon=+1]=\frac{1}{2}$
+\end_inset
+
+.
+ Thus, the mgf of 
+\begin_inset Formula $\varepsilon$
+\end_inset
+
+ is as follows 
+\begin_inset Formula 
+\[
+\E[\exp(\lambda\varepsilon)]=\sum_{i\in\{-1,+1\}}\exp(\lambda\varepsilon_{i})p(\varepsilon=i)=\frac{1}{2}[\exp(-\lambda)+\exp(\lambda)]
+\]
+
+\end_inset
+
+where the Maclaurin-series expansion of the terms 
+\begin_inset Formula $\exp(-\lambda)$
+\end_inset
+
+ and 
+\begin_inset Formula $\exp(\lambda)$
+\end_inset
+
+ leads gives us 
+\begin_inset Formula 
+\begin{align*}
+\E[\exp(\lambda\varepsilon)]=\frac{1}{2}\left[\sum\limits _{k=0}^{\infty}\frac{\lambda^{k}}{k!}+\sum\limits _{k=0}^{\infty}\frac{(-\lambda)^{k}}{k!}\right] & =\frac{1}{2}\left[2\sum\limits _{k=0}^{\infty}\frac{\lambda^{2k}}{2k!}\right]=\sum\limits _{k=0}^{\infty}\frac{\lambda^{2k}}{2k!}\\
+ & \leq1+\sum\limits _{k=0}^{\infty}\frac{\lambda^{2k}}{2^{k}k!}=\exp\left(\frac{\lambda^{2}}{2}\right)
+\end{align*}
+
+\end_inset
+
+with the sub-Gaussian parameter 
+\begin_inset Formula $\sigma=1$
+\end_inset
+
+.
+ 
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+
+\series bold
+Some preliminaries:
+\series default
+ The exponential function 
+\begin_inset Formula $g(z)=\exp(z)$
+\end_inset
+
+ is convex; thus, Jensen's inequality for convex functions applies as follows
+ 
+\begin_inset Formula 
+\[
+g(\E[z])\leq\E[g(z)]
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+A r.v.
+ 
+\begin_inset Formula $Z'$
+\end_inset
+
+ is an 
+\color red
+independent copy
+\color inherit
+ of 
+\begin_inset Formula $Z$
+\end_inset
+
+, if it has a same the same distribution as 
+\begin_inset Formula $Z$
+\end_inset
+
+, and where 
+\begin_inset Formula $Z$
+\end_inset
+
+ and 
+\begin_inset Formula $Z'$
+\end_inset
+
+ are independent.
+\end_layout
+
+\begin_layout Frame
+Given the above definitions, we provide a simple example of 
+\color red
+symmetrization argument
+\color inherit
+, in which first an independent copy of 
+\begin_inset Formula $X$
+\end_inset
+
+, 
+\begin_inset Formula $X'$
+\end_inset
+
+ is introduced and the problem is symmetrized using a Rademacher variable.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+
+\end_layout
+
+\begin_deeper
+\begin_layout Block
+\begin_inset Argument 2
+status collapsed
+
+\begin_layout Plain Layout
+Symmetrization argument
+\end_layout
+
+\end_inset
+
+Let 
+\begin_inset Formula $X$
+\end_inset
+
+ be a r.v.
+ with mean zero - i.e.
+ 
+\begin_inset Formula $\mu=\E_{X}[X]=0$
+\end_inset
+
+, with a support on the interval 
+\begin_inset Formula $[a,b]$
+\end_inset
+
+, and let 
+\begin_inset Formula $X'$
+\end_inset
+
+ be an independent copy of 
+\begin_inset Formula $X$
+\end_inset
+
+, for any 
+\begin_inset Formula $\lambda\in\R$
+\end_inset
+
+, we have 
+\begin_inset Formula 
+\[
+\E_{X}[\exp(\lambda X)]=\E_{X}[\exp(\lambda(X-\E_{X'}[X']))]
+\]
+
+\end_inset
+
+since 
+\begin_inset Formula $\E_{X}[X]=\E_{X'}[X']=0$
+\end_inset
+
+.
+ Using Jensen's inequality, we further establish that 
+\begin_inset Formula 
+\[
+\E_{X}[\exp(\lambda(X-\E[X']))]\leq\E_{X,X'}[\exp(\lambda(X-X'))]
+\]
+
+\end_inset
+
+Further, note that 
+\begin_inset Formula $\varepsilon(X-X')$
+\end_inset
+
+ and 
+\begin_inset Formula $(X-X')$
+\end_inset
+
+ possess the same distribution, where 
+\begin_inset Formula $\varepsilon$
+\end_inset
+
+ is a Rademacher r.v., so that 
+\begin_inset Formula 
+\[
+\E_{X,X'}[\exp(\lambda(X-X'))]=\E_{X,X'}[\E_{\varepsilon}[\exp(\lambda\varepsilon(X-X'))]]Â¸
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+Â¸ 
+\end_layout
+
+\begin_deeper
+\begin_layout Block
+\begin_inset Argument 2
+status collapsed
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+where from the earlier example, we know that 
+\begin_inset Formula 
+\[
+\E_{X,X'}[\E_{\varepsilon}[\exp(\lambda\varepsilon(X-X'))]]\leq\E_{X,X'}\left[\exp\left(\frac{\lambda^{2}(X-X')^{2}}{2}\right)\right]
+\]
+
+\end_inset
+
+since 
+\begin_inset Formula $\lvert X-X'\rvert\leq b-a$
+\end_inset
+
+, we are guaranteed that 
+\begin_inset Formula 
+\[
+\E_{X,X'}\left[\exp\left(\frac{\lambda^{2}(X-X')^{2}}{2}\right)\right]\leq\exp\left(\frac{\lambda^{2}(b-a)^{2}}{2}\right)
+\]
+
+\end_inset
+
+thus, we have shown that 
+\begin_inset Formula $X$
+\end_inset
+
+ is sub-Gaussian with sub-Gaussian parameter 
+\begin_inset Formula $\sigma=b-a$
+\end_inset
+
+ 
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+
+\end_layout
+
+\begin_layout Frame
+
+\series bold
+Quiz:
+\series default
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+{
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+vskip
+\end_layout
+
+\end_inset
+
+ 0.5em
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+\begin_inset Argument item:1
+status collapsed
+
+\begin_layout Plain Layout
+1)
+\end_layout
+
+\end_inset
+
+Two independent sub-Gaussian variables 
+\begin_inset Formula $X_{1}$
+\end_inset
+
+ and 
+\begin_inset Formula $X_{2}$
+\end_inset
+
+ possess the sub-Gaussian parameters 
+\begin_inset Formula $\sigma_{1}$
+\end_inset
+
+ and 
+\begin_inset Formula $\sigma_{2}$
+\end_inset
+
+ respectively.
+ What is the sub-Gaussian parameter of 
+\begin_inset Formula $X_{1}+X_{2}$
+\end_inset
+
+?
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Argument item:1
+status collapsed
+
+\begin_layout Plain Layout
+2)
+\end_layout
+
+\end_inset
+
+Now once again consider the sub-Gaussian tail bound (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq: Sub-Gaussian TB"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+).
+ How is this result extended to the variable 
+\begin_inset Formula $X_{1}+X_{2}$
+\end_inset
+
+? 
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+The answers to the above quiz, can be generalised to the variables 
+\begin_inset Formula $X_{1},\cdots,X_{n}$
+\end_inset
+
+ with mean 
+\begin_inset Formula $\mu_{i}$
+\end_inset
+
+ and sub-Gaussian parameters 
+\begin_inset Formula $\sigma_{i}$
+\end_inset
+
+ for 
+\begin_inset Formula $i=1,\cdots,n$
+\end_inset
+
+ leading to the Hoeffding bound 
+\end_layout
+
+\begin_deeper
+\begin_layout Block
+\begin_inset Argument 2
+status collapsed
+
+\begin_layout Plain Layout
+Hoeffding bounds
+\end_layout
+
+\end_inset
+
+Suppose that the variables 
+\begin_inset Formula $X_{1},\cdots,X_{n}$
+\end_inset
+
+ each with mean 
+\begin_inset Formula $\mu_{1},\cdots,\mu_{n}$
+\end_inset
+
+ and sub-Gaussian parameter 
+\begin_inset Formula $\sigma_{1},\cdots,\sigma_{n}$
+\end_inset
+
+ are independent.
+ Then we have 
+\begin_inset Formula 
+\[
+P\left[\sum\limits _{i=1}^{n}(X_{i}-\mu_{i})\geq t\right]\leq\exp\left\{ -\frac{t^{2}}{2\sum_{i=1}^{n}\sigma_{i}^{2}}\right\} 
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 3
+status collapsed
+
+\begin_layout Plain Layout
+allowframebreaks
+\end_layout
+
+\end_inset
+
+To prove the equivalent characterizations of sub-Gaussian variables, it
+ is of interest to first answer Exercise 2.2 of 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "wainwright2019high"
+literal "false"
+
+\end_inset
+
+ which introduces 
+\color red
+Mills ratio
+\color inherit
+.
+\end_layout
+
+\begin_layout Frame
+
+\series bold
+Exercise 2.2 of 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "wainwright2019high"
+literal "false"
+
+\end_inset
+
+:
+\series default
+ Let 
+\begin_inset Formula $\phi(z)=\frac{1}{\sqrt{2\pi}}\exp\left(\frac{-z^{2}}{2}\right)$
+\end_inset
+
+ be the density function of a standard normal 
+\begin_inset Formula $Z\sim N(0,1)$
+\end_inset
+
+ variate.
+ 
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+\begin_inset Argument item:1
+status collapsed
+
+\begin_layout Plain Layout
+1)
+\end_layout
+
+\end_inset
+
+Show that 
+\begin_inset Formula $\phi'(z)+z\phi(z)=0$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Argument item:1
+status collapsed
+
+\begin_layout Plain Layout
+2)
+\end_layout
+
+\end_inset
+
+Use part 1 to show that 
+\begin_inset Formula 
+\[
+\phi(z)\left(\frac{1}{z}-\frac{1}{z^{3}}\right)\leq P[Z\geq z]\leq\phi(z)\left(\frac{1}{z}-\frac{1}{z^{3}}+\frac{3}{z^{5}}\right),\quad\forall z>0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Frame
+
+\series bold
+Solution:
+\end_layout
+
+\begin_layout Frame
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+underline{Part 1:}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula 
+\[
+\phi'(z)=-\frac{z}{\sqrt{2\pi}}\exp\left(\frac{-z^{2}}{2}\right)\quad\text{and}\quad z\phi(z)=\frac{z}{\sqrt{2\pi}}\exp\left(\frac{-z^{2}}{2}\right)
+\]
+
+\end_inset
+
+thus, 
+\begin_inset Formula 
+\[
+\phi'(z)+z\phi(z)=0
+\]
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+underline{Part 2:}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+Note that 
+\begin_inset Formula $P[Z\geq z]=\int_{z}^{\infty}\phi(t)dt$
+\end_inset
+
+.
+ Furthermore, from part 1, we know that 
+\begin_inset Formula $\phi(z)=\frac{-\phi'(z)}{z}$
+\end_inset
+
+.
+ By substituting 
+\begin_inset Formula $\frac{-\phi'(z)}{z}$
+\end_inset
+
+ into the earlier integral, we get 
+\begin_inset Formula 
+\[
+\int_{z}^{\infty}\phi(t)dt=\int_{z}^{\infty}\frac{-\phi'(t)}{t}dt=\left[\frac{-\phi'(t)}{t}\right]_{z}^{\infty}-\int_{z}^{\infty}\frac{\phi(t)}{t^{2}}dt
+\]
+
+\end_inset
+
+We know that 
+\begin_inset Formula $\lim_{t\to\infty}\frac{-\phi'(t)}{t}=0$
+\end_inset
+
+, therefore, we may apply the the above expression can be written as 
+\begin_inset Formula 
+\[
+\frac{\phi(z)}{z}-\int_{z}^{\infty}\frac{-\phi'(t)}{t^{3}}dt
+\]
+
+\end_inset
+
+using the substitution derived from Miller's ratio.
+ Using integration by parts yet again, we obtain 
+\begin_inset Formula 
+\begin{align*}
+\frac{\phi(z)}{z}-\int_{z}^{\infty}\frac{-\phi'(t)}{t^{3}}dt & =\frac{\phi(z)}{z}+\left[\frac{\phi(t)}{t^{3}}\right]_{z}^{\infty}-\int_{z}^{\infty}\frac{-3\phi(t)}{t^{4}}dt\\
+ & =\frac{\phi(z)}{z}+\frac{\phi(z)}{z^{3}}+\int_{z}^{\infty}\frac{3\phi(t)}{t^{4}}dt\\
+P[Z\geq z] & =\phi(z)\left(\frac{1}{z}+\frac{1}{z^{3}}\right)+\underbrace{\int_{z}^{\infty}\frac{3\phi(t)}{t^{4}}dt}_{\geq0}\\
+ & \geq\phi(z)\left(\frac{1}{z}+\frac{1}{z^{3}}\right)
+\end{align*}
+
+\end_inset
+
+Applying the same procedure again will prove the upper inequality.
+ This is left as an exercise to the reader.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+
+\end_layout
+
+\begin_deeper
+\begin_layout Block
+\begin_inset Argument 2
+status collapsed
+
+\begin_layout Plain Layout
+Equivalent characterizations of the sub-Gaussian variables (I-II)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+\begin_inset Argument item:1
+status collapsed
+
+\begin_layout Plain Layout
+(I)
+\end_layout
+
+\end_inset
+
+From the definition of sub-Gaussian variables, a r.v.
+ with 
+\begin_inset Formula $\mu=\E[X]=0$
+\end_inset
+
+ is sub-Gaussian for 
+\begin_inset Formula $\sigma\geq0$
+\end_inset
+
+, 
+\begin_inset Formula 
+\[
+\E[\exp(\lambda X)]\leq\exp\left(\frac{\sigma^{2}\lambda^{2}}{2}\right),\quad\forall\lambda\in\R
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Argument item:1
+status collapsed
+
+\begin_layout Plain Layout
+(II)
+\end_layout
+
+\end_inset
+
+There is a constant 
+\begin_inset Formula $c\geq0$
+\end_inset
+
+ and Gaussian r.v.
+ 
+\begin_inset Formula $Z\sim N(0,\tau^{2})$
+\end_inset
+
+, such that 
+\begin_inset Formula 
+\[
+P[\lvert X\rvert\geq s]\leq cP[\lvert Z\rvert\geq s],\quad\forall s\geq0.
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Subsection
+Sub-exponential variables and Bernstein bounds
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+frame{
+\end_layout
+
+\end_inset
+
+
+\begin_inset CommandInset toc
+LatexCommand tableofcontents
+
+\end_inset
+
+[currentsection,currentsubsection]
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Frame
+The notion of sub-Gaussianity is rather restrictive.
+ We thus now introduce sub-exponential variables, which impose milder conditions
+ on the mgf.
+ 
+\end_layout
+
+\begin_deeper
+\begin_layout Definition
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+{
+\end_layout
+
+\end_inset
+
+Sub-exponentiality
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+ A r.v.
+ 
+\begin_inset Formula $X$
+\end_inset
+
+ with mean 
+\begin_inset Formula $\mu=\E[X]$
+\end_inset
+
+ is sub-exponential if there are non-negative parameters 
+\begin_inset Formula $(\nu,\alpha)$
+\end_inset
+
+, such that 
+\begin_inset Formula 
+\[
+\E[\exp(\lambda(X-\mu))]\leq\exp\left(\frac{\nu^{2}\lambda^{2}}{2}\right),\quad\forall\lvert\lambda\rvert<\frac{1}{\alpha}
+\]
+
+\end_inset
+
+It is immediately obvious that any sub-Gaussian variable is also sub-exponential
+, where the former is a special case of the latter, with 
+\begin_inset Formula $\nu=\sigma$
+\end_inset
+
+ and 
+\begin_inset Formula $\alpha=0$
+\end_inset
+
+.
+ However, the converse is not true.
+ 
+\end_layout
+
+\end_deeper
+\begin_layout Frame
+An example of a case where a variable is sub-exponential but not sub-Gaussian
+ is as follows 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+
+\end_layout
+
+\begin_deeper
+\begin_layout Example
+\begin_inset Argument 2
+status collapsed
+
+\begin_layout Plain Layout
+sub-exponential but not sub-Gaussian
+\end_layout
+
+\end_inset
+
+Let 
+\begin_inset Formula $Z\sim N(0,1)$
+\end_inset
+
+, and consider the r.v.
+ 
+\begin_inset Formula $X=Z^{2}$
+\end_inset
+
+, such that 
+\begin_inset Formula $Z\sim\chi_{1}^{2}$
+\end_inset
+
+.
+ Therefore, the mean 
+\begin_inset Formula $\mu=\E[\chi_{1}^{2}]=1$
+\end_inset
+
+.
+ For 
+\begin_inset Formula $\lambda<\frac{1}{2}$
+\end_inset
+
+, we have the mgf as follows 
+\begin_inset Formula 
+\begin{align*}
+\E[\exp(\lambda(X-1))] & =\int_{-\infty}^{+\infty}\exp(\lambda(Z^{2}-1))f(z)dz\\
+ & =\frac{1}{\sqrt{2\pi}}\int_{-\infty}^{+\infty}\exp(\lambda(Z^{2}-1))\exp\left(\frac{-Z^{2}}{2}\right)dz\\
+ & =\frac{\exp(-\lambda)}{\sqrt{1-2\lambda}}.
+\end{align*}
+
+\end_inset
+
+for 
+\begin_inset Formula $\lambda\geq\frac{1}{2}$
+\end_inset
+
+ the mgf is infinite, which reveals that 
+\begin_inset Formula $X$
+\end_inset
+
+ is not sub-Gaussian.
+ 
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 3
+status collapsed
+
+\begin_layout Plain Layout
+allowframebreaks
+\end_layout
+
+\end_inset
+
+To obtain the tail-bounds of sub-exponential variables, we refer to the
+ Chernoff-type approach - i.e.
+ 
+\begin_inset Formula 
+\[
+P[X-\mu\geq t]=P[\exp(\lambda(X-\mu))\geq\exp(t\lambda)]\leq\frac{\E[\exp(\lambda(X-\mu))]}{\exp(\lambda t)}
+\]
+
+\end_inset
+
+where from the definition of sub-exponential variables, we get the upper
+ bound 
+\begin_inset Formula 
+\[
+P[X-\mu\geq t]\leq\frac{\E[\exp(\lambda(X-\mu))]}{\exp(\lambda t)}\leq\exp\left(\frac{\lambda^{2}\nu^{2}}{2}-\lambda t\right),\quad\forall\lambda\in\left[0,\frac{1}{\alpha}\right)Â¸
+\]
+
+\end_inset
+
+where the Chernoff optimisation problem is 
+\begin_inset Formula 
+\[
+\log P[X-\mu\geq t]\leq\inf_{\lambda\in[0,\alpha^{-1}]}\left\{ \frac{\lambda^{2}\nu^{2}}{2}-\lambda t\right\} 
+\]
+
+\end_inset
+
+where using the same unconstrained optimisation approach as for sub-Gaussian
+ variables, we'd obtain 
+\begin_inset Formula $\lambda_{opt}=\frac{t}{\nu^{2}}$
+\end_inset
+
+, which yields the minimum 
+\begin_inset Formula $-\frac{t^{2}}{2\nu^{2}}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Frame
+Recall the constraint 
+\begin_inset Formula $0\leq\lambda<\frac{1}{\alpha}$
+\end_inset
+
+.
+ This implies that the unconstrained optimal 
+\begin_inset Formula $\lambda_{opt}$
+\end_inset
+
+ must be between 
+\begin_inset Formula $0\leq\frac{t}{\nu^{2}}<\frac{1}{\alpha}$
+\end_inset
+
+, which implies that in the interval 
+\begin_inset Formula $0\leq t<\frac{\nu^{2}}{\alpha^{2}}$
+\end_inset
+
+, the unconstrained optimum corresponds to the constrained optimum.
+\end_layout
+
+\begin_layout Frame
+Otherwise for 
+\begin_inset Formula $t\geq\frac{\nu^{2}}{\alpha^{2}}$
+\end_inset
+
+, considering that the function 
+\begin_inset Formula $g(.,t)=\frac{\lambda^{2}\nu^{2}}{2}-\lambda t$
+\end_inset
+
+ is monotonically decreasing, in the interval 
+\begin_inset Formula $[0,\lambda^{*})$
+\end_inset
+
+, the constrained minimum is obtained at the boundary - i.e.
+ 
+\begin_inset Formula $\lambda^{\#}=\frac{1}{\alpha}$
+\end_inset
+
+, which leads to the minimum 
+\begin_inset Formula 
+\[
+g^{*}(t)=g(\lambda^{\#},t)=-\frac{t}{\alpha}+\frac{1}{2\alpha}\frac{\nu^{2}}{\alpha}\leq-\frac{t}{2\alpha}
+\]
+
+\end_inset
+
+where this inequality used the fact that 
+\begin_inset Formula $\frac{\nu^{2}}{\alpha}\leq t$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Frame
+The results above lead to the sub-exponential tail bounds as follows 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 3
+status collapsed
+
+\begin_layout Plain Layout
+allowframebreaks
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Block
+\begin_inset Argument 2
+status collapsed
+
+\begin_layout Plain Layout
+Sub-exponential tail bounds
+\end_layout
+
+\end_inset
+
+Suppose 
+\begin_inset Formula $X$
+\end_inset
+
+ is sub-exponential with parameters 
+\begin_inset Formula $(\nu,\alpha)$
+\end_inset
+
+.
+ Then 
+\begin_inset Formula 
+\[
+P[X-\mu\geq t]\leq\begin{cases}
+\exp\left(-\frac{t}{2\nu^{2}}\right)\quad0\leq t\leq\frac{\nu^{2}}{\alpha},\\
+\exp\left(-\frac{t}{2\alpha}\right)\quad t>\frac{\nu^{2}}{\alpha}.
+\end{cases}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Frame
+The sub-exponential property can be verified by computing or bounding the
+ mgf, which may not be practical in many different settings.
+ One other approach is based on the control of the polynomial moments of
+ 
+\begin_inset Formula $X$
+\end_inset
+
+, which leads to the 
+\color red
+Bernstein condition
+\color inherit
+ 
+\end_layout
+
+\begin_deeper
+\begin_layout Block
+\begin_inset Argument 2
+status collapsed
+
+\begin_layout Plain Layout
+Bernstein condition
+\end_layout
+
+\end_inset
+
+Given a r.v.
+ 
+\begin_inset Formula $X$
+\end_inset
+
+ with mean 
+\begin_inset Formula $\mu=\E[X]$
+\end_inset
+
+ and variance 
+\begin_inset Formula $\sigma^{2}=\E[X^{2}]-\mu^{2}$
+\end_inset
+
+, the Bernstein condition with parameter 
+\begin_inset Formula $b$
+\end_inset
+
+ holds if 
+\begin_inset Formula 
+\[
+\lvert\E[(X-\mu)^{k}]\rvert\leq\frac{1}{2}k!\sigma^{2}b^{k-2},\quad k\geq2
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Frame
+One sufficient condition for the Bernstein condition to hold is that 
+\begin_inset Formula $X$
+\end_inset
+
+ is bounded.
+ When 
+\begin_inset Formula $X$
+\end_inset
+
+ satisfies the Bernstein condition, then it is sub-exponential with parameters
+ 
+\begin_inset Formula $\sigma^{2}$
+\end_inset
+
+ and 
+\begin_inset Formula $b$
+\end_inset
+
+.
+ The Maclaurin-series expansion of the mgf can be expressed as follows 
+\begin_inset Formula 
+\begin{align*}
+\E[\exp(\lambda(X-\mu))] & =\E\left\{ \sum\limits _{i=0}^{\infty}\frac{f^{(i)}(0)}{i!}\left[\lambda(X-\mu)\right]^{i}\right\} \\
+ & =\sum\limits _{i=0}^{\infty}\E\left\{ \frac{f^{(i)}(0)}{i!}\left[\lambda(X-\mu)\right]^{i}\right\} \\
+ & =1+\lambda\E[(X-\mu)]+\frac{\lambda^{2}\E[(X-\mu)]^{2}}{2}+\sum\limits _{i=3}^{\infty}\frac{\lambda^{i}\E[(X-\mu)^{i}]}{i!}\\
+ & =1+\frac{\lambda^{2}\sigma^{2}}{2}+\sum\limits _{i=3}^{\infty}\frac{\lambda^{i}\E[(X-\mu)^{i}]}{i!}
+\end{align*}
+
+\end_inset
+
+Note that from the definition of Bernstein condition, we have 
+\begin_inset Formula 
+\[
+\frac{\lvert\E[(X-\mu)^{i}]\rvert}{i!}\leq\frac{1}{2}\sigma^{2}b^{i-2}
+\]
+
+\end_inset
+
+Therefore, 
+\begin_inset Formula 
+\[
+\E[\exp(\lambda(X-\mu))]\leq1+\frac{\lambda^{2}\sigma^{2}}{2}+\frac{\lambda^{2}\sigma^{2}}{2}\sum\limits _{i=3}^{\infty}(\lvert\lambda\rvert b)^{i-2}
+\]
+
+\end_inset
+
+For 
+\begin_inset Formula $\lvert\lambda\rvert<\frac{1}{b}$
+\end_inset
+
+, we sum the geometric series, 
+\begin_inset Formula 
+\[
+\sum\limits _{i=3}^{\infty}(\lvert\lambda\rvert b)^{i-2}=\frac{1}{1-\lvert\lambda\rvert b}
+\]
+
+\end_inset
+
+which leads to the following inequality 
+\begin_inset Formula 
+\[
+\E[\exp(\lambda(X-\mu))]\leq1+\frac{\lambda^{2}\sigma^{2}}{2}+\frac{\lambda^{2}\sigma^{2}}{2}\frac{1}{1-\lvert\lambda\rvert b}
+\]
+
+\end_inset
+
+Noting that 
+\begin_inset Formula 
+\begin{align*}
+\exp\left(\frac{\lambda^{2}\sigma^{2}/2}{1-\lvert\lambda\rvert b}\right) & =1+\frac{\lambda^{2}\sigma^{2}/2}{1-\lvert\lambda\rvert b}+\cdots\\
+ & \geq1+\frac{\lambda^{2}\sigma^{2}/2}{1-\lvert\lambda\rvert b}
+\end{align*}
+
+\end_inset
+
+leading to 
+\color red
+Bernstein-type bound
+\color inherit
+.
+ 
+\end_layout
+
+\begin_deeper
+\begin_layout Block
+\begin_inset Argument 2
+status collapsed
+
+\begin_layout Plain Layout
+Bernstein-type bound
+\end_layout
+
+\end_inset
+
+For any r.v.
+ satisfying the Bernstein condition, we have 
+\begin_inset Formula 
+\[
+E[\exp(\lambda(X-\mu))]\leq\exp\left(\frac{\lambda^{2}\sigma^{2}/2}{1-\lvert\lambda\rvert b}\right),\quad\forall\lvert\lambda\rvert<\frac{1}{b}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Frame
+As with the sub-Gaussian property, the sub-exponential property is preserved
+ under summation for independent r.v.s.
+ Consider the independent sequence 
+\begin_inset Formula $X_{1},\cdots,X_{n}$
+\end_inset
+
+, with means 
+\begin_inset Formula $\mu_{1},\cdots,\mu_{n}$
+\end_inset
+
+ and sub-exponential parameters 
+\begin_inset Formula $(\nu_{1},\alpha_{1}),\cdots,(\nu_{n},\alpha_{n})$
+\end_inset
+
+.
+ The mgf can be calculated as follows 
+\begin_inset Formula 
+\[
+\E\left[\exp\left(\lambda\sum_{i=1}^{n}(X_{i}-\mu_{i})\right)\right]=\prod\limits _{i=1}^{n}\E[\exp(\lambda(X_{i}-\mu_{i}))]\leq\prod\limits _{i=1}^{n}\exp\left(\frac{\lambda^{2}\nu_{i}^{2}}{2}\right)
+\]
+
+\end_inset
+
+for all 
+\begin_inset Formula $\lvert\lambda\rvert<(\max_{i=1,\cdots,n})^{-1}$
+\end_inset
+
+.
+ Hence, the variable 
+\begin_inset Formula $\sum_{i=1}^{n}(X_{i}-\mu_{i})$
+\end_inset
+
+ is sub-exponential with parameters 
+\begin_inset Formula $(\nu^{*},\alpha^{*})$
+\end_inset
+
+, where 
+\begin_inset Formula 
+\[
+\alpha^{*}:=max_{i=1,\cdots,n}\alpha_{i},\quad\text{and}\quad\nu^{*}:=\sqrt{\sum\limits _{i=1}^{n}\nu_{i}^{2}}
+\]
+
+\end_inset
+
+which using a Chernoff-type approach as before, leads to upper tail bound
+ 
+\begin_inset Formula 
+\[
+P\left[\frac{1}{n}\sum\limits _{i=1}^{n}(X_{i}-\mu_{i})\geq t\right]\leq\begin{cases}
+\exp\left(-\frac{nt^{2}}{2(\nu^{*2}/n)}\right),\quad & 0\leq t\leq\frac{\nu^{*2}}{n\alpha^{*}}\\
+\exp\left(-\frac{nt}{2\alpha^{*}}\right),\quad & t\geq\frac{\nu^{*2}}{n\alpha^{*}}
+\end{cases}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Some one-sided results
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+frame{
+\end_layout
+
+\end_inset
+
+
+\begin_inset CommandInset toc
+LatexCommand tableofcontents
+
+\end_inset
+
+[currentsection,currentsubsection]
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Martingale-based methods
+\end_layout
+
+\begin_layout Subsection
+Martingales, MDS and telescoping decomposition
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+frame{
+\end_layout
+
+\end_inset
+
+
+\begin_inset CommandInset toc
+LatexCommand tableofcontents
+
+\end_inset
+
+[currentsection,currentsubsection]
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 3
+status collapsed
+
+\begin_layout Plain Layout
+allowframebreaks
+\end_layout
+
+\end_inset
+
+Let us extend the techniques considered for independent r.v.s to more general
+ functions of the variables.
+ One classical approach is based on martingale decomposition.
+ Consider the independent r.vs 
+\begin_inset Formula $X_{1},\cdots,X_{n}$
+\end_inset
+
+ and consider a function 
+\begin_inset Formula $f(X)=f(X_{1},\cdots,X_{n})$
+\end_inset
+
+ with the mapping 
+\begin_inset Formula $f:\R^{n}\to\R$
+\end_inset
+
+.
+ Suppose our goal is to obtain bounds on the deviations of 
+\begin_inset Formula $f$
+\end_inset
+
+ from its mean.
+ To achieve this, let us consider the sequence of r.v.s given by 
+\begin_inset Formula $Y_{0}=\E[f(X)]$
+\end_inset
+
+, 
+\begin_inset Formula $Y_{n}=f(X)$
+\end_inset
+
+, and 
+\begin_inset Formula 
+\[
+Y_{k}=\E[f(X)\mid X_{1},\cdots,X_{k}]\quad k=1,\cdots,n-1,
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $Y_{0}$
+\end_inset
+
+ is a constant and the variables 
+\begin_inset Formula $Y_{1},\cdots,Y_{n}$
+\end_inset
+
+ tend to exhibit more fluctuations as they move along the sequence.
+ Based on this intuition the martingale approach is based on the telescoping
+ decomposition 
+\begin_inset Formula 
+\[
+f(X)-\E[X]=Y_{n}-Y_{0}=\sum\limits _{i=1}^{n}\underbrace{Y_{i}-Y_{i-1}}_{D_{i}}
+\]
+
+\end_inset
+
+Thus,
+\begin_inset Formula $f(X)-\E[f(X)]$
+\end_inset
+
+ is expressed as the sum of increments 
+\begin_inset Formula $D_{1},\cdots,D_{n}$
+\end_inset
+
+.
+ This is a specific example of a martingale sequence, most commonly referred
+ to as Doob martingale, whereas 
+\begin_inset Formula $D_{1},\cdots,D_{n}$
+\end_inset
+
+ is a martingale difference sequence (MDS hereafter).
+\end_layout
+
+\begin_layout Frame
+We now provide a general definition of a martingale sequence by first defining
+ a 
+\color red
+filtration
+\color inherit
+, as follows 
+\end_layout
+
+\begin_deeper
+\begin_layout Block
+\begin_inset Argument 2
+status collapsed
+
+\begin_layout Plain Layout
+Filtration
+\end_layout
+
+\end_inset
+
+Let 
+\begin_inset Formula $\{\F_{i}\}_{i=1}^{\infty}$
+\end_inset
+
+ be a sequence of 
+\begin_inset Formula $\sigma$
+\end_inset
+
+-fields that are nested, meaning that 
+\begin_inset Formula $\F_{m}\subseteq\F_{n}$
+\end_inset
+
+ for 
+\begin_inset Formula $n\geq m$
+\end_inset
+
+.
+ Such a sequence is known as a filtration.
+ 
+\end_layout
+
+\end_deeper
+\begin_layout Frame
+In the Doob martingale described earlier, the 
+\begin_inset Formula $\sigma$
+\end_inset
+
+-field 
+\begin_inset Formula $\sigma(X_{1},\cdots,X_{m})$
+\end_inset
+
+ is spanned by the first 
+\begin_inset Formula $m$
+\end_inset
+
+ variables 
+\begin_inset Formula $X_{1},\cdots,X_{m}$
+\end_inset
+
+ and plays the role of 
+\begin_inset Formula $\F_{m}$
+\end_inset
+
+.
+ Let 
+\begin_inset Formula $\{Y_{i}\}_{i=1}^{\infty}$
+\end_inset
+
+ be a sequence of r.vs such that 
+\begin_inset Formula $Y_{i}$
+\end_inset
+
+ is measurable wrt to the 
+\begin_inset Formula $\sigma$
+\end_inset
+
+-field 
+\begin_inset Formula $\F_{i}$
+\end_inset
+
+.
+ We say that 
+\begin_inset Formula $\{Y_{i}\}_{i=1}^{\infty}$
+\end_inset
+
+ is 
+\color red
+adapted
+\color inherit
+ to the filtration 
+\begin_inset Formula $\{\F_{i}\}_{i=1}^{\infty}$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_deeper
+\begin_layout Block
+\begin_inset Argument 2
+status collapsed
+
+\begin_layout Plain Layout
+Martingale
+\end_layout
+
+\end_inset
+
+Given a sequence 
+\begin_inset Formula $\{Y_{i}\}_{i=1}^{\infty}$
+\end_inset
+
+ of r.v.s adapted to a filtration 
+\begin_inset Formula $\{\F_{i}\}_{i=1}^{\infty}$
+\end_inset
+
+, the pair 
+\begin_inset Formula $\{(Y_{i},\F_{i})\}_{i=1}^{\infty}$
+\end_inset
+
+ is a martingale if, for all 
+\begin_inset Formula $i\geq1$
+\end_inset
+
+ 
+\begin_inset Formula 
+\[
+\E[\lvert Y_{i}\rvert]<\infty\quad\text{and}\quad\E[Y_{i+1}\mid\F_{i}]=Y_{i}.
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Example
+\begin_inset Argument 2
+status collapsed
+
+\begin_layout Plain Layout
+Partial sums as martingales
+\end_layout
+
+\end_inset
+
+Let 
+\begin_inset Formula $\{X_{i}\}_{i=1}^{\infty}$
+\end_inset
+
+ be a sequence of i.i.d r.v.s with mean 
+\begin_inset Formula $\mu$
+\end_inset
+
+, and define the partial sums 
+\begin_inset Formula $S_{m}:=\sum\limits _{i=1}^{m}X_{i}$
+\end_inset
+
+.
+ Define 
+\begin_inset Formula $\F_{m}=\sigma(X_{1},\cdots,X_{m})$
+\end_inset
+
+, the r.v.
+ 
+\begin_inset Formula $S_{m}$
+\end_inset
+
+ is measurable wrt to 
+\begin_inset Formula $\F_{m}$
+\end_inset
+
+, and, we have 
+\begin_inset Formula 
+\begin{align*}
+\E[S_{m+1}\mid\F_{m}] & =\E[X_{m+1}+S_{m}\mid X_{1},\cdots,X_{m}]\\
+ & =\E[X_{m+1}\mid X_{1},\cdots,X_{m}]+\E[S_{m}\mid X_{1},\cdots,X_{m}]\\
+ & =\E[X_{m+1}]+S_{m}=\mu+S_{m}.
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Frame
+A closely related concept is that of the 
+\color red
+martingale difference sequence
+\color inherit
+, which is an adapted sequence 
+\begin_inset Formula $\{D_{i},\F_{i}\}_{i=1}^{\infty}$
+\end_inset
+
+ such that, for all 
+\begin_inset Formula $i\geq1$
+\end_inset
+
+, 
+\begin_inset Formula 
+\[
+\E[\lvert D_{i}\rvert]<\infty\quad\text{and}\quad\E[D_{i+1}\mid\F_{i}]=0.
+\]
+
+\end_inset
+
+Difference sequences arise naturally from martingales.
+ Given a martingale 
+\begin_inset Formula $\{(Y_{i},\F_{i})\}_{i=0}^{\infty}$
+\end_inset
+
+, define 
+\begin_inset Formula $D_{i}=Y_{i}-Y_{i-1}$
+\end_inset
+
+ for 
+\begin_inset Formula $i\geq1$
+\end_inset
+
+.
+ We then have 
+\begin_inset Formula 
+\begin{align*}
+\E[D_{i+1}\mid\F_{i}] & =\E[Y_{i+1}-Y_{i}\mid\F_{i}]\\
+ & =\E[Y_{i+1}\mid\F_{i}]-Y_{i}\\
+ & =Y_{i}-Y_{i}=0
+\end{align*}
+
+\end_inset
+
+using the martingale property and the fact that 
+\begin_inset Formula $Y_{i}$
+\end_inset
+
+ is measurable wrt to 
+\begin_inset Formula $\F_{i}$
+\end_inset
+
+.
+ Thus, for any martingale sequence 
+\begin_inset Formula $\{Y_{i}\}_{i=0}^{n}$
+\end_inset
+
+, we have the telescoping decomposition.
+ 
+\end_layout
+
+\begin_deeper
+\begin_layout Block
+\begin_inset Argument 2
+status collapsed
+
+\begin_layout Plain Layout
+Telescoping decomposition
+\end_layout
+
+\end_inset
+
+Let 
+\begin_inset Formula $\{D_{i}\}_{i=1}^{\infty}$
+\end_inset
+
+ be a MDS.
+ Then for any martingale sequence 
+\begin_inset Formula $\{Y_{i}\}_{i=0}^{\infty}$
+\end_inset
+
+, we have the telescoping decomposition 
+\begin_inset Formula 
+\[
+Y_{n}-Y_{0}=\sum\limits _{i=1}^{n}D_{i}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Example
+\begin_inset Argument 2
+status collapsed
+
+\begin_layout Plain Layout
+Doob construction
+\end_layout
+
+\end_inset
+
+Consider the sequence on independent r.v.s 
+\begin_inset Formula $X_{1},\cdots,X_{n}$
+\end_inset
+
+, recall the sequence 
+\begin_inset Formula $Y_{k}=\E[f(X)\mid X_{1},\cdots,X_{k}]$
+\end_inset
+
+ previously defined, and suppose that 
+\begin_inset Formula $\E[\lvert f(X)\rvert]<\infty$
+\end_inset
+
+.
+ We claim that 
+\begin_inset Formula $Y_{0},\cdots,Y_{n}$
+\end_inset
+
+ is a martingale w.r.t to 
+\begin_inset Formula $X_{1},\cdots,X_{n}$
+\end_inset
+
+.
+ We have 
+\begin_inset Formula 
+\[
+\E[\lvert Y_{k}\rvert]=\E[\lvert\E[f(X)\mid X_{1},\cdots,X_{k}]\rvert].
+\]
+
+\end_inset
+
+From Jensen's inequality, we have 
+\begin_inset Formula 
+\[
+\E[\lvert\E[f(X)\mid X_{1},\cdots,X_{k}]\rvert]\leq\E[\lvert f(X)\rvert]<\infty.
+\]
+
+\end_inset
+
+From the 2
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+ts
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+{
+\end_layout
+
+\end_inset
+
+nd
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+ property of martingales, we have 
+\begin_inset Formula 
+\[
+\E[Y_{k+1}\mid X_{1}^{k}]=\E[\E[f(X)\mid X_{1}^{k+1}]\mid X_{1}^{k}]=\E[f(X)\mid X_{1}^{k}]=Y_{k}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Subsection
+Concentration bounds for MDS
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+frame{
+\end_layout
+
+\end_inset
+
+
+\begin_inset CommandInset toc
+LatexCommand tableofcontents
+
+\end_inset
+
+[currentsection,currentsubsection]
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 3
+status collapsed
+
+\begin_layout Plain Layout
+allowframebreaks
+\end_layout
+
+\end_inset
+
+We now turn to the derivation of concentration inequalities for martingales,
+ either 
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+\begin_inset Argument item:1
+status collapsed
+
+\begin_layout Plain Layout
+1)
+\end_layout
+
+\end_inset
+
+as bounds for the difference 
+\begin_inset Formula $Y_{n}-Y_{0}$
+\end_inset
+
+; or 
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Argument item:1
+status collapsed
+
+\begin_layout Plain Layout
+2)
+\end_layout
+
+\end_inset
+
+as bounds for the sum 
+\begin_inset Formula $\sum_{i=1}^{n}D_{i}$
+\end_inset
+
+ of the associated MDS.
+ 
+\end_layout
+
+\end_deeper
+\begin_layout Frame
+We begin by stating and proving a general Bernstein-type bound for a MDS,
+ based on imposing a sub-exponential condition on the MDS.
+ To do so, 
+\color red
+we adopt the standard approach of controlling the mgf of 
+\begin_inset Formula $\sum_{i=1}^{n}D_{i}$
+\end_inset
+
+ and then applying the Chernoff bound
+\color inherit
+.
+ Assume that 
+\begin_inset Formula $\E[\exp(\lambda D_{i})\mid\F_{i-1}]\leq\exp\left(\frac{\lambda^{2}\nu_{i}^{2}}{2}\right)$
+\end_inset
+
+ a.s.
+ for any 
+\begin_inset Formula $\lvert\lambda\rvert<\frac{1}{\alpha_{i}}$
+\end_inset
+
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+begingroup
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+allowdisplaybreaks
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula 
+\begin{align*}
+\E[\exp(\lambda\sum_{i=1}^{n}D_{i})] & =\E[\E[\exp(\lambda\sum_{i=1}^{n}D_{i})\mid\F_{n-1}]]\\
+ & =\E[\E[\exp(\lambda D_{n})\exp(\lambda\sum_{i=1}^{n-1}D_{i})\mid\F_{n-1}]]\\
+ & =\E[\exp(\lambda\sum_{i=1}^{n-1}D_{i})\E[\exp(\lambda D_{n})\mid\F_{n-1}]]\\
+ & \leq\E[\exp(\lambda\sum_{i=1}^{n-1}D_{i})]\exp\left(\frac{\lambda^{2}\nu_{n}^{2}}{2}\right)
+\end{align*}
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+endgroup
+\end_layout
+
+\end_inset
+
+ we may iterate this procedure again for 
+\begin_inset Formula $\E[\exp(\lambda\sum_{i=1}^{n-1}D_{i})]$
+\end_inset
+
+ and we'd obtain, 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+begingroup
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+allowdisplaybreaks
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula 
+\begin{align*}
+\E[\exp(\lambda\sum_{i=1}^{n-1}D_{i})] & =\E[\E[\exp(\lambda\sum_{i=1}^{n-1}D_{i})\mid\F_{n-2}]]\\
+ & =\E[\E[\exp(\lambda D_{n-1})\exp(\lambda\sum_{i=1}^{n-2}D_{i})\mid\F_{n-2}]]\\
+ & =\E[\exp(\lambda\sum_{i=1}^{n-2}D_{i})\E[\exp(\lambda D_{n-1})\mid\F_{n-2}]]\\
+ & \leq\E[\exp(\lambda\sum_{i=1}^{n-2}D_{i})]\exp\left(\frac{\lambda^{2}\nu_{n-1}^{2}}{2}\right)
+\end{align*}
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+endgroup
+\end_layout
+
+\end_inset
+
+ Continuously iterating this process yields, 
+\begin_inset Formula 
+\[
+\E[\exp(\lambda\sum_{i=1}^{n}D_{i})]\leq\exp\left(\frac{\lambda^{2}\sum_{i=1}^{n}\nu_{i}^{2}}{2}\right),
+\]
+
+\end_inset
+
+valid for all 
+\begin_inset Formula $\lvert\lambda\rvert<\frac{1}{\alpha^{*}}$
+\end_inset
+
+.
+ Hence, by definition, it can be concluded that 
+\begin_inset Formula $\sum_{i=1}^{n}D_{i}$
+\end_inset
+
+ is sub-exponential with parameters 
+\begin_inset Formula $(\sqrt{\sum_{i=1}^{n}\nu_{i}^{2}},\alpha^{*})$
+\end_inset
+
+.
+ The tail bounds can be derived by using the Chernoff-type approach as before.
+ 
+\end_layout
+
+\begin_deeper
+\begin_layout Block
+\begin_inset Argument 2
+status collapsed
+
+\begin_layout Plain Layout
+Concentration inequalities for MDS
+\end_layout
+
+\end_inset
+
+Let 
+\begin_inset Formula $\{(D_{i},\F_{i})\}_{i=1}^{\infty}$
+\end_inset
+
+ be a MDS, and suppose that 
+\begin_inset Formula $\E[\exp(\lambda D_{i})\mid\F_{i-1}]\leq\frac{\lambda^{2}\nu_{i}^{2}}{2}$
+\end_inset
+
+ a.s.
+ for any 
+\begin_inset Formula $\lvert\lambda\rvert<\frac{1}{\alpha}$
+\end_inset
+
+.
+ Then the following hold 
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+The sum 
+\begin_inset Formula $\sum_{i=1}^{n}D_{i}$
+\end_inset
+
+ is sub-exponential with parameters 
+\begin_inset Formula $\left(\sqrt{\sum_{i=1}^{n}\nu_{i}^{2}},\alpha^{*}\right)$
+\end_inset
+
+, where 
+\begin_inset Formula $\alpha^{*}:=\max_{i=1,\cdots,n}\alpha_{i}$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Itemize
+The sum satisfies the concentration inequality 
+\begin_inset Formula 
+\[
+P\left[\lvert\sum\limits _{i=1}^{n}D_{i}\rvert\geq t\right]\leq\begin{cases}
+2\exp\left(-\frac{t^{2}}{2\sum_{i=1}^{n}\nu_{i}^{2}}\right),\quad & 0\leq t<\frac{\sum_{i=1}^{n}\nu_{i}^{2}}{\alpha^{*}}\\
+2\exp\left(-\frac{t}{2\alpha^{*}}\right),\quad & t>\frac{\sum_{i=1}^{n}\nu_{i}^{2}}{\alpha^{*}}
+\end{cases}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Frame
+For the concentration inequalities to be useful in practice, we must isolate
+ sufficient easily checkable conditions for the differences 
+\begin_inset Formula $D_{i}$
+\end_inset
+
+ to be a.s.
+ sub-exponential (or sub-Gaussian when 
+\begin_inset Formula $\alpha=0$
+\end_inset
+
+).
+ As mentioned earlier, bounded r.v.s are sub-Gaussian, which leads to the
+ following corollary 
+\end_layout
+
+\begin_deeper
+\begin_layout Block
+\begin_inset Argument 2
+status collapsed
+
+\begin_layout Plain Layout
+Azuma-Hoeffding
+\end_layout
+
+\end_inset
+
+Let 
+\begin_inset Formula $(\{D_{i},\F_{i}\}_{i=1}^{n})$
+\end_inset
+
+ be a MDS for which there are constants 
+\begin_inset Formula $\{a_{i},b_{i}\}_{i=1}^{n}$
+\end_inset
+
+ such that 
+\begin_inset Formula $D_{i}\in[a_{i},b_{i}]$
+\end_inset
+
+ a.s.
+ for all 
+\begin_inset Formula $k=1,\cdots,n$
+\end_inset
+
+.
+ Then for all 
+\begin_inset Formula $t\geq0$
+\end_inset
+
+ 
+\begin_inset Formula 
+\[
+P\left[\lvert\sum\limits _{i=1}^{n}D_{i}\rvert\geq t\right]\leq2\exp\left(-\frac{2t^{2}}{\sum_{i=1}^{n}(b_{i}-a_{i})^{2}}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Frame
+
+\series bold
+Proof:
+\series default
+ All that needs showing is that the 
+\begin_inset Formula $\E[\exp(\lambda D_{i}\mid\F_{i-1})]\leq\exp\left(\frac{\lambda^{2}(b_{i}-a_{i})^{2}}{8}\right)$
+\end_inset
+
+ a.s.
+ for each 
+\begin_inset Formula $i=1,\cdots,n$
+\end_inset
+
+.
+ But since 
+\begin_inset Formula $D_{i}\in[a_{i},b_{i}]$
+\end_inset
+
+ a.s., the conditioned variables 
+\begin_inset Formula $(D_{i}\mid\F_{i-1})$
+\end_inset
+
+ also belongs to this interval a.s.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+
+\end_layout
+
+\begin_deeper
+\begin_layout Block
+\begin_inset Argument 2
+status collapsed
+
+\begin_layout Plain Layout
+Bounded differences property
+\end_layout
+
+\end_inset
+
+Given vectors 
+\begin_inset Formula $x,x'\in\R^{n}$
+\end_inset
+
+ and an index 
+\begin_inset Formula $k\in\{1,2,\cdots,n\}$
+\end_inset
+
+, define the vector 
+\begin_inset Formula $\{x^{\backslash k}\in\R^{n}\}$
+\end_inset
+
+ via 
+\begin_inset Formula 
+\[
+x^{\backslash k}:=(x_{1},x_{2},\cdots,x_{k-1},x'_{k},x_{k+1},\cdots,x_{n})'.
+\]
+
+\end_inset
+
+We say that 
+\begin_inset Formula $f:\R^{n}\to\R$
+\end_inset
+
+ satisfies the bounded difference property with parameters 
+\begin_inset Formula $(L_{1},\cdots,L_{n})$
+\end_inset
+
+ if, for each 
+\begin_inset Formula $k=1,2,\cdots,n$
+\end_inset
+
+, 
+\begin_inset Formula 
+\[
+\lvert f(x)-f(x^{\backslash k})\rvert\leq L_{k}\quad\forall x,x'\in\R^{n}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+
+\end_layout
+
+\begin_deeper
+\begin_layout Block
+\begin_inset Argument 2
+status collapsed
+
+\begin_layout Plain Layout
+Bounded differences inequality
+\end_layout
+
+\end_inset
+
+Suppose that 
+\begin_inset Formula $f$
+\end_inset
+
+ satisfies the bounded difference property with parameters 
+\begin_inset Formula $(L_{1},\cdots,L_{n})$
+\end_inset
+
+ and that the random vector 
+\begin_inset Formula $X=(X_{1},X_{2},\cdots,X_{n})'$
+\end_inset
+
+ has independent components.
+ Then 
+\begin_inset Formula 
+\[
+P[\lvert f(X)-\E[f(X)]\geq t\rvert]\leq2\exp\left(-\frac{2t^{2}}{\sum_{i=1}^{n}L_{k}^{2}}\right),\quad\forall t\geq0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+
+\end_layout
+
+\begin_deeper
+\begin_layout Example
+Say we have the bounded r.v.s 
+\begin_inset Formula $X_{i}\in[a,b]$
+\end_inset
+
+ almost surely, and consider the function 
+\begin_inset Formula $f(x_{1},\cdots,x_{n})=\sum_{i=1}^{n}(x_{i}-\mu_{i})$
+\end_inset
+
+, where 
+\begin_inset Formula $\mu_{i}=\E[X_{i}]$
+\end_inset
+
+ is the mean of the 
+\begin_inset Formula $i$
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+ts
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+{
+\end_layout
+
+\end_inset
+
+th
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+ rv.
+ For any index 
+\begin_inset Formula $l\in\{1,\cdots,n\}$
+\end_inset
+
+, we have 
+\begin_inset Formula 
+\begin{align*}
+\lvert f(x)-f(x^{\backslash k})\rvert & =\lvert(x_{k}-\mu_{k})-(x'_{k}-\mu_{k})\rvert\\
+ & =\lvert x_{k}-x'_{k}\rvert\leq b-a
+\end{align*}
+
+\end_inset
+
+which shows that 
+\begin_inset Formula $f$
+\end_inset
+
+ satisfies the bounded difference inequality in each coordinate with parameter
+ 
+\begin_inset Formula $L=b-a$
+\end_inset
+
+.
+ Consequently, from the bounded inequality it follows 
+\begin_inset Formula 
+\[
+P\left[\lvert\sum\limits _{i=1}^{n}(x_{i}-\mu_{i})\rvert\geq t\right]\leq2\exp\left(-\frac{2t^{2}}{n(b-a)^{2}}\right)
+\]
+
+\end_inset
+
+which is classical Hoeffding bound for independent r.v.s.
+ 
+\end_layout
+
+\end_deeper
+\begin_layout Section
+Lipschitz functions of Gaussian variables
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+frame{
+\end_layout
+
+\end_inset
+
+
+\begin_inset CommandInset toc
+LatexCommand tableofcontents
+
+\end_inset
+
+[currentsection]
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 3
+status collapsed
+
+\begin_layout Plain Layout
+allowframebreaks
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Block
+\begin_inset Argument 2
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Formula $L$
+\end_inset
+
+-Lipschitz functions
+\end_layout
+
+\end_inset
+
+We say a function 
+\begin_inset Formula $f:\R^{n}\to\R$
+\end_inset
+
+ is 
+\begin_inset Formula $L$
+\end_inset
+
+-Lipschitz w.r.t the Euclidean norm 
+\begin_inset Formula $\lVert.\rVert_{2}$
+\end_inset
+
+ if 
+\begin_inset Formula 
+\[
+\lvert f(x)-f(y)\rvert\leq L\lVert x-y\rVert_{2},\quad\forall x,y\in\R^{n}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Frame
+The following guarantees that any such function is sub-Gaussian with parameter
+ at most 
+\begin_inset Formula $L$
+\end_inset
+
+: 
+\end_layout
+
+\begin_deeper
+\begin_layout Block
+\begin_inset Argument 2
+status collapsed
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+Let 
+\begin_inset Formula $(X_{1},\cdots,X_{n})$
+\end_inset
+
+ be a vector of i.i.d.
+ standard Gaussian variables, and let 
+\begin_inset Formula $f:\R^{n}\to\R$
+\end_inset
+
+ be 
+\begin_inset Formula $L$
+\end_inset
+
+-Lipschitz w.r.t the Euclidean norm.
+ Then the variable 
+\begin_inset Formula $f(X)-\E[f(X)]$
+\end_inset
+
+ is sub-Gaussian with parameter at most 
+\begin_inset Formula $L$
+\end_inset
+
+, and hence 
+\begin_inset Formula 
+\[
+P[\lvert f(X)-\E[f(X)]\rvert\geq t]\leq2\exp\left(-\frac{t^{2}}{2L^{2}}\right),\quad\forall t\geq0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Frame
+The earlier result is of great importance, as it guarantees that any 
+\begin_inset Formula $L$
+\end_inset
+
+-Lipschitz function of a standard Gaussian random vector, regardless of
+ the dimension, exhibits concentration like a scalar Gaussian variable with
+ variance 
+\begin_inset Formula $L^{2}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Frame
+Any Lipschitz function is differentiable almost everywhere and the Lipschitz
+ property further guarantees 
+\begin_inset Formula $\lVert\nabla f(x)\rVert_{2}\leq L$
+\end_inset
+
+ for all 
+\begin_inset Formula $x\in\R^{n}$
+\end_inset
+
+.
+ Therefore, to prove the earlier results, we first begin by providing the
+ following Lemma: 
+\end_layout
+
+\begin_deeper
+\begin_layout Lemma
+Suppose that 
+\begin_inset Formula $F:\R^{n}\to\R$
+\end_inset
+
+ is differentiable.
+ Then for any convex function 
+\begin_inset Formula $\phi:\R\to\R$
+\end_inset
+
+, we have 
+\begin_inset Formula 
+\[
+\E_{X}[\phi(f(X)-\E(f(X)))]\leq\E_{X,Y}\left[\phi\left(\frac{\pi}{2}\left\langle \nabla f(X),Y\right\rangle \right)\right]
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $X,Y\sim N(0,I_{n})$
+\end_inset
+
+ are standard multivariate and independent.
+ 
+\end_layout
+
+\end_deeper
+\begin_layout Frame
+
+\series bold
+Proof:
+\series default
+ For any fixed 
+\begin_inset Formula $\lambda\in\R$
+\end_inset
+
+ applying the inequality in above Lemma to the convex function 
+\begin_inset Formula $f:t\to\exp(\lambda t)$
+\end_inset
+
+ yields 
+\begin_inset Formula 
+\[
+\E_{X}[\exp(\lambda\{f(X)-\E[f(X)]\})]\leq\E_{X,Y}\left[\exp\left(\frac{\pi}{2}\langle\nabla f(X),Y\rangle\right)\right]
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 3
+status collapsed
+
+\begin_layout Plain Layout
+allowframebreaks
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout FrameTitle
+References
+\end_layout
+
+\end_deeper
+\begin_layout Frame
+ 
+\begin_inset CommandInset bibtex
+LatexCommand bibtex
+bibfiles "References_HDStat"
+options "apa"
+
+\end_inset
+
+ 
+\end_layout
+
+\end_body
+\end_document

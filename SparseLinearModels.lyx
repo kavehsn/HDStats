@@ -1,0 +1,1867 @@
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass beamer
+\begin_preamble
+\usetheme{Warsaw}
+\usepackage{placeins}
+\usepackage{tabu}
+\usepackage{bbm}
+\usepackage{booktabs}
+\usepackage{bm}
+\usepackage{ragged2e}
+\usepackage{bbm}
+\usepackage{xcolor}
+\usepackage[super]{nth}
+
+
+\apptocmd{\frame}{}{\justifying}{} % Allow optional arguments after frame.
+
+\setbeamertemplate{frametitle continuation}{}
+
+\newcommand{\setItemnumber}[1]{\setcounter{enumi}{\numexpr#1-1\relax}}
+
+\DeclareMathOperator{\tr}{tr}
+
+\newcommand{\ts}{\textsuperscript}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\F}{\mathcal{F}}
+\newcommand{\vertiii}[1]{{\left\vert\kern-0.25ex\left\vert\kern-0.25ex\left\vert #1 
+    \right\vert\kern-0.25ex\right\vert\kern-0.25ex\right\vert}}
+
+
+\title[]{Sparse linear models in high dimensions}
+\author[Kaveh S. Nobari]{Kaveh S. Nobari}
+\institute[]{Lectures in High-Dimensional Statistics}
+[27/10/2020]
+{Department of Mathematics and Statistics\\ Lancaster University}
+	
+\end_preamble
+\options handout
+\use_default_options false
+\maintain_unincluded_children false
+\language english
+\language_package none
+\inputencoding auto
+\fontencoding default
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize 10
+\spacing single
+\use_hyperref true
+\pdf_bookmarks false
+\pdf_bookmarksnumbered false
+\pdf_bookmarksopen false
+\pdf_bookmarksopenlevel 1
+\pdf_breaklinks false
+\pdf_pdfborder false
+\pdf_colorlinks true
+\pdf_backref section
+\pdf_pdfusetitle false
+\pdf_quoted_options "linkcolor=blue,filecolor=blue,urlcolor=blue,citecolor=black,"
+\papersize default
+\use_geometry false
+\use_package amsmath 2
+\use_package amssymb 2
+\use_package cancel 0
+\use_package esint 1
+\use_package mathdots 0
+\use_package mathtools 0
+\use_package mhchem 0
+\use_package stackrel 0
+\use_package stmaryrd 0
+\use_package undertilde 0
+\cite_engine natbib
+\cite_engine_type authoryear
+\biblio_style plainnat
+\biblio_options round
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date true
+\justification true
+\use_refstyle 0
+\use_minted 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Frame
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+titlepage
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status collapsed
+
+\begin_layout Plain Layout
+Contents
+\end_layout
+
+\end_inset
+
+
+\begin_inset CommandInset toc
+LatexCommand tableofcontents
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 3
+status collapsed
+
+\begin_layout Plain Layout
+allowframebreaks
+\end_layout
+
+\end_inset
+
+
+\begin_inset Argument 4
+status collapsed
+
+\begin_layout Plain Layout
+Motivation
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Block
+\begin_inset Argument 2
+status collapsed
+
+\begin_layout Plain Layout
+Classical vs High-Dimensional asymptotics
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+
+\color red
+Classical:
+\color inherit
+ low-dimensional settings, in which the number of predictors 
+\begin_inset Formula $d$
+\end_inset
+
+ is substantially less than the sample size 
+\begin_inset Formula $n$
+\end_inset
+
+ - i.e., 
+\begin_inset Formula $d\ll n$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Itemize
+
+\color red
+High-dimensional:
+\color inherit
+ High-dimensional regime allows for scaling such that 
+\begin_inset Formula $d\asymp n$
+\end_inset
+
+ or even 
+\begin_inset Formula $d\gg n$
+\end_inset
+
+.
+ 
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Frame
+In the case that 
+\begin_inset Formula $d\gg n$
+\end_inset
+
+, if the model lacks any additional structure, then there is no hope of
+ obtaining consistent estimators when the ratio 
+\begin_inset Formula $d/n$
+\end_inset
+
+ stays bounded away from zero.
+ Therefore, when working in settings in which 
+\begin_inset Formula $d>n$
+\end_inset
+
+, it is necessary to impose additional structure on the unknown regression
+ vector 
+\begin_inset Formula $\theta^{*}\in\R^{d}$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Section
+Problem formulation and applications
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+frame{
+\end_layout
+
+\end_inset
+
+
+\begin_inset CommandInset toc
+LatexCommand tableofcontents
+
+\end_inset
+
+[currentsection]
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 3
+status collapsed
+
+\begin_layout Plain Layout
+allowframebreaks
+\end_layout
+
+\end_inset
+
+Let 
+\begin_inset Formula $\theta^{*}\in\R^{d}$
+\end_inset
+
+ be an unknown vector, and suppose we observe a vector 
+\begin_inset Formula $y\in\R^{n}$
+\end_inset
+
+ and a matrix 
+\begin_inset Formula $X\in\R^{n\times d}$
+\end_inset
+
+, such that 
+\begin_inset Formula $X=[x_{1}',\cdots,x_{n}']'$
+\end_inset
+
+ that are linked via the linear model 
+\begin_inset Formula 
+\[
+y=X\theta^{*}+\varepsilon
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $\varepsilon\in\R^{n}$
+\end_inset
+
+ is the noise vector.
+ This model can be written in any of the following scalar forms 
+\begin_inset Formula 
+\begin{align*}
+y_{i}=\langle x_{i},\theta^{*}\rangle+\varepsilon_{i},\quad i=1,\cdots,n,\\
+y_{i}=x_{i}'\theta+\varepsilon_{i},\quad i=1,\cdots,n,\\
+\end{align*}
+
+\end_inset
+
+where 
+\begin_inset Formula $\langle x_{i},\theta^{*}\rangle=\sum\limits _{i=1}^{n}x_{ij}\theta_{j}^{*}$
+\end_inset
+
+ denotes the Euclidean inner product.
+\end_layout
+
+\begin_layout Frame
+The focus of this presentation is to consider the cases where 
+\begin_inset Formula $n<d$
+\end_inset
+
+.
+ We first consider the 
+\color red
+noiseless linear model
+\color inherit
+, such that 
+\begin_inset Formula $\epsilon=0$
+\end_inset
+
+, in which we may model the response variable as 
+\begin_inset Formula 
+\[
+y=X\theta^{*}
+\]
+
+\end_inset
+
+which when 
+\begin_inset Formula $n<d$
+\end_inset
+
+ defines an undetermined linear system, and the goal is to understand the
+ 
+\color red
+structure of its sparse solutions
+\color inherit
+.
+ 
+\end_layout
+
+\begin_layout Subsection
+Different sparsity models
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+frame{
+\end_layout
+
+\end_inset
+
+
+\begin_inset CommandInset toc
+LatexCommand tableofcontents
+
+\end_inset
+
+[currentsection, currentsubsection]
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+%------------------------------------------------
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 3
+status collapsed
+
+\begin_layout Plain Layout
+allowframebreaks
+\end_layout
+
+\end_inset
+
+When 
+\begin_inset Formula $d>n$
+\end_inset
+
+, it is impossible to obtain any meaningful estimate of 
+\begin_inset Formula $\theta^{*}$
+\end_inset
+
+ unless the model is equipped with some form of low-dimensional structure.
+ First, we consider the simplest case, namely the 
+\color red
+hard sparsity
+\color inherit
+ assumption:
+\end_layout
+
+\begin_deeper
+\begin_layout Block
+\begin_inset Argument 2
+status collapsed
+
+\begin_layout Plain Layout
+Hard sparsity assumption
+\end_layout
+
+\end_inset
+
+The simplest kind of structure is the hard sparsity assumption that the
+ set 
+\begin_inset Formula 
+\[
+S(\theta^{*}):=\{j\in\{1,\cdots,d\}\mid\theta_{j}^{*}\neq0\}.
+\]
+
+\end_inset
+
+which is known as the support of 
+\begin_inset Formula $\theta^{*}$
+\end_inset
+
+ and has cardinality 
+\begin_inset Formula $s:=\lvert S(\theta^{*})\rvert$
+\end_inset
+
+, where 
+\begin_inset Formula $s\ll d$
+\end_inset
+
+.Â¸ 
+\end_layout
+
+\end_deeper
+\begin_layout Frame
+The problem with the hard sparsity assumption is that it is 
+\color red
+overly restrictive
+\color inherit
+, which motivates considering the 
+\color red
+weak sparsity
+\color inherit
+ assumption.
+ 
+\end_layout
+
+\begin_deeper
+\begin_layout Definition
+A vector 
+\begin_inset Formula $\theta^{*}$
+\end_inset
+
+ is weakly sparse if it can be closely approximated by a sparse vector.
+ 
+\end_layout
+
+\end_deeper
+\begin_layout Frame
+One way to formalize such an idea is via the 
+\begin_inset Formula $l_{q}$
+\end_inset
+
+-norms.
+ For a parameter 
+\begin_inset Formula $q\in[0,1]$
+\end_inset
+
+ and radius 
+\begin_inset Formula $R_{1}>0$
+\end_inset
+
+, consider the 
+\begin_inset Formula $l_{q}$
+\end_inset
+
+-ball set 
+\begin_inset Formula 
+\[
+B_{q}(R_{q})=\left\{ \theta\in\R^{d}\mid\sum\limits _{j=1}^{d}\lvert\theta_{j}\rvert^{q}\leq R_{q}\right\} 
+\]
+
+\end_inset
+
+is one with radius 
+\begin_inset Formula $R_{q}$
+\end_inset
+
+.
+ As it is evident from the below figures for 
+\begin_inset Formula $q\in[0,1)$
+\end_inset
+
+, it is not a ball in the strict sense, since it a non-convex set.
+ When 
+\begin_inset Formula $q=0$
+\end_inset
+
+, this is the case of the 
+\begin_inset Quotes eld
+\end_inset
+
+improper
+\begin_inset Quotes erd
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+{
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\begin_inset Formula $l_{0}$
+\end_inset
+
+-norm, and any vector 
+\begin_inset Formula $\theta^{*}\in B_{0}(R_{0})$
+\end_inset
+
+ can have at most 
+\begin_inset Formula $s=R_{0}$
+\end_inset
+
+ non-zero entries.
+ For values of 
+\begin_inset Formula $q\in(0,1]$
+\end_inset
+
+, membership in the set 
+\begin_inset Formula $B_{q}(R_{q})$
+\end_inset
+
+ has different interpretations, one of which involves, how quickly the ordered
+ coefficients 
+\begin_inset Formula 
+\[
+\lvert\theta_{(1)}^{*}\rvert\geq\lvert\theta_{(2)}^{*}\rvert\geq\cdots\geq\lvert\theta_{(d)}^{*}\rvert
+\]
+
+\end_inset
+
+decay.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Graphics
+	filename lqballs.png
+	width 100text%
+	height 100theight%
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Subsection
+Applications of sparse linear models
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+frame{
+\end_layout
+
+\end_inset
+
+
+\begin_inset CommandInset toc
+LatexCommand tableofcontents
+
+\end_inset
+
+[currentsection, currentsubsection]
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 3
+status collapsed
+
+\begin_layout Plain Layout
+allowframebreaks
+\end_layout
+
+\end_inset
+
+
+\series bold
+Example (Gaussian sequence models):
+\series default
+ Suppose we observed 
+\begin_inset Formula $\{y_{1},\cdots,y_{n}\}$
+\end_inset
+
+ where 
+\begin_inset Formula 
+\[
+y_{i}=\theta_{i}^{*}+\epsilon\varepsilon_{i},
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $\varepsilon_{i}\sim N(0,1)$
+\end_inset
+
+ and 
+\begin_inset Formula $\epsilon=\frac{\sigma}{\sqrt{n}}$
+\end_inset
+
+, where the variance is divided by 
+\begin_inset Formula $n$
+\end_inset
+
+, as it corresponds to taking 
+\begin_inset Formula $n$
+\end_inset
+
+ i.i.d variables and taking their average.
+ In this case, it is evident that 
+\begin_inset Formula $n=d$
+\end_inset
+
+ and as 
+\begin_inset Formula $n\to\infty$
+\end_inset
+
+, so does 
+\begin_inset Formula $d\to\infty$
+\end_inset
+
+.
+ It is clearly evident that in the general linear model introduced earlier
+ - i.e.
+ 
+\begin_inset Formula 
+\[
+y=X\theta^{*}+\varepsilon
+\]
+
+\end_inset
+
+
+\begin_inset Formula $X=I_{n}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Frame
+
+\series bold
+Example (Signal denoising in orthonormal bases):
+\series default
+ Sparsity plays an important role in signal processing, both for compression
+ and for denoising of signals.
+ Suppose we have the noisy observations 
+\begin_inset Formula $\tilde{y}=(\tilde{y}_{1},\cdots,\tilde{y}_{n})'$
+\end_inset
+
+.
+ 
+\begin_inset Formula 
+\[
+\tilde{y}=\beta^{*}+\tilde{\varepsilon}
+\]
+
+\end_inset
+
+where the vector 
+\begin_inset Formula $\beta^{*}\in\R^{d}$
+\end_inset
+
+ represents the signal, while 
+\begin_inset Formula $\tilde{\varepsilon}$
+\end_inset
+
+ is some kind of additive noise.
+ Denoising 
+\begin_inset Formula $\tilde{y}$
+\end_inset
+
+ implies that constructing 
+\begin_inset Formula $\beta^{*}$
+\end_inset
+
+ as accurately as possible, which mean producing a representation of 
+\begin_inset Formula $\beta^{*}$
+\end_inset
+
+ that can be stored compactly than its original representation.
+\end_layout
+
+\begin_layout Frame
+Many classes of signals exhibit sparsity when transformed into the appropriate
+ basis, such as a wavelet basis.
+ Such transform can be represented as an orthonormal matrix 
+\begin_inset Formula $\Psi\in\R^{d\times d}$
+\end_inset
+
+, constructed so that 
+\begin_inset Formula 
+\[
+\theta^{*}:=\Psi'\beta^{*}\in\R^{d}
+\]
+
+\end_inset
+
+corresponds to the vector of transformed coefficients.
+ If 
+\begin_inset Formula $\theta^{*}$
+\end_inset
+
+ is known to be sparse then only a fraction of the coefficients, say the
+ 
+\begin_inset Formula $s<d$
+\end_inset
+
+ largest coefficients in absolute value can be retained.
+\end_layout
+
+\begin_layout Frame
+In the transformed space, the model takes the form 
+\begin_inset Formula 
+\[
+y=\theta^{*}+\varepsilon
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $y=\Psi'\tilde{y}$
+\end_inset
+
+, and 
+\begin_inset Formula $\Psi'\tilde{\varepsilon}$
+\end_inset
+
+.
+ If 
+\begin_inset Formula $\tilde{\varepsilon}\sim N(0,\sigma^{2})$
+\end_inset
+
+, then it is invariant under orthogonal transformation and the original
+ and transformed observations 
+\begin_inset Formula $\tilde{y}$
+\end_inset
+
+ and 
+\begin_inset Formula $y$
+\end_inset
+
+ are examples of Gaussian sequence models touched in the earlier example,
+ both with 
+\begin_inset Formula $n=d$
+\end_inset
+
+.
+ If 
+\begin_inset Formula $\theta^{*}$
+\end_inset
+
+ is known to be sparse then it is natural to consider estimators based on
+ thresholding.
+ 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "wainwright2019high"
+literal "false"
+
+\end_inset
+
+ shows that for a hard threshold of 
+\begin_inset Formula $\lambda>0$
+\end_inset
+
+, we may have 
+\color red
+hard-threshold
+\color inherit
+ or 
+\color red
+soft-threshold
+\color inherit
+ estimates of 
+\begin_inset Formula $\theta^{*}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Frame
+
+\series bold
+Example (Lifting and non-linear functions):
+\series default
+ Consider the 
+\begin_inset Formula $n$
+\end_inset
+
+ pair of observations 
+\begin_inset Formula $\{(y_{i},t_{i})\}_{i=1}^{n}$
+\end_inset
+
+, where each pair is lined via the model 
+\begin_inset Formula 
+\[
+y_{i}=f(t_{i};\theta)+\varepsilon_{i},
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula 
+\[
+f(t_{i};\theta)=\theta_{1}+\theta_{2}t_{i}+\theta_{3}t_{i}^{2}+\cdots+\theta_{k+1}t_{i}^{k}.
+\]
+
+\end_inset
+
+This non-linear problem can be converted into an instance of linear regression
+ model, by defining the 
+\begin_inset Formula $n\times(k+1)$
+\end_inset
+
+ matrix 
+\begin_inset Formula 
+\[
+X=\begin{bmatrix}1 & t_{1} & t_{1}^{2} & \cdots & t_{1}^{k}\\
+1 & t_{2} & t_{2}^{2} & \cdots & t_{2}^{k}\\
+\vdots & \vdots & \vdots & \ddots & \vdots\\
+1 & t_{n} & t_{n}^{2} & \cdots & t_{n}^{k}
+\end{bmatrix}
+\]
+
+\end_inset
+
+which once again leads to the general linear model 
+\begin_inset Formula 
+\[
+y=X\theta+\varepsilon.
+\]
+
+\end_inset
+
+If we were to extend the univariate function above to a multivariate functions
+ in 
+\begin_inset Formula $D$
+\end_inset
+
+ dimensions, there are 
+\begin_inset Formula $\binom{k}{D}$
+\end_inset
+
+ possible multinomials of degree 
+\begin_inset Formula $k$
+\end_inset
+
+ in dimension 
+\begin_inset Formula $D$
+\end_inset
+
+.
+ This leads to an exponentially growing model with dimension of the magnitude
+ 
+\begin_inset Formula $D^{k}$
+\end_inset
+
+, so that the sparsity assumptions become essential.
+ 
+\end_layout
+
+\begin_layout Section
+Recovery in noiseless setting
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+frame{
+\end_layout
+
+\end_inset
+
+
+\begin_inset CommandInset toc
+LatexCommand tableofcontents
+
+\end_inset
+
+[currentsection]
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 3
+status collapsed
+
+\begin_layout Plain Layout
+allowframebreaks
+\end_layout
+
+\end_inset
+
+To build intuition, we start we the simplest case were there observations
+ are noiseless.
+ Essentially, we wish to find a solution 
+\begin_inset Formula $\theta$
+\end_inset
+
+ to the linear system 
+\begin_inset Formula 
+\[
+y=X\theta,
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $y\in\R^{n}$
+\end_inset
+
+ and 
+\begin_inset Formula $X\in\R^{n\times d}$
+\end_inset
+
+, such that 
+\begin_inset Formula $d>n$
+\end_inset
+
+.
+ When 
+\begin_inset Formula $d>n$
+\end_inset
+
+, this is an 
+\color red
+undetermined
+\color inherit
+ set of linear equations, so there is a whole subspace of solutions.
+\end_layout
+
+\begin_layout Frame
+If we have a 
+\color red
+sparse solution
+\color inherit
+ that means that there is a vector 
+\begin_inset Formula $\theta^{*}\in\R^{d}$
+\end_inset
+
+, with at most 
+\begin_inset Formula $s\ll d$
+\end_inset
+
+ non-zero entries and such that 
+\begin_inset Formula $y=X\theta^{*}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Frame
+The goal is to find this sparse solution to the linear system.
+ 
+\end_layout
+
+\begin_layout Subsection
+\begin_inset Formula $l_{1}$
+\end_inset
+
+-based relaxation
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+frame{
+\end_layout
+
+\end_inset
+
+
+\begin_inset CommandInset toc
+LatexCommand tableofcontents
+
+\end_inset
+
+[currentsection,currentsubsection]
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 3
+status collapsed
+
+\begin_layout Plain Layout
+allowframebreaks
+\end_layout
+
+\end_inset
+
+This problem can be expressed as a non-convex optimization problem involving
+ the 
+\begin_inset Formula $l_{0}$
+\end_inset
+
+-
+\begin_inset Quotes eld
+\end_inset
+
+norm
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Frame
+
+\series bold
+Question:
+\series default
+ The 
+\begin_inset Formula $l_{0}$
+\end_inset
+
+-norm has been put in quotation marks, as it is not considered a 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+underline{proper}
+\end_layout
+
+\end_inset
+
+ norm.
+ Why is that?
+\end_layout
+
+\begin_layout Frame
+Let us define 
+\begin_inset Formula 
+\[
+\lVert\theta\rVert_{0}:=\sum\limits _{j=1}^{d}\mathbbm{1}[\theta_{j}\neq0]
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $\mathbbm{1}$
+\end_inset
+
+ is an indicator function.
+ Thus, the optimization problem is 
+\begin_inset Formula 
+\[
+\min_{\theta\in\R^{d}}\lVert\theta\rVert_{0}\quad\text{such that}\quad X\theta=y
+\]
+
+\end_inset
+
+Solving this leads to obtaining a solution to the linear equations that
+ has the fewest number of non-zero entries.
+ How can we solve the above optimization problem? The constraint set is
+ simply a subspace, but the cost function is 
+\color red
+non-differentiable
+\color inherit
+ and 
+\color red
+non-convex
+\color inherit
+.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 3
+status collapsed
+
+\begin_layout Plain Layout
+allowframebreaks
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Block
+\begin_inset Argument 2
+status collapsed
+
+\begin_layout Plain Layout
+Algorithm for solving the 
+\begin_inset Formula $l_{0}$
+\end_inset
+
+ optimization problem
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+\begin_inset Argument item:1
+status collapsed
+
+\begin_layout Plain Layout
+1)
+\end_layout
+
+\end_inset
+
+For each subset 
+\begin_inset Formula $S\subset\{1,\cdots,d\}$
+\end_inset
+
+, we form the matrix 
+\begin_inset Formula $X_{S}\in\R^{\lvert S\rvert}$
+\end_inset
+
+, consisting of the columns of 
+\begin_inset Formula $X$
+\end_inset
+
+ indexed by S.
+ 
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Argument item:1
+status collapsed
+
+\begin_layout Plain Layout
+2)
+\end_layout
+
+\end_inset
+
+Examine the linear system 
+\begin_inset Formula $y=X_{S}\theta$
+\end_inset
+
+ to see whether it has a solution 
+\begin_inset Formula $\theta\in\R^{\lvert S\rvert}$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Argument item:1
+status collapsed
+
+\begin_layout Plain Layout
+3)
+\end_layout
+
+\end_inset
+
+Iterate over subsets in increasing cardinality, then the first solution
+ found would be the sparsest solution.
+ 
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Frame
+What would be the computational cost of this optimisation approach be? If
+ the sparsest solution contained 
+\begin_inset Formula $s$
+\end_inset
+
+ non-zero entries, then we would have to search over at least 
+\begin_inset Formula 
+\[
+\sum\limits _{j=1}^{s-1}\binom{d}{j}
+\]
+
+\end_inset
+
+subsets before finding it.
+\end_layout
+
+\begin_layout Frame
+The next solution is to replace 
+\begin_inset Formula $l_{0}$
+\end_inset
+
+ with the 
+\color red
+nearest convex member
+\color inherit
+ of the 
+\begin_inset Formula $l_{q}$
+\end_inset
+
+ family, namely the 
+\begin_inset Formula $l_{1}$
+\end_inset
+
+ norm.
+ 
+\end_layout
+
+\begin_deeper
+\begin_layout Definition
+\begin_inset Argument 2
+status collapsed
+
+\begin_layout Plain Layout
+Convex relaxation
+\end_layout
+
+\end_inset
+
+When a non-convex optimization problem is approximated by a convex programme.
+ 
+\end_layout
+
+\end_deeper
+\begin_layout Frame
+In this setting this leads to the optimization problem 
+\begin_inset Formula 
+\[
+\min_{\theta\in\R^{d}}\lVert\theta\rVert_{1}\quad\text{such that}\quad X\theta=y.
+\]
+
+\end_inset
+
+The constraint sex is a subspace (hence convex), and the cost function is
+ piecewise linear and thus convex as well.
+ The 
+\begin_inset Formula $l_{1}$
+\end_inset
+
+ optimisation problem is a linear programme, since any piecewise linear
+ convex cost can always be reformulated as the maximum of a collection of
+ linear functions.
+ The above optimisation problem is referred to as 
+\color red
+basis pursuit linear programme
+\color inherit
+.
+ 
+\end_layout
+
+\begin_layout Subsection
+Exact recovery and restricted null space
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+frame{
+\end_layout
+
+\end_inset
+
+
+\begin_inset CommandInset toc
+LatexCommand tableofcontents
+
+\end_inset
+
+[currentsection,currentsubsection]
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 3
+status collapsed
+
+\begin_layout Plain Layout
+allowframebreaks
+\end_layout
+
+\end_inset
+
+When is solving the basis pursuit problem 
+\begin_inset Formula 
+\[
+\min_{\theta\in\R^{d}}\lVert\theta\rVert_{1}\quad\text{such that}\quad X\theta=y.
+\]
+
+\end_inset
+
+equivalent to solving the 
+\begin_inset Formula $l_{0}$
+\end_inset
+
+ problem below? 
+\begin_inset Formula 
+\[
+\min_{\theta\in\R^{d}}\lVert\theta\rVert_{0}\quad\text{such that}\quad X\theta=y
+\]
+
+\end_inset
+
+Suppose 
+\begin_inset Formula $\theta^{*}=\R^{d}$
+\end_inset
+
+ such that 
+\begin_inset Formula $y=X\theta^{*}$
+\end_inset
+
+.
+ Moreover, the vector 
+\begin_inset Formula $\theta^{*}$
+\end_inset
+
+ has the support 
+\begin_inset Formula $S\subset\{1,2,\cdots,d\}$
+\end_inset
+
+, which means that 
+\begin_inset Formula $\theta_{j}^{*}=0$
+\end_inset
+
+ for all 
+\begin_inset Formula $j\in S^{C}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Frame
+The success of the basis pursuit should depend on how the nullspace of 
+\begin_inset Formula $X$
+\end_inset
+
+ is related to this support, where by definition 
+\begin_inset Formula 
+\[
+\text{null}(X):=\{\Delta\in\R^{d}\mid X\Delta=0\}.
+\]
+
+\end_inset
+
+Since 
+\begin_inset Formula $X\theta^{*}=y$
+\end_inset
+
+ by assumption, any vector of the form 
+\begin_inset Formula $\theta^{*}+\Delta$
+\end_inset
+
+ for some 
+\begin_inset Formula $\Delta\in\text{null}(X)$
+\end_inset
+
+ is feasible for the basis pursuit programme.
+ 
+\end_layout
+
+\begin_layout Subsection
+Sufficient conditions for restricted null space
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+frame{
+\end_layout
+
+\end_inset
+
+
+\begin_inset CommandInset toc
+LatexCommand tableofcontents
+
+\end_inset
+
+[currentsection,currentsubsection]
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Estimation in noisy settings
+\end_layout
+
+\begin_layout Subsection
+Restricted eigenvalue condition
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+frame{
+\end_layout
+
+\end_inset
+
+
+\begin_inset CommandInset toc
+LatexCommand tableofcontents
+
+\end_inset
+
+[currentsection,currentsubsection]
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Bounds on 
+\begin_inset Formula $l_{2}$
+\end_inset
+
+-error for hard sparse models
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+frame{
+\end_layout
+
+\end_inset
+
+
+\begin_inset CommandInset toc
+LatexCommand tableofcontents
+
+\end_inset
+
+[currentsubsection]
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Restricted nullspace and eigenvalues for random designs
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+frame{
+\end_layout
+
+\end_inset
+
+
+\begin_inset CommandInset toc
+LatexCommand tableofcontents
+
+\end_inset
+
+[currentsubsection]
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Bounds on prediction error
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+frame{
+\end_layout
+
+\end_inset
+
+
+\begin_inset CommandInset toc
+LatexCommand tableofcontents
+
+\end_inset
+
+[currentsection]
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Variable or subset selection
+\end_layout
+
+\begin_layout Subsection
+Variable selection consistency for the Lasso
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+frame{
+\end_layout
+
+\end_inset
+
+
+\begin_inset CommandInset toc
+LatexCommand tableofcontents
+
+\end_inset
+
+[currentsection]
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Proof of Theorem 7.21
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+frame{
+\end_layout
+
+\end_inset
+
+
+\begin_inset CommandInset toc
+LatexCommand tableofcontents
+
+\end_inset
+
+[currentsection]
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset FormulaMacro
+\newcommand{\E}{\mathbb{{E}}}
+{\mathbb{E}}
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset FormulaMacro
+\newcommand{\R}{\mathbb{{R}}}
+{\mathbb{R}}
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 3
+status collapsed
+
+\begin_layout Plain Layout
+allowframebreaks
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout FrameTitle
+References
+\end_layout
+
+\end_deeper
+\begin_layout Frame
+ 
+\begin_inset CommandInset bibtex
+LatexCommand bibtex
+bibfiles "References_HDStat"
+options "apa"
+
+\end_inset
+
+ 
+\end_layout
+
+\end_body
+\end_document
