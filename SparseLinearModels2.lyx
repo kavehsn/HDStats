@@ -771,7 +771,144 @@ Thus,
 \begin_inset Formula 
 \begin{align*}
 \Vert\frac{X\theta_{S}}{\sqrt{n}}\Vert_{2}^{2}= & \theta_{S}'\left(\frac{X'X}{n}-I\right)\theta_{S}+\text{\ensuremath{\Vert}\ensuremath{\theta_{S}\Vert_{2}^{2}}}\\
-\geq & -\vertiii\frac{X'X}{n}-I\vertiii_{2}\Vert\theta_{S}\Vert_{1}+\ensuremath{\Vert}\ensuremath{\theta_{S}\Vert_{2}^{2}}
+\geq & -\vertiii\frac{X'X}{n}-I\vertiii_{2}\Vert\theta_{S}\Vert_{1}^{2}+\ensuremath{\Vert}\ensuremath{\theta_{S}\Vert_{2}^{2}}
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+since the mutual incoherence parameter is the smallest constant 
+\begin_inset Formula $\delta_{pw}(X)$
+\end_inset
+
+ such that 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\vertiii\frac{X'X}{n}-I\vertiii_{2}\leq\delta_{pw}(X)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+we would thus have
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+\Vert\frac{X\theta_{S}}{\sqrt{n}}\Vert_{2}^{2}= & \theta_{S}'\left(\frac{X'X}{n}-I\right)\theta_{S}+\text{\ensuremath{\Vert}\ensuremath{\theta_{S}\Vert_{2}^{2}}}\\
+\geq & -\vertiii\frac{X'X}{n}-I\vertiii_{2}\Vert\theta_{S}\Vert_{1}^{2}+\ensuremath{\Vert}\ensuremath{\theta_{S}\Vert_{2}^{2}}\\
+\geq & -\delta\lVert\theta_{S}\Vert_{1}^{2}+\lVert\theta_{S}\lVert_{2}^{2}
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Moreover, we have the inequality
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\lVert\theta_{S}\rVert_{1}\leq\sqrt{s}\lVert\theta_{S}\rVert_{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+which leads to 
+\begin_inset Formula 
+\begin{align}
+\Vert\frac{X\theta_{S}}{\sqrt{n}}\Vert_{2}^{2}= & \theta_{S}'\left(\frac{X'X}{n}-I\right)\theta_{S}+\text{\ensuremath{\Vert}\ensuremath{\theta_{S}\Vert_{2}^{2}}}\\
+\geq & -\vertiii\frac{X'X}{n}-I\vertiii_{2}\Vert\theta_{S}\Vert_{1}^{2}+\ensuremath{\Vert}\ensuremath{\theta_{S}\Vert_{2}^{2}}\\
+\geq & -\delta\lVert\theta_{S}\Vert_{1}^{2}+\lVert\theta_{S}\lVert_{2}^{2}\\
+\geq & -\delta s\lVert\theta_{S}\rVert_{2}^{2}+\lVert\theta_{S}\lVert_{2}^{2}=(1-\delta s)\lVert\theta_{S}\rVert_{2}^{2}
+\end{align}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Since 
+\begin_inset Formula $X\theta_{S}=-X\theta_{S^{c}}$
+\end_inset
+
+we would also have
+\begin_inset Formula 
+\begin{align}
+\Vert\frac{X\theta_{S}}{\sqrt{n}}\Vert_{2}^{2} & =\vert\theta_{S}'\left(\frac{X'X}{n}-I\right)\theta_{S}+\underbrace{\theta_{S}'\theta_{S^{c}}}_{=0}\vert\\
+ & \leq\delta\lVert\theta_{S}\rVert_{1}\lVert\theta_{S^{c}}\rVert_{1}\\
+ & \leq\delta\sqrt{s}\lVert\theta_{S}\rVert_{2}\lVert\theta_{S^{c}}\rVert_{1}
+\end{align}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Relating equations (1) and (5), we have
+\begin_inset Formula 
+\[
+(1-\delta s)\lVert\theta_{S}\rVert_{2}^{2}\leq\Vert\frac{X\theta_{S}}{\sqrt{n}}\Vert_{2}^{2}\leq\delta\sqrt{s}\lVert\theta_{S}\rVert_{2}\lVert\theta_{S^{c}}\rVert_{1}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Hence, we may write the above as
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align}
+(1-\delta s)\lVert\theta_{S}\rVert_{2}^{2} & \leq\delta\sqrt{s}\lVert\theta_{S}\rVert_{2}\lVert\theta_{S^{c}}\rVert_{1}\\
+\lVert\theta_{S}\rVert_{2}^{2} & \leq\frac{\delta\sqrt{s}}{(1-\delta s)}\lVert\theta_{S}\rVert_{2}\lVert\theta_{S^{c}}\rVert_{1}
+\end{align}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Recall the inequality 
+\begin_inset Formula $\lVert\theta_{S}\rVert_{1}\leq\sqrt{s}\lVert\theta_{S}\rVert_{2}$
+\end_inset
+
+.
+ Thus, multiplying equation (9) by 
+\begin_inset Formula $\sqrt{s}$
+\end_inset
+
+, we will have
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+\sqrt{s}\lVert\theta_{S}\rVert_{2}^{2} & \leq\frac{s\delta}{(1-\delta s)}\lVert\theta_{S}\rVert_{2}\lVert\theta_{S^{c}}\rVert_{1}\\
+\lVert\theta_{S}\rVert_{1}\leq\sqrt{s}\lVert\theta_{S}\rVert_{2} & \leq\frac{s\delta}{(1-\delta s)}\lVert\theta_{S}\rVert_{2}\lVert\theta_{S^{c}}\rVert_{1}
 \end{align*}
 
 \end_inset
@@ -852,7 +989,7 @@ Prove that
 
 \begin_layout Standard
 A more related but sophisticated sufficient condition is the Restricted
- Isometry Propety (RIP).
+ Isometry Property (RIP).
  This can be understood as a generalisation of the pairwise incoherence
  condition, based on looking at conditioning of larger subsets of columns.
 \end_layout
@@ -886,7 +1023,7 @@ For a given integer
 \begin_layout Standard
 \begin_inset Formula 
 \[
-\vertiii\frac{X_{S}'X_{S}}{n}-I_{s}\vertiii_{2}\leq\delta_{s}(s)\quad\text{for all subests \ensuremath{S}of size at most \ensuremath{s}}
+\vertiii\frac{X_{S}'X_{S}}{n}-I_{s}\vertiii_{2}\leq\delta_{s}(s)\quad\text{for all subests \ensuremath{S} of size at most \ensuremath{s}}
 \]
 
 \end_inset
