@@ -165,7 +165,16 @@ theorems-std
 \end_layout
 
 \begin_layout Standard
-now let us consider the tanget cone of the 
+\begin_inset FormulaMacro
+\newcommand{\vertiii}{\vert\vert\vert}
+{\vert\vert\vert}
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+now let us consider the tangent cone of the 
 \begin_inset Formula $l_{1}$
 \end_inset
 
@@ -449,12 +458,444 @@ from here we have
 \begin_layout Standard
 \begin_inset Formula 
 \begin{align*}
-\lVert\theta_{S}^{*}\rVert_{1} & =\lVert\theta^{*}\rVert_{1}\geq\lVert\theta^{*}+\hat{\Delta}\rVert_{1}\\
+\lVert\theta_{S}^{*}\lVert_{1}=\lVert\theta^{*}\lVert_{1}\geq & \lVert\theta^{*}+\hat{\Delta}\rVert_{1}\\
+= & \lVert\theta_{S}^{*}+\hat{\Delta}_{S}\rVert_{1}+\lVert\hat{\Delta}_{S^{c}}\rVert_{1}
 \end{align*}
 
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+From the triangle inequality, we know that
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\lVert\theta_{S}^{*}\rVert_{1}-\lVert\hat{\Delta}_{S}\rVert_{1}\leq\lVert\theta_{S}^{*}+\hat{\Delta}_{S}\rVert_{1}\leq\lVert\theta_{S}^{*}+\hat{\Delta}_{S}\rVert_{1}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+therefore
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+\lVert\theta_{S}^{*}\lVert_{1}=\lVert\theta^{*}\lVert_{1}\geq & \lVert\theta^{*}+\hat{\Delta}\rVert_{1}\\
+= & \lVert\theta_{S}^{*}+\hat{\Delta}_{S}\rVert_{1}+\lVert\hat{\Delta}_{S^{c}}\rVert_{1}\\
+\geq & \lVert\theta_{S}^{*}\rVert_{1}-\lVert\hat{\Delta}_{S}\rVert_{1}+\lVert\hat{\Delta}_{S^{c}}\rVert_{1}
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+rearranging the above yields
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+\lVert\theta^{*}\rVert_{1}\geq & \lVert\theta_{S}^{*}\rVert_{1}-\lVert\hat{\Delta}_{S}\rVert_{1}+\lVert\hat{\Delta}_{S^{c}}\rVert_{1}\\
+\lVert\theta^{*}\rVert_{1}-\lVert\theta_{S}^{*}\rVert_{1}\geq & -\lVert\hat{\Delta}_{S}\rVert_{1}+\lVert\hat{\Delta}_{S^{c}}\rVert_{1}\\
+0\geq & -\lVert\hat{\Delta}_{S}\rVert_{1}+\lVert\hat{\Delta}_{S^{c}}\rVert_{1}\\
+\lVert\hat{\Delta}_{S}\rVert_{1}\geq & \lVert\hat{\Delta}_{S^{c}}\rVert_{1}
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+which proves that 
+\begin_inset Formula $\hat{\Delta}\in\C(S)$
+\end_inset
+
+.
+ However, by construction, 
+\begin_inset Formula $X\hat{\Delta}=0$
+\end_inset
+
+, which means that 
+\begin_inset Formula $\hat{\Delta}\in\text{null}(X)$
+\end_inset
+
+ too.
+ By the assumption imposed earlier, this implies that 
+\begin_inset Formula $\hat{\Delta}=0$
+\end_inset
+
+ or that 
+\begin_inset Formula $\hat{\theta}=\theta^{*}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Sufficient conditions for restricted nullspace
+\end_layout
+
+\begin_layout Standard
+In order to ensure that for any vector 
+\begin_inset Formula $\R^{d}$
+\end_inset
+
+with support 
+\begin_inset Formula $S$
+\end_inset
+
+, the basis pursuit programme applied with 
+\begin_inset Formula $y=X\theta^{*}$
+\end_inset
+
+has unique solution 
+\begin_inset Formula $\hat{\theta}=\theta^{*}$
+\end_inset
+
+, the matrix 
+\begin_inset Formula $X$
+\end_inset
+
+ has to satisfy the restricted nullspace property.
+ The earliest sufficient conditions were based on the incoherence parameter
+ of the design matrix, which is the quantity
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\delta_{pw}(X)=\max_{j,k=1,\cdots,d}\lvert\frac{\langle X_{j},X_{k}\rangle}{n}-1{j=k}\rvert
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where 
+\begin_inset Formula $X_{j}$
+\end_inset
+
+and 
+\begin_inset Formula $X_{k}$
+\end_inset
+
+are the 
+\begin_inset Formula $k$
+\end_inset
+
+th and 
+\begin_inset Formula $j$
+\end_inset
+
+th columns of the matrix 
+\begin_inset Formula $X$
+\end_inset
+
+ respectively and 
+\begin_inset Formula $1{.}$
+\end_inset
+
+ denotes an indicator function.
+ If 
+\begin_inset Formula $X$
+\end_inset
+
+ is rescaled by dividing by 
+\begin_inset Formula $\sqrt{n}$
+\end_inset
+
+, then 
+\begin_inset Formula $X_{j}'X_{j}=1$
+\end_inset
+
+, which makes is more readily interpretable.
+ The parameter 
+\begin_inset Formula $\delta_{pw}(X)$
+\end_inset
+
+ essentially defines the maximum absolute value of cross-correlations between
+ the columns of 
+\begin_inset Formula $X$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+In what follows, through Exercise 7.3 of Wainright (2019), it will be shown
+ that a small mutual (pairwise) incoherence is sufficient to guarantee a
+ uniform version of the restricted nullspace property.4
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Proposition:
+\end_layout
+
+\begin_layout Standard
+If the pairwise incoherence satisfies the bound
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\delta_{pw}(X)\leq\frac{1}{3s}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+then the restricted nullspace property holds for all subsets 
+\begin_inset Formula $S$
+\end_inset
+
+ of cardinality at most 
+\begin_inset Formula $s$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Proof:
+\end_layout
+
+\begin_layout Standard
+Choose a vector 
+\begin_inset Formula $\theta$
+\end_inset
+
+ such that 
+\begin_inset Formula $X\theta=0$
+\end_inset
+
+.
+ For some set 
+\begin_inset Formula $S$
+\end_inset
+
+ subject to 
+\begin_inset Formula $\vert S\vert\leq s$
+\end_inset
+
+, we have 
+\begin_inset Formula $\theta=\theta_{S}+\theta_{S^{c}}$
+\end_inset
+
+,and 
+\begin_inset Formula $X(\theta_{S}+\theta_{S^{c}})=0$
+\end_inset
+
+.
+ Thus, 
+\begin_inset Formula $X\theta_{S}=-X\theta_{S^{c}}$
+\end_inset
+
+.
+ Let us lower bound the 
+\begin_inset Formula $l_{2}$
+\end_inset
+
+norm of the left hand side of the former equation
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+\Vert\frac{X\theta_{S}}{\sqrt{n}}\Vert_{2}^{2}= & \frac{(X\theta_{S})'X\theta_{S}}{n}=\frac{\theta_{S}'X'X\theta_{S}}{n}\\
+= & \frac{\theta_{S}'X'X\theta_{S}}{n}-\theta_{S}'\theta_{S}+\theta_{S}'\theta_{S}\\
+= & \theta_{S}'\left(\frac{X'X}{n}-I\right)\theta_{S}+\text{\ensuremath{\Vert}\ensuremath{\theta_{S}\Vert_{2}^{2}}}
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+since we have the inequality
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+u'Mv\leq\Vert M\Vert_{2}\Vert u\Vert_{1}\Vert v\Vert_{1}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The term 
+\begin_inset Formula $\theta_{S}'\left(\frac{X'X}{n}-I\right)\theta_{S}$
+\end_inset
+
+can be expressed as follows
+\begin_inset Formula 
+\[
+\theta_{S}'\left(\frac{X'X}{n}-I\right)\theta_{S}\leq\vertiii\frac{X'X}{n}-I\vertiii_{2}\Vert\theta_{S}\Vert_{1}\Vert\theta_{S}\Vert_{1}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Thus, 
+\begin_inset Formula 
+\begin{align*}
+\Vert\frac{X\theta_{S}}{\sqrt{n}}\Vert_{2}^{2}= & \theta_{S}'\left(\frac{X'X}{n}-I\right)\theta_{S}+\text{\ensuremath{\Vert}\ensuremath{\theta_{S}\Vert_{2}^{2}}}\\
+\geq & -\vertiii\frac{X'X}{n}-I\vertiii_{2}\Vert\theta_{S}\Vert_{1}+\ensuremath{\Vert}\ensuremath{\theta_{S}\Vert_{2}^{2}}
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Exercise 7.3:
+\series default
+ Given a matrix 
+\begin_inset Formula $X\in\R^{n\times d}$
+\end_inset
+
+, suppose that it has pairwise incoherence upper bounded as 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\delta_{pw}(X)<\frac{\gamma}{s},
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+Let 
+\begin_inset Formula $S\subset\{1,\cdots,d\}$
+\end_inset
+
+be any subset of size 
+\begin_inset Formula $s$
+\end_inset
+
+.
+ Show that there is a function 
+\begin_inset Formula $\gamma\to c(\gamma)$
+\end_inset
+
+ such that 
+\begin_inset Formula $\gamma_{\min}(\frac{X_{S}'X_{S}}{n})\geq c(\gamma)>0$
+\end_inset
+
+, as long as 
+\begin_inset Formula $\gamma$
+\end_inset
+
+ is sufficiently small.
+\end_layout
+
+\begin_layout Enumerate
+Prove that 
+\begin_inset Formula $X$
+\end_inset
+
+ satisfies the restricted nullspace property wrt 
+\begin_inset Formula $S$
+\end_inset
+
+ as long as 
+\begin_inset Formula $\gamma<\frac{1}{3}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+A more related but sophisticated sufficient condition is the Restricted
+ Isometry Propety (RIP).
+ This can be understood as a generalisation of the pairwise incoherence
+ condition, based on looking at conditioning of larger subsets of columns.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Definion (Restricted isometry property): 
+\end_layout
+
+\begin_layout Standard
+For a given integer 
+\begin_inset Formula $s\in\{1,\cdots,d\}$
+\end_inset
+
+, we say that 
+\begin_inset Formula $X\in\R^{n\times d}$
+\end_inset
+
+ satisfies the RIP of order 
+\begin_inset Formula $s$
+\end_inset
+
+ with constant 
+\begin_inset Formula $\delta_{s}(X)>0$
+\end_inset
+
+, if 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\vertiii\frac{X_{S}'X_{S}}{n}-I_{s}\vertiii_{2}\leq\delta_{s}(s)\quad\text{for all subests \ensuremath{S}of size at most \ensuremath{s}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+_
 \end_layout
 
 \end_body
