@@ -129,6 +129,22 @@ theorems-std
 \begin_body
 
 \begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{document}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
 \begin_inset FormulaMacro
 \newcommand{\E}{\mathbb{{E}}}
 {\mathbb{E}}
@@ -1023,7 +1039,7 @@ For a given integer
 \begin_layout Standard
 \begin_inset Formula 
 \[
-\vertiii\frac{X_{S}'X_{S}}{n}-I_{s}\vertiii_{2}\leq\delta_{s}(s)\quad\text{for all subests \ensuremath{S} of size at most \ensuremath{s}}
+\vertiii\frac{X_{S}'X_{S}}{n}-I_{s}\vertiii_{2}\leq\delta_{s}(X)\quad\text{for all subests \ensuremath{S} of size at most \ensuremath{s}}
 \]
 
 \end_inset
@@ -1032,7 +1048,750 @@ For a given integer
 \end_layout
 
 \begin_layout Standard
-_
+For 
+\begin_inset Formula $s=1$
+\end_inset
+
+,we would have
+\begin_inset Formula 
+\begin{align*}
+\vertiii\frac{X_{j}'X_{j}}{n}-1\vertiii_{2} & \leq\delta_{1}\\
+\lvert\frac{\lVert X_{j}\rVert_{2}^{2}}{n}-1\rvert & \leq\delta_{1}
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+which implies
+\begin_inset Formula 
+\[
+1-\delta_{1}\leq\frac{\lVert X_{j}\rVert_{2}^{2}}{n}\leq1+\delta_{1}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+for all 
+\begin_inset Formula $j=1,\cdots,d$
+\end_inset
+
+.
+ Now consider 
+\begin_inset Formula $s=2$
+\end_inset
+
+, and suppose the matrix 
+\begin_inset Formula $X/\sqrt{n}$
+\end_inset
+
+ has unit-norm columns.
+ Then we would have
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\frac{X_{\{j,k\}}'X_{\{j,k\}}}{n}-\begin{bmatrix}1 & 0\\
+0 & 1
+\end{bmatrix}=\begin{bmatrix}\frac{\lVert X_{j}\rVert_{2}^{2}}{n}-1 & \frac{\langle X_{j,}X_{k}\rangle}{n}\\
+\frac{\langle X_{j},X_{k}\rangle}{n} & \frac{\lVert X_{k}\rVert_{2}^{2}}{n}-1
+\end{bmatrix}=\begin{bmatrix}0 & \frac{\langle X_{j,}X_{k}\rangle}{n}\\
+\frac{\langle X_{j,}X_{k}\rangle}{n} & 0
+\end{bmatrix}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Now let us consider the 
+\begin_inset Formula $l_{2}$
+\end_inset
+
+-matrix norm, which is the maximum singular value - i.e.,
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\vert\vert\vert\frac{X_{\{j,k\}}'X_{\{j,k\}}}{n}-I_{2}\vertiii_{2}=\max_{j\neq k}\lvert\frac{\langle X_{j,}X_{k}\rangle}{n}\rvert=\delta_{pw}(X)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{definition}[Sandwich relation]
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+For any matrix 
+\begin_inset Formula $X$
+\end_inset
+
+ any sparsity level 
+\begin_inset Formula $s\in{2,\cdots,d}$
+\end_inset
+
+, we have the sandwich relation
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\delta_{pw}(X)\leq\delta_{s}(X)\leq s\delta_{pw}(X)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+and neither bound can be improved in general.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{definition}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Although RIP imposes constraints on much larger submatrices than pairwise
+ incoherence, the magnitude of the constraints required to guarantee uniform
+ RNS property can be milder.
+ Suitable control on the RIP constants implies that the RNS property holds:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{proposition}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+If the RIP constant of order 
+\begin_inset Formula $2s$
+\end_inset
+
+ is bounded as 
+\begin_inset Formula $\delta_{2s}(X)<1/2$
+\end_inset
+
+, then the uniform RNS holds for any subset 
+\begin_inset Formula $S$
+\end_inset
+
+ of cardinality 
+\begin_inset Formula $\lvert S\rvert\leq s$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{proposition}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Like pairwise incoherence constant, control on the RIP constants is sufficient
+ condition for the BPLP to succeed.
+ A major advantage of the RIP is that for various classes of random design
+ matrices, it can be used to guarantee exactness of basis pursuit using
+ a sample size 
+\begin_inset Formula $n$
+\end_inset
+
+ 
+\bar under
+that is much smaller than that guaranteed by pairwise incoherence
+\bar default
+.
+ The RIP approach overcomes the 
+\begin_inset Quotes eld
+\end_inset
+
+quadratic barrier
+\begin_inset Quotes erd
+\end_inset
+
+ - i.e., the requirement that the sample size 
+\begin_inset Formula $n$
+\end_inset
+
+ scales quadratically in the sparsity 
+\begin_inset Formula $s$
+\end_inset
+
+, as in the pairwise incoherence approach.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+section{Estimation in noisy settings}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We now consider the noisy setting, in which we observe 
+\begin_inset Formula $(y,X)\in\R^{d}\times\R^{n\times d}$
+\end_inset
+
+, which are linked by the model
+\begin_inset Formula 
+\[
+y=X\theta^{*}+\underbrace{\varepsilon}_{\text{noise}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where 
+\begin_inset Formula $\varepsilon\in\R^{n}$
+\end_inset
+
+.
+ Thus, a natural extension of the basis pursuit programme introduced in
+ the noiseless setting is the Lasso programme, which is based on minimizing
+ a weighted combination of the term 
+\begin_inset Formula $\lVert y-X\theta\rVert_{2}^{2}$
+\end_inset
+
+ with the 
+\begin_inset Formula $l_{1}$
+\end_inset
+
+-norm penalty, say of the form
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\hat{\theta}\in\arg\min_{\theta\in\R^{d}}\left\{ \frac{1}{2n}\lVert y-X\theta\rVert_{2}^{2}+\lambda_{n}\lVert\theta\rVert_{1}\right\} 
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where 
+\begin_inset Formula $\lambda_{n}>0$
+\end_inset
+
+ is a regularisation parameter, which is chosen by the user.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{block}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Different constrained forms of Lasso are as follows
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\min_{\theta\in\R^{d}}\left\{ \frac{1}{2n}\lVert y-X\theta\rVert_{2}^{2}\right\} \quad\text{s.t. \ensuremath{\lVert\theta\rVert_{1}\leq R}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+for some 
+\begin_inset Formula $R>0$
+\end_inset
+
+, or 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\min_{\theta\in\R^{d}}\lVert\theta\rVert_{1}\quad\text{s.t. \ensuremath{\lVert y-X\theta\rVert_{2}^{2}\leq b^{2}}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+for some noise tolerance 
+\begin_inset Formula $b>0$
+\end_inset
+
+.
+ The latter is referred to as 
+\bar under
+relaxed basis pursuit
+\bar default
+ by 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+citet{Chenetal}
+\end_layout
+
+\end_inset
+
+.
+ By Lagrangian duality theory, all three families of convex programmes are
+ equivalent.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{block}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+subsection{Restricted eigenvalue condition}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Achieving perfect recovery is no longer feasible in noisy setting.
+ Therefore, we focus on bounding the 
+\begin_inset Formula $l_{2}$
+\end_inset
+
+-error 
+\begin_inset Formula $\lVert\hat{\theta}-\theta^{*}\rVert_{2}$
+\end_inset
+
+, between a Lasso solution 
+\begin_inset Formula $\hat{\theta}$
+\end_inset
+
+ and the unknown regression vector 
+\begin_inset Formula $\theta^{*}$
+\end_inset
+
+.
+ In noisy setting, the required condition is one that is slightly stronger
+ than the RNS property - namely that the 
+\bar under
+restricted eigenvalues of the matrix 
+\begin_inset Formula $\frac{X'X}{n}$
+\end_inset
+
+ are lower bounded over a cone
+\bar default
+.
+ In particular, for a constant 
+\begin_inset Formula $\alpha\geq1$
+\end_inset
+
+, let us define the set
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\C_{\alpha}(S):=\{\Delta\in\R^{d}\mid\lVert\Delta_{S^{c}}\rVert_{1}\leq\alpha\lVert\Delta_{S}\rVert_{1}\}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Notice that the above set is a special case of our definition in the RNS
+ property, which corresponds to the special case of 
+\begin_inset Formula $\alpha=1$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{definition}[Restricted eigenvalue condition]
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The matrix 
+\begin_inset Formula $X$
+\end_inset
+
+ satisfies the RE condition over 
+\begin_inset Formula $S$
+\end_inset
+
+ with parameters 
+\begin_inset Formula $(\kappa,\alpha)$
+\end_inset
+
+, if
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\frac{1}{n}\lVert X\Delta\rVert_{2}^{2}\geq\kappa\lVert\Delta\rVert_{2}^{2},\quad\forall\Delta\in\C_{\alpha}(S)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{definition}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The RE condition, strengthens the RNS property.
+ In particular, if the RE condition holds with parameters 
+\begin_inset Formula $(\kappa,1)$
+\end_inset
+
+ for any 
+\begin_inset Formula $\kappa>0$
+\end_inset
+
+, then the RNS property holds.
+ In what follows, we will prove that the error 
+\begin_inset Formula $\lVert\hat{\theta}-\theta^{*}\rVert_{2}$
+\end_inset
+
+in the Lasso condition is well controlled.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Intuition for the RE condition:
+\end_layout
+
+\begin_layout Standard
+In the optimisation problem
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\min_{\theta\in\R^{d}}\left\{ \frac{1}{2n}\lVert y-X\theta\rVert_{2}^{2}\right\} \quad\text{s.t. \ensuremath{\lVert\theta\rVert_{1}\leq R}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+let us consider the radius 
+\begin_inset Formula $R=\lVert\theta^{*}\lVert_{1}$
+\end_inset
+
+.
+ With this setting, the true parameter vector 
+\begin_inset Formula $\theta^{*}$
+\end_inset
+
+is feasible for the problem.
+ By definition, the Lasso estimate 
+\begin_inset Formula $\hat{\theta}$
+\end_inset
+
+minimised the quadratic cost function 
+\begin_inset Formula 
+\[
+L_{n}(\theta)=\frac{1}{2n}\lVert y-X\theta\rVert_{2}^{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+over the 
+\begin_inset Formula $l_{1}$
+\end_inset
+
+-ball of radius 
+\begin_inset Formula $R$
+\end_inset
+
+.
+ As 
+\begin_inset Formula $n\to\infty$
+\end_inset
+
+, it is expected that 
+\begin_inset Formula $\theta^{*}$
+\end_inset
+
+becomes a near-minimiser of the same cost function, so that 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+L_{n}(\hat{\theta})\approx L_{n}(\theta).
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+But when does closeness in cost imply that the error vector 
+\begin_inset Formula $\Delta:=\hat{\theta}-\theta^{*}$
+\end_inset
+
+is small? Let us first take a look at the following image
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename StrongConvex.png
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Standard
+As it is evident from the figure above there is a link between the cost
+ difference of the one-dimensional function 
+\begin_inset Formula $\delta L_{n}:=L_{n}(\theta^{*})-L_{n}(\hat{\theta})$
+\end_inset
+
+ and the error 
+\begin_inset Formula $\Delta=\hat{\theta}-\theta^{*}$
+\end_inset
+
+is controlled by the curvature of the cost function.
+ Which of the figures above are favorable and why? For a function in 
+\begin_inset Formula $d$
+\end_inset
+
+ dimensions, the curvature of a cost function is captured by the structure
+ of its Hessian matrix 
+\begin_inset Formula $\nabla^{2}L_{n}(\theta)$
+\end_inset
+
+, which is symmetric positive semidefinite matrix.
+\end_layout
+
+\begin_layout Standard
+Notice that in the special case of the quadratic cost function that underlies
+ the Lasso
+\begin_inset Formula 
+\[
+\nabla L_{n}(\theta)=\frac{1}{n}(\theta X'X-X'y)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+and the Hessian is calculated as 
+\begin_inset Formula 
+\[
+\nabla^{2}L_{n}(\theta)=\frac{1}{n}X'X
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+If we could guarantee that the eigenvalues of this matrix were uniformly
+ bounded away from zero, say that
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\frac{}{}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{document}
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \end_body
