@@ -1770,12 +1770,96 @@ If we could guarantee that the eigenvalues of this matrix were uniformly
 \begin_layout Standard
 \begin_inset Formula 
 \[
-\frac{}{}
+\frac{\lVert X\Delta\rVert_{2}^{2}}{n}\geq\kappa\lVert\Delta\rVert_{2}^{2}>0,\quad\forall\Delta\in\R^{d}\backslash\{0\}
 \]
 
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+then we would be assured of having curvature in all directions.
+\end_layout
+
+\begin_layout Standard
+In the high-dimensional setting 
+\begin_inset Formula $d>n$
+\end_inset
+
+ and the Hessian is a 
+\begin_inset Formula $d\times d$
+\end_inset
+
+ with rank at most 
+\begin_inset Formula $n$
+\end_inset
+
+, so it is impossible to guarantee that it has positive curvature in all
+ directions.
+ The quadratic cost function always has the below form
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename StrongConvex1.png
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Although, it is curved in some directions, there is always 
+\begin_inset Formula $(d-n)$
+\end_inset
+
+-dimensional subspace of directions in which it is completely flat, and
+ consequently the uniform lower bound above is never satisfied.
+ Thus, it is necessary to relax the stringency of the uniform curvature
+ condition and 
+\bar under
+require that it holds only for a subset 
+\begin_inset Formula $\C_{\alpha}(S)$
+\end_inset
+
+ of vectors
+\bar default
+.
+ If we can be assured that the subset 
+\begin_inset Formula $\C_{\alpha}(S)$
+\end_inset
+
+ is well aligned with the curved direction of the Hessian, then a small
+ difference in the cost function will translate into bounds on the difference
+ between 
+\begin_inset Formula $\hat{\theta}$
+\end_inset
+
+ and 
+\begin_inset Formula $\theta^{*}$
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Standard
@@ -1786,9 +1870,711 @@ status open
 
 
 \backslash
-end{document}
+subsection{Bounds on $l_2$-error for hard sparse models}
 \end_layout
 
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Let us now provide the bound on the error 
+\begin_inset Formula $\lVert\hat{\theta}-\theta^{*}\rVert_{2}$
+\end_inset
+
+in the case of a 
+\begin_inset Quotes eld
+\end_inset
+
+hard sparse
+\begin_inset Quotes erd
+\end_inset
+
+ vector 
+\begin_inset Formula $\theta^{*}$
+\end_inset
+
+.
+ In particular, let us impose the following conditions:
+\end_layout
+
+\begin_layout Enumerate
+The vector 
+\begin_inset Formula $\theta^{*}$
+\end_inset
+
+is supported on the subset 
+\begin_inset Formula $S\subseteq\{1,2,\cdots,d\}$
+\end_inset
+
+ with 
+\begin_inset Formula $\lvert S\rvert=s$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+The design matrix 
+\begin_inset Formula $X$
+\end_inset
+
+ satisfies the restricted eigenvalue condition
+\begin_inset Formula 
+\[
+\frac{1}{n}\lVert X\Delta\rVert_{2}^{2}\geq\kappa\lVert\Delta\rVert_{2}^{2},\quad\forall\Delta\in\C_{\alpha}(S)
+\]
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+with parameter 
+\begin_inset Formula $(\kappa,3)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+The following results provides bounds on the 
+\begin_inset Formula $l_{2}$
+\end_inset
+
+-error between any Lasso solution 
+\begin_inset Formula $\hat{\theta}$
+\end_inset
+
+ and the true vector 
+\begin_inset Formula $\theta^{*}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{theorem}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Under the above assumptions:
+\end_layout
+
+\begin_layout Enumerate
+Any solutions of the 
+\series bold
+Lagrangian Lasso
+\series default
+
+\begin_inset Formula 
+\[
+\hat{\theta}\in\min_{\theta\in\R^{d}}\left\{ \frac{1}{2n}\lVert y-X\theta\rVert_{2}^{2}+\lambda_{n}\lVert\theta\lVert_{1}\right\} 
+\]
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+with 
+\begin_inset Formula 
+\[
+\lambda_{n}\geq2\lVert\frac{X'\varepsilon}{n}\rVert_{\infty}
+\]
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+satisfies the bound
+\begin_inset Formula 
+\[
+\lVert\hat{\theta}-\theta^{*}\rVert_{2}\leq\frac{3}{\kappa}\sqrt{s}\lambda_{n}.
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+Any solution of the 
+\series bold
+constrained Lasso
+\series default
+
+\begin_inset Formula 
+\[
+\min_{\theta\in\R^{d}}\left\{ \frac{1}{2n}\lVert y-X\theta\rVert_{2}^{2}\right\} ,\quad\text{such that \ensuremath{\lVert\theta\rVert_{1}\leq\lVert\theta^{*}\rVert_{1},}}
+\]
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+satisfies the bound 
+\begin_inset Formula 
+\[
+\lVert\hat{\theta}-\theta^{*}\rVert_{2}\leq\frac{4}{\kappa}\sqrt{s}\lVert\frac{X'\varepsilon}{n}\rVert_{\infty}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+Finally, any solution to the 
+\series bold
+relaxed basis pursuit programme
+\series default
+
+\begin_inset Formula 
+\[
+\min_{\theta\in\R^{d}}\lVert\theta\rVert_{1}\quad\text{s.t. \ensuremath{\lVert y-X\theta\rVert_{2}^{2}\leq b^{2}}}
+\]
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+with 
+\begin_inset Formula $b^{2}\geq\frac{\lVert\varepsilon\rVert_{2}^{2}}{2n}$
+\end_inset
+
+ satisfies the bound
+\begin_inset Formula 
+\[
+\lVert\hat{\theta}-\theta^{*}\rVert_{2}\leq\frac{4}{\kappa}\sqrt{s}\lVert\frac{X'\varepsilon}{n}\rVert_{\infty}+\frac{2}{\sqrt{k}}\sqrt{b^{2}-\frac{\lVert\varepsilon\rVert_{2}^{2}}{2n}}
+\]
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+In addition, all these solutions satisfy the 
+\begin_inset Formula $l_{1}$
+\end_inset
+
+-bound 
+\begin_inset Formula $\lVert\hat{\theta}-\theta^{*}\rVert_{1}\leq4\sqrt{s}\lVert\hat{\theta}-\theta^{*}\rVert_{2}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{theorem}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The above results are 
+\bar under
+deterministic and apply to any set of linear regression equations
+\bar default
+.
+ However, the results involve 
+\bar under
+unknown quantities stated in terms of 
+\begin_inset Formula $\varepsilon$
+\end_inset
+
+ and/or 
+\begin_inset Formula $\theta^{*}$
+\end_inset
+
+
+\bar default
+ .
+ Obtaining results for specific statistical models - as determined by the
+ noise vector 
+\begin_inset Formula $\varepsilon$
+\end_inset
+
+ and the random design matrix 
+\begin_inset Formula $X$
+\end_inset
+
+ - involves bounding or approximating these quantities.
+ 
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Intuition:
+\end_layout
+
+\begin_layout Itemize
+Based on our earlier discussion of the role of convexity, naturally all
+ three upper bounds are inversely proportional to the restricted eigenvalue
+ constant 
+\begin_inset Formula $\kappa\geq0$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+Their scaling with 
+\begin_inset Formula $\sqrt{s}$
+\end_inset
+
+ is also natural, since we are trying to estimate the unknown regression
+ vector with 
+\begin_inset Formula $s$
+\end_inset
+
+ unknown entries.
+\end_layout
+
+\begin_layout Itemize
+The remaining terms involve the unknown noise vector.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Before, we carry on with an example for classical linear Gaussian models,
+ let us first preface the theory, with Exercise 2.12 of the second chapter.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Exercise 2.12 (Upper bounds for sub-Gaussian maxima):
+\series default
+ Let 
+\begin_inset Formula $\{X_{i}\}_{i=1}^{n}$
+\end_inset
+
+be a sequence of zero mean random variables, each sub-Gaussian with parameter
+ 
+\begin_inset Formula $\sigma$
+\end_inset
+
+.
+ (No independence assumption are needed).
+ Prove that 
+\begin_inset Formula 
+\[
+\E[\max_{i=1,\cdots,n}X_{i}]\leq\sqrt{2\sigma^{2}\log n}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+For any 
+\begin_inset Formula $\lambda>0$
+\end_inset
+
+, we can use the convexity of the exponential function and Jensen's inequality
+ to obtain 
+\begin_inset Formula 
+\[
+\exp\{\lambda\E[\max_{i=1,\cdots,n}X_{i}]\}\leq\E[\exp{\lambda\max_{i=1,\cdots,n}X_{i}}]
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+using the monotonicity of exponential function
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\E[\exp{\lambda\max_{i=1,\cdots,n}X_{i}}]=\E[\max_{i=1,\cdots,n}\exp{\lambda X_{i}}]\leq\sum_{i=1}^{n}\E[\exp{\lambda X_{i}}]\leq n\exp{\frac{\lambda^{2}\sigma^{2}}{2}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+hence, 
+\begin_inset Formula $\E[\max_{i=1,\cdots,n}X_{i}]\leq\frac{\log n}{\lambda}+\lambda\frac{\sigma^{2}}{2}$
+\end_inset
+
+ and optimising over 
+\begin_inset Formula $\lambda>0$
+\end_inset
+
+ yields 
+\begin_inset Formula $\lambda=\frac{\sqrt{2\log n}}{\sigma}$
+\end_inset
+
+; substituting 
+\begin_inset Formula 
+\[
+\E[\max_{i=1,\cdots,n}X_{i}]\leq\frac{\sigma}{\sqrt{2}}\sqrt{\log n}+\frac{\sigma}{\sqrt{2}}\sqrt{\log n}=\sqrt{2\sigma^{2}\log n}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Example (Classical linear Gaussian model):
+\series default
+ 
+\end_layout
+
+\begin_layout Standard
+Consider a classical linear Gaussian model with noise vector 
+\begin_inset Formula $\varepsilon\in\R^{n}$
+\end_inset
+
+with i.i.d.
+ 
+\begin_inset Formula $N(0,\sigma^{2})$
+\end_inset
+
+ entries.
+ Let us consider a fixed design matrix 
+\begin_inset Formula $X\in\R^{n\times d}$
+\end_inset
+
+.
+ Suppose that matrix 
+\begin_inset Formula $X$
+\end_inset
+
+ satisfies the RE condition over 
+\begin_inset Formula $S$
+\end_inset
+
+ with parameters 
+\begin_inset Formula $(\kappa,\alpha)$
+\end_inset
+
+, meaning that
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\frac{1}{n}\lVert X\Delta\rVert_{2}^{2}\geq\kappa\lVert\Delta\rVert_{2}^{2},\quad\forall\Delta\in\C_{\alpha}(S)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+and that is 
+\begin_inset Formula $C$
+\end_inset
+
+ column normalised, meaning that 
+\begin_inset Formula $\max_{j=1,\cdots,d}\frac{\lVert X_{j}\rVert_{2}}{\sqrt{n}}\leq C$
+\end_inset
+
+.
+ With this setup, the r.v.
+ 
+\begin_inset Formula $\lVert\frac{X'\varepsilon}{n}\rVert_{\infty}$
+\end_inset
+
+ corresponds to the absolute maximum of 
+\begin_inset Formula $d$
+\end_inset
+
+ zero-mean Gaussian variables, each with variance at most 
+\begin_inset Formula $\frac{C^{2}\sigma^{2}}{n}$
+\end_inset
+
+.
+ From exercise 2.12, it is evident that
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+P\left[\lVert\frac{X'\varepsilon}{n}\rVert_{\infty}\geq C\sigma\left(\sqrt{\frac{2\log d}{n}}+\delta\right)\right]\leq2\exp\left(-\frac{n\delta^{2}}{2}\right),\quad\forall\delta>0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Now let us set 
+\begin_inset Formula $\lambda_{n}=2C\sigma\left(\sqrt{\frac{2\log d}{n}}+\delta\right)$
+\end_inset
+
+, which would turn 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+\lVert\frac{X'\varepsilon}{n}\rVert_{\infty}\geq C\sigma\left(\sqrt{\frac{2\log d}{n}}+\delta\right)= & 2\lVert\frac{X'\varepsilon}{n}\rVert_{\infty}\geq2C\sigma\left(\sqrt{\frac{2\log d}{n}}+\delta\right)\\
+= & 2\lVert\frac{X'\varepsilon}{n}\rVert_{\infty}\geq\lambda_{n}
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+From Theorem 7.13, we have that the optimal solution to of the Lagrangian
+ Lasso satisfies the bound
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\lVert\hat{\theta}-\theta^{*}\rVert_{2}\leq\frac{6C\sigma}{\kappa}\sqrt{s}\left\{ \sqrt{\frac{2\log d}{n}}+\delta\right\} 
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+with probability at least 
+\begin_inset Formula $1-2\exp\left(-\frac{n\delta^{2}}{2}\right)$
+\end_inset
+
+.
+ The same Theorem can be used to show the bounds for the constrained Lasso.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{block}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The most significant difference between the constrained Lasso and the Lagrangian
+ Lasso is that the Constrained Lasso assumed exact knowledge of the 
+\begin_inset Formula $l_{1}$
+\end_inset
+
+-norm 
+\begin_inset Formula $\lVert\theta^{*}\rVert_{1}$
+\end_inset
+
+, whereas the Lagrangian Lasso only requires knowledge of the noise variance
+ 
+\begin_inset Formula $\sigma^{2}$
+\end_inset
+
+.
+ As you may suspect, in practice it is straightforward to estimate the noise
+ variance, whereas the 
+\begin_inset Formula $l_{1}$
+\end_inset
+
+-norm is a more delicate object.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{block}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Example (Compressed sensing):
+\end_layout
+
+\begin_layout Standard
+In the domain of compressed sensing,the design matrix 
+\begin_inset Formula $X$
+\end_inset
+
+ can be chosen by the user, and one standard choice is the standard Gaussian
+ matrix with i.i.d.
+ 
+\begin_inset Formula $N(0,1)$
+\end_inset
+
+ entries.
+ Suppose that the noise vector 
+\begin_inset Formula $\varepsilon\in\R^{n}$
+\end_inset
+
+is deterministic, say with bounded entries 
+\begin_inset Formula $(\lVert\varepsilon\rVert{}_{\infty}\leq\sigma$
+\end_inset
+
+).
+ Under these assumptions, each variable 
+\begin_inset Formula $\frac{X_{j}'\varepsilon}{\sqrt{n}}$
+\end_inset
+
+ is a zero mean Gaussian with variance at most 
+\begin_inset Formula $\sigma^{2}$
+\end_inset
+
+.
+ Thus, by following the same argument as in the preceding example, we conclude
+ that Lasso will again satisfy the bound
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\lVert\hat{\theta}-\theta^{*}\rVert_{2}\leq\frac{6\sigma}{\kappa}\sqrt{s}\left\{ \sqrt{\frac{2\log d}{n}}+\delta\right\} 
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+with 
+\begin_inset Formula $C=1$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+In what follows, we prove the bounds on the 
+\begin_inset Formula $l_{2}$
+\end_inset
+
+- error between any Lasso solution 
+\begin_inset Formula $\hat{\theta}$
+\end_inset
+
+and the true vector 
+\begin_inset Formula $\theta^{*}$
+\end_inset
+
+.
+ Let us first consider the constrained Lasso
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\min_{\theta\in\R^{d}}\left\{ \frac{1}{2n}\lVert y-X\theta\rVert_{2}^{2}\right\} ,\quad\text{such that \ensuremath{\lVert\theta\rVert_{1}\leq R,}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Given the choice 
+\begin_inset Formula $R=\lVert\theta^{*}\rVert_{1}$
+\end_inset
+
+, the tangent vector 
+\begin_inset Formula $\theta^{*}$
+\end_inset
+
+ is feasible.
+ Since 
+\begin_inset Formula $\hat{\theta}$
+\end_inset
+
+ is optimal,we have the inequality
+\begin_inset Formula 
+\[
+\frac{1}{2n}\lVert y-X\hat{\theta}\rVert_{2}^{2}\leq\frac{1}{2n}\lVert y-X\theta^{*}\rVert_{2}^{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Let us define the error vector 
+\begin_inset Formula $\hat{\Delta}=\hat{\theta}-\theta^{*}$
 \end_inset
 
 
