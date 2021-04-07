@@ -2574,7 +2574,367 @@ Given the choice
 
 \begin_layout Standard
 Let us define the error vector 
-\begin_inset Formula $\hat{\Delta}=\hat{\theta}-\theta^{*}$
+\begin_inset Formula $\hat{\Delta}=\hat{\theta}-\theta^{*}.$
+\end_inset
+
+ Substituting 
+\begin_inset Formula $y$
+\end_inset
+
+ with 
+\begin_inset Formula $X\theta^{*}+\varepsilon$
+\end_inset
+
+ and expanding the above inequality we get
+\begin_inset Formula 
+\begin{align*}
+\frac{1}{2n}\lVert y-X\hat{\theta}\rVert_{2}^{2}\leq & \frac{1}{2n}\lVert y-X\theta^{*}\rVert_{2}^{2}\\
+\lVert X\theta^{*}+\varepsilon-X\hat{\theta}\rVert_{2}^{2}\leq & \lVert X\theta^{*}+\varepsilon-X\theta^{*}\rVert_{2}^{2}\\
+\lVert X(\theta^{*}-\hat{\theta})+\varepsilon\rVert_{2}^{2}\leq & \lVert\varepsilon\rVert_{2}^{2}\\
+\lVert X(\theta^{*}-\hat{\theta})\rVert_{2}^{2}+\lVert\varepsilon\rVert_{2}^{2}+2\varepsilon'X(\theta^{*}-\hat{\theta})\leq & \lVert\varepsilon\rVert_{2}^{2}\\
+\lVert X(\theta^{*}-\hat{\theta})\rVert_{2}^{2}+2\varepsilon'X(\theta^{*}-\hat{\theta})\leq & 0\\
+\lVert X\hat{\Delta}\rVert_{2}^{2}\leq & 2\varepsilon'X\hat{\Delta}\\
+\frac{\lVert X\hat{\Delta}\rVert_{2}^{2}}{n}\leq & \frac{2\varepsilon'X\hat{\Delta}}{n}
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{block}[Holder's inequality]
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Recall that for any 
+\begin_inset Formula $p\geq1$
+\end_inset
+
+,
+\begin_inset Formula 
+\[
+\E\lvert XY\rvert\leq\lVert X\rVert_{p}\lVert Y\rVert_{q}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where 
+\begin_inset Formula $q=p/(p-1)$
+\end_inset
+
+ if 
+\begin_inset Formula $p>1$
+\end_inset
+
+, and 
+\begin_inset Formula $q=\infty$
+\end_inset
+
+ if 
+\begin_inset Formula $p=1$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{block}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Given the above definition, we can apply Holder inequality to the right
+ hand-side of the penultimate inequality to obtain
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Formula 
+\begin{equation}
+\frac{\lVert X\hat{\Delta}\rVert_{2}^{2}}{n}\leq2\lVert\frac{X'\varepsilon}{n}\rVert_{\infty}\lVert\hat{\Delta}\rVert_{1}
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+As it was shown in an earlier Theorem, whenever 
+\begin_inset Formula $\lVert\hat{\theta}\rVert_{1}\leq\lVert\theta^{*}\rVert_{1}$
+\end_inset
+
+for an 
+\begin_inset Formula $S$
+\end_inset
+
+-sparse vector, the error
+\begin_inset Formula $\hat{\Delta}$
+\end_inset
+
+belongs to the cone 
+\begin_inset Formula $\C_{1}(S)$
+\end_inset
+
+, whence
+\begin_inset Formula 
+\[
+\lVert\hat{\Delta}\rVert_{1}=\lVert\hat{\Delta}_{S}\rVert_{1}+\lVert\hat{\Delta}_{S^{c}}\rVert_{1}\leq2\lVert\hat{\Delta}_{S}\rVert_{1}\leq2\sqrt{s}\lVert\hat{\Delta}\rVert_{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Since 
+\begin_inset Formula $\C_{1}(S)$
+\end_inset
+
+ is a subset of 
+\begin_inset Formula $\C_{3}(S)$
+\end_inset
+
+, we may apply the restricted eigenvalue condition to the left hand side
+ of inequality (10), thereby obtaining 
+\begin_inset Formula 
+\[
+\frac{\lVert X\hat{\Delta}\rVert_{2}^{2}}{n}\geq\kappa\lVert\hat{\Delta}\rVert_{2}^{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Putting all this together yields the claimed bound.
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+section{Restricted nullspace and eigenvalues for random designs}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The earlier Theorem assumed that the design matrix 
+\begin_inset Formula $X$
+\end_inset
+
+ satisfies the restricted eigenvalue condition (RE).
+ In practice, it is difficult to verify that a given design matrix 
+\begin_inset Formula $X$
+\end_inset
+
+ satisfies this condition.
+ However, it is possible to give high-probability results in the case of
+ random design matrices.
+ As discussed previously, pairwise incoherence and RIP conditions are one
+ way in which to certify the restricted nullspace and eigenvalue properties,
+ and are well suited to isotropic designs (in which the population covariance
+ matrix of the rows 
+\begin_inset Formula $X_{i}$
+\end_inset
+
+ is the identity).
+ Many other random design matrices encountered in practice do not have such
+ an isotropic structure, so that it is desirable to have alternative direct
+ verifications of the restricted nullspace property.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{theorem}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Consider a random matrix 
+\begin_inset Formula $X\in\R^{n\times d},$
+\end_inset
+
+in which each row 
+\begin_inset Formula $x_{i}\in\R^{d}$
+\end_inset
+
+ is drawn i.i.d from 
+\begin_inset Formula $N(0,\Sigma)$
+\end_inset
+
+ distribution.
+ Then there are universal positive constants 
+\begin_inset Formula $c_{1}<1<c_{2}$
+\end_inset
+
+ such that
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\frac{\lVert X\theta\rVert_{2}^{2}}{n}\geq c_{1}\lVert\sqrt{\Sigma}\theta\rVert_{2}^{2}-c_{2}\rho^{2}(\Sigma)\frac{\log d}{n}\lVert\theta\rVert_{1}^{2}\quad\forall\theta\in\R^{d}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+with probability at least 
+\begin_inset Formula $1-\frac{\exp(-n/32)}{1-\exp(-n/32)}$
+\end_inset
+
+, where 
+\begin_inset Formula $\rho^{2}(\Sigma)$
+\end_inset
+
+ is the maximum diagonal entry of the covariance matrix 
+\begin_inset Formula $\Sigma$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{theorem}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The above Theorem can be used to establish restricted nullspace and eigenvalue
+ conditions for various matrix ensembles that do not satisfy incoherence
+ or RIP conditions.
+ 
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Example (Geometric decay): 
+\end_layout
+
+\begin_layout Standard
+Consider a covariance matrix with Toeplitz structure 
+\begin_inset Formula $\Sigma_{ij}=\nu^{\lvert i-j\rvert}$
+\end_inset
+
+for some parameter 
+\begin_inset Formula $\nu\in[0,1)$
+\end_inset
+
+.
+ This type of geometrically decaying covariance structure arises naturally
+ from autoregressive processes, e.g.,
+\begin_inset Formula 
+\[
+\begin{bmatrix}\text{1} & \nu & \nu^{2} & \cdots & \nu^{n-2} & \nu^{n-1}\\
+\nu & 1 & \nu & \nu^{2} & \vdots & \nu^{n-2}\\
+\nu^{2} & \nu & 1 & \nu & \ddots & \vdots\\
+\vdots & \nu^{2} & \ddots & \ddots & \ddots & \nu^{2}\\
+\nu^{n-2} & \vdots & \ddots & \nu & 1 & \nu\\
+\nu^{n-1} & \nu^{n-2} & \cdots & \nu^{2} & \nu & 1
+\end{bmatrix}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where 
+\begin_inset Formula $\nu$
+\end_inset
+
+ allows for the tuning of the memory process.
+ By classical results, we have 
+\begin_inset Formula $\gamma_{\min}(\Sigma)\geq(1-\nu)^{2}>0$
+\end_inset
+
+ and 
+\begin_inset Formula $\rho^{2}(\Sigma)=1$
+\end_inset
+
+, independently of dimension 
+\begin_inset Formula $d$
+\end_inset
+
+.
+ Consequently, the earlier Theorem implies that, with high probability,
+ the sample covariance matrix 
+\begin_inset Formula $\hat{\Sigma}=\frac{X'X}{n}$
+\end_inset
+
+ obtained by sampling from this distribution will satisfy the RE condition
+ for all subsets 
+\begin_inset Formula $S$
+\end_inset
+
+ of cardinality at most 
+\begin_inset Formula $\lvert S\rvert\leq\frac{c_{1}}{32c_{2}}(1-\nu^{2})\frac{n}{\log d}$
 \end_inset
 
 
