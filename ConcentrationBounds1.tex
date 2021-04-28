@@ -1,0 +1,547 @@
+\documentclass[10pt,handout,english]{beamer}
+\usetheme{Warsaw}
+\usepackage{graphicx}
+\usepackage{placeins}
+\usepackage{amsmath}
+\usepackage{tabu}
+\usepackage{bbm}
+\usepackage{booktabs}
+\usepackage[round]{natbib}
+\usepackage{bm}
+\usepackage{ragged2e}
+\usepackage{hyperref}
+\usepackage{amsmath}
+\usepackage{xcolor}
+\usepackage[super]{nth}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=blue,      
+    urlcolor=blue,
+    citecolor=black,
+}
+
+\apptocmd{\frame}{}{\justifying}{} % Allow optional arguments after frame.
+
+\setbeamertemplate{frametitle continuation}{}
+
+\newcommand\setItemnumber[1]{\setcounter{enumi}{\numexpr#1-1\relax}}
+
+\newcommand{\ts}{\textsuperscript}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\F}{\mathcal{F}}
+\newcommand{\1}{\mathbbm{1}}
+
+\title[]{Basic tail and concentration bounds (Part I)}
+\author[Kaveh S. Nobari]{Kaveh S. Nobari}
+\institute[]{Reading Sessions in High-Dimensional Statistics}
+\date[27/10/2020]
+{Department of Mathematics and Statistics\\ Lancaster University}
+	
+
+\begin{document}
+\begin{frame}
+\titlepage
+\end{frame}
+
+
+\begin{frame}{Contents}
+\tableofcontents
+\end{frame}
+
+\section{Motivation}
+\begin{frame}[allowframebreaks]{Motivation}
+It is often of interest to obtain bounds on the tails of a random variable, or two-sided inequalities, which guarantee that the random variable is close to its mean or median. These slides follow the structure of chapter 2 of \citet{wainwright2019high} and chapters 1 and 2 of \citet{vershynin2018high} to shed light on elementary techniques for obtaining \textcolor{red}{deviation} and \textcolor{red}{concentration} inequalities.\justifying
+{\vskip 0.5em}
+Concentration inequalities generally take the form of\justifying 
+\[
+P[\lvert X-\mu\rvert\geq t]\leq something\;small
+\]
+One way of controlling a tail probability $P[X\geq t]$ is by controlling the moments of the random variable $X$, where \textcolor{red}{by controlling higher-order moments of the variable $X$, we can obtain sharper bounds on tail probabilities}. This motivates the "Classical bounds" section of the notes.\justifying 
+{\vskip0.5em}
+We then extend the derivation of bounds to more general functions of the random variables in the "Martingale-based methods" section using \textcolor{red}{martingale decompositions}, as opposed to limiting the techniques to deriving bounds on \textcolor{red}{the sum of independent} random variables.\justifying  
+{\vskip  0.5em}
+Finally, we conclude this with a classical result on the concentration properties of Lipschitz functions of Gaussian variables.\justifying 
+\end{frame}
+
+\section{Classical bounds}
+\subsection{From Markov to Chernoff}
+\frame{\tableofcontents[currentsection , currentsubsection]}
+
+%------------------------------------------------
+\begin{frame}[allowframebreaks]
+The most elementary tail bound is \textcolor{red}{Markov's inequality}:
+\begin{block}{Markov's inequality}
+Given a non-negative random variable $X$ with finite mean - i.e. $\E[X]<\infty$, we have
+\[
+P[X\geq t]\leq\frac{\E[X]}{t},\quad \forall t>0
+\]
+\end{block}
+\textbf{Proof:} For $t\geq 0$, we can express any real number $x$, as 
+\[
+x=x\1\{x\geq t\}+x\1\{x<t\}
+\]
+Substituting the random variable $X$ for $x$ and taking expectations from both sides, we obtain
+\begin{align*}
+\E[X]&=\E[X\1\{X\geq t\}]+\E[X\1\{X<t\}]\\
+&\geq\E[t\1\{X\geq t\}]+0\\
+&\geq tP[X\geq t]
+\end{align*}
+Thus, dividing both sides by $t$ yields Markov's inequality.\justifying
+{\vskip 0.5em}
+It is immediately obvious that Markov's inequality \textcolor{red}{requires only the existence of the first moment}. If the random variable $X$ also has finite variance - i.e. $\text{var}(X)<\infty$, we have \textcolor{red}{Chebyshev's inequality}:\justifying
+\begin{block}{Chebyshev's inequality}
+For a random variable $X$ that has a finite mean and variance, we have
+\[
+P[\lvert X-\mu \rvert\geq t]\leq\frac{\text{var}(X)}{t^2},\quad \forall t>0
+\]
+\end{block} 
+\end{frame}
+\begin{frame}[allowframebreaks]
+
+\textbf{Proof:}
+Chebyshev's inequality follows from Markov's inequality, by considering the variable $(X-\E[X])^2$ and the constant $t^2$. By substituting these in the Markov inequality, we get\justifying
+\begin{align*}
+P[(X-\E[X])^2\geq t^2]&\leq \frac{\E[(X-\E[X])^2]}{t^2}\\
+P[\lvert X-\E[X] \rvert\geq t]&\leq\frac{\E[(X-\E[X])^2]}{t^2}
+\end{align*}
+Since, $\E[X]=\mu$ and $\text{var}(X)=\E[(X-\E[X])^2]$, we get
+\[
+P[\lvert X-\mu \rvert\geq t]\leq\frac{\text{var}(X)}{t^2}
+\]
+\end{frame}
+\begin{frame}[allowframebreaks]
+\textbf{Example:} Toss a fair coin $N$ times. What is the probability that we get at least $\frac{3N}{4}$ heads?
+{\vskip 0.5em}
+Let us express the outcome of the coin toss as a random variable $X$ that takes values in $\{1,0\}$, that signify head and tail respectively. We know that $P[X=1]=P[X=0]=1/2$, since it is a fair coin; thus, $X\sim binom(1,0.5)$. Now we are interested in the sum $S_N=X_1+X_2+\cdots+X_N$, where $S_N$ follows a $S_N\sim binom(N,0.5)$ with $\E[S_N]=Np$ and $Var(S_N)=Np(1-p)$. We are interested in the probability 
+\[
+P\left[S_n\geq \frac{3N}{4}\right].
+\]   
+
+We know that
+\[
+\E[S_N]=\frac{N}{2}\quad\text{and}\quad Var(S_N)=\frac{N}{4}
+\]
+Thus, from Chebyshev's inequality, we can show that
+\[
+P\left[\left\lvert S_n-\frac{N}{2}\right\rvert\geq t\right]\leq\frac{N}{4t}
+\]
+Thus, substituting $N/4$ for $t$, we get
+\[
+P\left[\left\lvert S_n-\frac{N}{2}\right\rvert\geq \frac{N}{4}\right]\leq\frac{4}{N}
+\]
+So the probability converges to zero at least linearly in $N$.
+The earlier results can be generalised as follows:
+\begin{block}{Extensions of Markov's inequality}
+Whenever a variable $X$ has a central moment of order $k$, an application of Markov's inequality to the random variable $\lvert X-\mu\rvert^k$ yields:
+\[
+P[\lvert X-\mu\rvert\geq t]\leq\frac{\E[\lvert X-\mu \rvert^k]}{t^k},\quad \forall t>0.
+\]
+\end{block}
+and this is not limited to polynomials $\lvert X-\mu \rvert^k $:
+\end{frame}
+\begin{frame}[allowframebreaks]
+Suppose $X$ has a moment generating function in a neighbourhood of zero, such that there is a constant $b>0$ that the functions $\rho(\lambda)=\E[\exp(\lambda(X-\mu))]$ exists for all $\lambda<\lvert b\rvert$. Thus, for any $\lambda\in[0,b]$, we may apply Markov's inequality to the random variable $Y=\exp(\lambda(X-\mu))$, obtaining the upper bound:
+\[
+P[(X-\mu)\geq t]=P[\exp(\lambda(X-\mu))\geq \exp(\lambda t)]\leq\frac{\E[\exp(\lambda(X-\mu))]}{\exp(\lambda t)}
+\]
+By taking the $\log$ of both side of the latter inequality, we get:
+\[
+\log P[(X-\mu)\geq t]\leq \log\E[\exp(\lambda(X-\mu))]-\lambda t
+\]
+Optimising our choice of $\lambda$, we can obtain the tightest results that yields the Chernoff bound:
+\begin{block}{Chernoff bound}
+\[
+\log P[(X-\mu)\geq t]\leq \inf_{\lambda\in [0,b]}\{\log\E[\exp(\lambda(X-\mu))]-\lambda t\}.
+\]
+\end{block}
+
+\end{frame}
+
+
+\subsection{Sub-Gaussian variables and Hoeffding bounds}
+\frame{\tableofcontents[currentsection, currentsubsection]}
+
+\begin{frame}[allowframebreaks]
+Evidently, the form of the tail bound obtained using the Chernoff approach depends on the growth rate of the mgf. Naturally, in the study of the tail bounds the random variables are then classified in terms of their mgfs. The simplest type of behaviour is known as sub-Gaussian, which shall be motivated by deriving tail bounds for a Gaussian variables, say X, such that $X\sim N(\mu,\sigma^2)$, with density
+\[
+f(x)=\frac{1}{\sigma\sqrt{2\pi}}\exp\left(-\frac{(X-\mu)^2}{2\sigma^2}\right)
+\]
+and thus, the mgf
+\begin{align*}
+\E[\exp(\lambda X)]&=\int_{\R}\exp(\lambda x)f(x)dx\\
+&=\int_{\R}\exp(\lambda x)\frac{1}{\sigma\sqrt{2\pi}}\exp\left(-\frac{(X-\mu)^2}{2\sigma^2}\right)dx\\
+&=\exp\left(\mu\lambda+\frac{\sigma^2\lambda^2}{2}\right),\quad\forall\lambda\in\R
+\end{align*}
+\begin{example}[Gaussian tail bounds]
+Let $X\sim N(\mu,\sigma^2)$ be a Gaussian r.v., which has mgf
+\[
+\E[\exp(\lambda X)]=\exp\left(\mu\lambda+\frac{\sigma^2\lambda^2}{2}\right),\quad \forall \lambda\in \R
+\]
+substituting this into the optimising problem of the Chernoff bound, we get
+\begin{equation}\label{eq: optms}
+\inf_{\lambda\geq 0}\{\log\E[\exp(\lambda(X-\mu))-\lambda t]\}=\inf_{\lambda\geq 0}\left\{\frac{\sigma^2\lambda^2}{2}-\lambda t\right\}=-\frac{t^2}{2\sigma^2}
+\end{equation}
+Therefore, we can conclude that any $N(\mu,\sigma^2)$ r.v. satisfies the upper deviation inequality
+\begin{equation}\label{eq: Sub-Gaussian TB}
+P[X\geq\mu+t]\leq\exp\left(-\frac{t^2}{2\sigma^2}\right)
+\end{equation}
+\end{example}
+\end{frame}
+\begin{frame}
+\begin{proof}[Proof of equation (\ref{eq: optms})]
+To solve the optimisation problem below 
+\[
+\inf_{\lambda\geq 0}\left\{\frac{\sigma^2\lambda^2}{2}-\lambda t\right\}
+\]
+we take derivatives to find the optimum of this quadratic function, - i.e.
+\[
+\frac{\partial}{\partial\lambda}\left(\frac{\sigma^2\lambda^2}{2}-\lambda t\right)=0,
+\]
+which leads to $\lambda_{opt}=\frac{t}{\sigma^2}$. Substituting $\lambda_{opt}$ with $\lambda$ in the above equation yields relationship (\ref{eq: optms}).
+\end{proof}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+\begin{definition}[Sub-Gaussianity]
+A r.v. $X$ with mean $\mu=\E[X]$ is sub-Gaussian if there is a positive number $\sigma$, such that
+\[
+\E[\exp(\lambda(X-\mu))]\leq\exp\left(\frac{\sigma^2\lambda^2}{2}\right),\quad\forall\lambda\in\R
+\]
+where the constant $\sigma$ is referred to as the \textcolor{red}{sub-Gaussian parameter}. 
+\end{definition}
+Moreover, when the above condition is combined with Chernoff bound, as in the Gaussian example, with $x\sim N(\mu,\sigma^2)$, it then satisfies the upper deviation inequality
+\[
+P[X\geq\mu+t]\leq\exp\left(-\frac{t^2}{2\sigma^2}\right)
+\]
+ By the symmetry of the definition, the variable $-X$ is sub-Gaussian iff $X$ is sub-Gaussian, so that we also have lower deviation inequality 
+\[
+P[X\leq\mu-t ]\leq\exp\left(-\frac{t^2}{2\sigma^2}\right), \quad\forall t\geq 0.
+\]
+Thus, we conclude that any sub-Gaussian variable satisfies the \textcolor{red}{concentration inequality}
+\[
+P[\lvert X-\mu\rvert\geq t]\leq2\exp\left(-\frac{t^2}{2\sigma^2}\right),\quad\forall t\in\R.
+\]
+We may have scenarios in which sub-Gaussian variables are non-Gaussian.
+\end{frame}
+\begin{frame}
+\begin{example}[Rademacher variables]
+A Rademacher r.v. $\varepsilon$ takes the values $[-1,+1]$ equiprobably - i.e $P[\varepsilon=-1]=P[\varepsilon=+1]=\frac{1}{2}$. Thus, the mgf of $\varepsilon$ is as follows
+\[
+\E[\exp(\lambda \varepsilon)]=\sum_{i\in\{-1,+1\}} \exp(\lambda\varepsilon_i)p(\varepsilon=i)=\frac{1}{2}[\exp(-\lambda)+\exp(\lambda)]
+\]
+where the Maclaurin-series expansion of the terms $\exp(-\lambda)$ and $\exp(\lambda)$ leads gives us
+\begin{align*}
+\E[\exp(\lambda \varepsilon)]=\frac{1}{2}\left[\sum\limits_{k=0}^{\infty}\frac{\lambda^k}{k!}+\sum\limits_{k=0}^{\infty}\frac{(-\lambda)^k}{k!}\right]&=\frac{1}{2}\left[2\sum\limits_{k=0}^{\infty}\frac{\lambda^{2k}}{(2k)!}\right]=\sum\limits_{k=0}^{\infty}\frac{\lambda^{2k}}{(2k)!}\\
+&\leq 1+\sum\limits_{k=0}^{\infty}\frac{\lambda^{2k}}{2^kk!}=\exp\left(\frac{\lambda^2}{2}\right)
+\end{align*}
+with the sub-Gaussian parameter $\sigma=1$.
+\end{example}
+\end{frame}
+
+\begin{frame}
+\textbf{Some preliminaries:} By definition, a function $g$ is convex if 
+\[
+g(\lambda x+(1-\lambda)y)\leq \lambda g(x)+(1-\lambda)g(y),\quad \forall \lambda\in[0,1]
+\]
+For a convex function $g:\R\to\R$, Jensen's inequality applies as follows
+\[
+g(\E[z])\leq \E[g(z)]
+\] 
+
+A r.v. $Z'$ is an \textcolor{red}{independent copy} of $Z$, if it has a same the same distribution as $Z$, and where $Z$ and $Z'$ are independent. 
+
+Given the above definitions, we provide a simple example of \textcolor{red}{symmetrization argument}, in which first an independent copy of $X$, $X'$ is introduced and the problem is symmetrized using a Rademacher variable.
+\end{frame}
+
+\begin{frame}
+\begin{block}{Symmetrization argument}
+Let $X$ be a r.v. with mean zero - i.e. $\mu=\E_X[X]=0$, with a support on the interval $[a,b]$, and let $X'$ be an independent copy of $X$, for any $\lambda\in\R$, we have
+\[
+\E_X[\exp(\lambda X)]=\E_X[\exp(\lambda(X-\E_{X'}[X']))]
+\]
+since $\E_X[X]=\E_{X'}[X']=0$. Using Jensen's inequality, we further establish that
+\[
+\E_X[\exp(\lambda(X-\E[X']))]\leq \E_{X,X'}[\exp(\lambda(X-X'))] 
+\]
+Further, note that $\varepsilon(X-X')$ and $(X-X')$ possess the same distribution, where $\varepsilon$ is a Rademacher r.v., so that
+\[
+\E_{X,X'}[\exp(\lambda(X-X'))]=\E_{X,X'}[\E_{\varepsilon}[\exp(\lambda\varepsilon(X-X'))]]¸
+\]
+\end{block}
+\end{frame}
+\begin{frame}¸
+\begin{block}{}
+where from the earlier example, we know that
+\[
+\E_{X,X'}[\E_{\varepsilon}[\exp(\lambda\varepsilon(X-X'))]]\leq \E_{X,X'}\left[\exp\left(\frac{\lambda^2(X-X')^2}{2}\right)\right]
+\]
+since $\lvert X-X' \rvert\leq b-a$, we are guaranteed that
+\[
+\E_{X,X'}\left[\exp\left(\frac{\lambda^2(X-X')^2}{2}\right)\right]\leq\exp\left(\frac{\lambda^2(b-a)^2}{2}\right)
+\]
+thus, we have shown that $X$ is sub-Gaussian with sub-Gaussian parameter $\sigma=b-a$
+\end{block}
+\end{frame}
+\begin{frame}
+
+\textbf{Quiz:}
+{\vskip 0.5em}
+\begin{itemize}
+\item[1)]Two independent sub-Gaussian variables $X_1$ and $X_2$ possess the sub-Gaussian parameters $\sigma_1$ and $\sigma_2$ respectively. What is the sub-Gaussian parameter of $X_1+X_2$?\justifying
+{\vskip 0.5em}
+\item[2)] Now once again consider the sub-Gaussian tail bound (\ref{eq: Sub-Gaussian TB}). How is this result extended to the variable $X_1+X_2$?\justifying
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+The answers to the above quiz, can be generalised to the variables $X_1,\cdots,X_n$ with mean $\mu_i$ and sub-Gaussian parameters $\sigma_i$ for $i=1,\cdots,n$ leading to the Hoeffding bound 
+\begin{block}{Hoeffding bounds}
+Suppose that the variables $X_1,\cdots,X_n$ each with mean $\mu_1,\cdots,\mu_n$ and sub-Gaussian parameter $\sigma_1,\cdots,\sigma_n$ are independent. Then we have
+\[
+P\left[\sum\limits_{i=1}^n(X_i-\mu_i)\geq t\right]\leq\exp\left\{-\frac{t^2}{2\sum_{i=1}^n\sigma_i^2}\right\}
+\]
+\end{block}
+\end{frame}
+\begin{frame}[allowframebreaks]
+\textbf{Exercise 2.4 of \citet{wainwright2019high}:} Consider a r.v. $X$ with mean $\mu=\E[X]$, and such that for scalars $b>a$, $X\in[a,b]$ almost surely.
+\begin{itemize}
+\item[1)]Defining the function $\psi(\lambda)=\log\E[\exp(\lambda X)]$, show that $\psi(0)=0$ and $\psi'(0)=\mu$.
+\item[2)]Show that $\psi''(\lambda)=\E_{\lambda}[X^2]-(\E_{\lambda}[X])^2$, where we define $\E_{\lambda}[f(X)]:=\frac{\E[f(X)\exp(\lambda X)]}{\E[\exp(\lambda X)]}$. Use this fact to obtain an upper bound on $\sup_{\lambda\in\R}\lvert\psi''(\lambda)\rvert$.
+\item[3)] Use parts (a) and (b) to establish that $X$ is sub-Gaussian with parameter at most $\sigma=\frac{b-a}{2}$. 
+\end{itemize}
+
+\textbf{Solution:}
+
+\underline{Part 1:}
+\[
+\psi(0)=\log\E[\exp(0)]=\log 1=0
+\]
+For $\psi'(0)$, we know that the derivative of the m.g.f equals $\mu$, so
+\[
+\psi'(0)=\frac{\mu}{\E[\exp(0X)]}=\mu.
+\]
+
+\underline{Part 2:}
+
+The identity for $\psi''(\lambda)$ follows from the chain rule. For the upper bound, observe that we can define a new distribution $Q_{\lambda}$ by taking $\exp(\lambda X)/\E[\exp(\lambda X)]$ to be its Radon–Nikodym derivative (density) with respect to the distribution of X. Hence establishing a bound on $\psi''(\lambda)$ is equivalent to bounding the supremum over variances of random variables $X_{\lambda}\sim Q_{\lambda}$.
+
+Taking, $m:=\frac{1}{2}(a+b)$, using that the mean minimises the mean squared error, and using that $X_{\lambda}\in[a,b ]$  a.s. for all $\lambda$,
+\[
+\sup_{\lambda} Var(X_{\lambda})=\sup_{\lambda} \E[(X-\E[X_{\lambda}])^2]\leq \sup_{\lambda} \E[(X-m)^2]\leq (b-m)^2=\frac{(b-a)^2}{4}.
+\]
+
+\underline{Part 2:}
+
+Taking a Maclaurin expansion of $\psi(\lambda)$
+\[
+\psi(\lambda)=\psi(0)+\lambda\psi'(0)+\frac{\lambda^2}{2}\psi''(\varepsilon),
+\]
+for some $\varepsilon\in(0,\lambda)$. Substituting the results from 1 and 2 ,
+\[
+\psi(\lambda)\leq\lambda\mu+\frac{\lambda^2}{2}\frac{(b-a)^2}{5}
+\]
+as desired.
+{\vskip 0.5em}
+\textbf{Conclusion:} If $X_i\in [a,b]$ for all $i=1,2,\cdots,n$, then it is sub-Gaussian with parameter $\sigma=\frac{b-a}{2}$, so that we obtain the bound
+\[
+P\left[\sum\limits_{i=1}^n(X_i-\mu_i)\geq t\right]\leq\exp\left(-\frac{2t^2}{n(b-a)^2}\right)
+\]
+\end{frame}
+\begin{frame}[allowframebreaks]
+To prove the equivalent characterizations of sub-Gaussian variables, it is of interest to first answer Exercise 2.2 of \citet{wainwright2019high} which introduces \textcolor{red}{Mills ratio}.
+
+\textbf{Exercise 2.2 of \citet{wainwright2019high}:} Let $\phi(z)=\frac{1}{\sqrt{2\pi}}\exp\left(\frac{-z^2}{2}\right)$ be the density function of a standard normal $Z\sim N(0,1)$ variate.
+\begin{itemize}
+\item[1)]Show that $\phi'(z)+z\phi(z)=0$
+\item[2)] Use part 1 to show that
+\[
+\phi(z)\left(\frac{1}{z}-\frac{1}{z^3}\right)\leq P[Z\geq z]\leq\phi(z)\left(\frac{1}{z}-\frac{1}{z^3}+\frac{3}{z^5}\right),\quad \forall z>0
+\]
+\end{itemize}
+\textbf{Solution:}
+
+\underline{Part 1:}
+\[
+\phi'(z)=-\frac{z}{\sqrt{2\pi}}\exp\left(\frac{-z^2}{2}\right)\quad \text{and}\quad z\phi(z)=\frac{z}{\sqrt{2\pi}}\exp\left(\frac{-z^2}{2}\right) 
+\]
+thus,
+\[
+\phi'(z)+z\phi(z)=0
+\]
+\underline{Part 2:} 
+
+Note that $P[Z\geq z]=\int_{z}^{\infty}\phi(t)dt$. Furthermore, from part 1, we know that $\phi(z)=\frac{-\phi'(z)}{z}$. By substituting $\frac{-\phi'(z)}{z}$ into the earlier integral, we get
+\[
+\int_{z}^{\infty}\phi(t)dt=\int_{z}^{\infty}\frac{-\phi'(t)}{t}dt=\left[\frac{-\phi(t)}{t}\right]_{z}^{\infty}-\int_{z}^{\infty} \frac{\phi(t)}{t^2}dt
+\]
+We know that $\lim_{t\to \infty}\frac{-\phi(t)}{t}=0$, therefore, the above expression can be written as
+\[
+\frac{\phi(z)}{z}-\int_{z}^{\infty} \frac{-\phi'(t)}{t^3}dt
+\] 
+using the substitution derived from Mill's ratio. Using integration by parts yet again, we obtain
+\begin{align*}
+\frac{\phi(z)}{z}-\int_{z}^{\infty} \frac{-\phi'(t)}{t^3}dt&=\frac{\phi(z)}{z}+\left[\frac{\phi(t)}{t^3}\right]_{z}^{\infty}-\int_{z}^{\infty}\frac{-3\phi(t)}{t^4}dt\\
+&=\frac{\phi(z)}{z}-\frac{\phi(z)}{z^3}+\int_{z}^{\infty}\frac{3\phi(t)}{t^4}dt\\
+P[Z\geq z]&=\phi(z)\left(\frac{1}{z}-\frac{1}{z^3}\right)+\underbrace{\int_{z}^{\infty}\frac{3\phi(t)}{t^4}dt}_{\geq0}\\
+		&\geq \phi(z)\left(\frac{1}{z}-\frac{1}{z^3}\right)
+\end{align*}
+Applying the same procedure again will prove the upper inequality. This is left as an exercise to the reader.
+\end{frame}
+\begin{frame}[allowframebreaks]
+\begin{block}{Equivalent characterizations of the sub-Gaussian variables (I-II)}
+\begin{itemize}
+\item[(I)] From the definition of sub-Gaussian variables, a r.v. with $\mu=\E[X]=0$ is sub-Gaussian for $\sigma\geq 0$,
+\[
+\E[\exp(\lambda X)]\leq\exp\left(\frac{\sigma^2\lambda^2}{2}\right),\quad\forall\lambda\in\R
+\]
+\item[(II)] There is a constant $c\geq 0$ and Gaussian r.v. $Z\sim N(0,\tau^2)$, such that
+\[
+P[\lvert X\rvert\geq s]\leq cP[\lvert Z\rvert\geq s],\quad\forall s\geq0.
+\]
+\end{itemize}
+\end{block}
+\begin{block}{Equivalent characterizations of the sub-Gaussian variables (III-IV)}
+\begin{itemize}
+\item[(III)] There is a constant $\theta\geq 0$ such that
+\[
+\E\left[X^{2k}\right]\leq\frac{(2k)!}{2^kk!}\theta^{2k},\quad \forall k=1,2,\cdots
+\] 
+\item[(IV)] There is a constant $\sigma\geq 0$ such that
+\[
+\E\left[\exp\left(\frac{\lambda X^2}{2\sigma^2}\right)\right]\leq\frac{1}{\sqrt{1-\lambda}},\quad\forall\lambda\in[0,1).
+\]
+\end{itemize}
+\end{block}
+\end{frame}
+\subsection{Sub-exponential variables and Bernstein bounds}
+\frame{\tableofcontents[currentsection,currentsubsection]}
+\begin{frame}
+The notion of sub-Gaussianity is rather restrictive. We thus now introduce sub-exponential variables, which impose milder conditions on the mgf.
+\begin{definition}{Sub-exponentiality}
+A r.v. $X$ with mean $\mu=\E[X]$ is sub-exponential if there are non-negative parameters $(\nu,\alpha)$, such that
+\[
+\E[\exp(\lambda(X-\mu))]\leq\exp\left(\frac{\nu^2\lambda^2}{2}\right),\quad\forall \lvert\lambda\rvert<\frac{1}{\alpha}
+\]
+It is immediately obvious that any sub-Gaussian variable is also sub-exponential, where the former is a special case of the latter, with $\nu=\sigma$ and $\alpha=0$. However, the converse is not true. 
+\end{definition}
+An example of a case where a variable is sub-exponential but not sub-Gaussian is as follows
+\end{frame}
+
+\begin{frame}
+\begin{example}[sub-exponential but not sub-Gaussian]
+Let $Z\sim N(0,1)$, and consider the r.v. $X=Z^2$, such that $Z\sim \chi^2_1$. Therefore, the mean $\mu=\E[\chi_1^2]=1$. For $\lambda<\frac{1}{2}$, we have the mgf as follows
+\begin{align*}
+\E[\exp(\lambda(X-1))]&=\int_{-\infty}^{+\infty}\exp(\lambda(Z^2-1))f(z)dz\\
+&=\frac{1}{\sqrt{2\pi}}\int_{-\infty}^{+\infty}\exp(\lambda(Z^2-1))\exp\left(\frac{-Z^2}{2}\right)dz\\
+&=\frac{\exp(-\lambda)}{\sqrt{1-2\lambda}}.
+\end{align*}
+for $\lambda\geq\frac{1}{2}$ the mgf is infinite, which reveals that $X$ is not sub-Gaussian.
+\end{example}
+\end{frame}
+\begin{frame}[allowframebreaks]
+To obtain the tail-bounds of sub-exponential variables, we refer to the Chernoff-type approach - i.e.  
+\[
+P[X-\mu\geq t]=P[\exp(\lambda(X-\mu))\geq\exp(t\lambda)]\leq\frac{\E[\exp(\lambda(X-\mu))]}{\exp(\lambda t)}
+\]
+where from the definition of sub-exponential variables, we get the upper bound
+\[
+P[X-\mu\geq t]\leq\frac{\E[\exp(\lambda(X-\mu))]}{\exp(\lambda t)}\leq\exp\left(\frac{\lambda^2\nu^2}{2}-\lambda t\right),\quad\forall \lambda\in\left[0,\frac{1}{\alpha}\right)¸
+\]
+where the Chernoff optimisation problem is
+\[
+\log P[X-\mu\geq t]\leq \inf_{\lambda\in[0,\alpha^{-1}]}\left\{\frac{\lambda^2\nu^2}{2}-\lambda t\right\}
+\]
+where using the same unconstrained optimisation approach as for sub-Gaussian variables, we'd obtain $\lambda_{opt}=\frac{t}{\nu^2}$, which yields the minimum $-\frac{t^2}{2\nu^2}$.
+
+Recall the constraint $0\leq\lambda<\frac{1}{\alpha}$. This implies that the unconstrained optimal $\lambda_{opt}$ must be between $0\leq\frac{t}{\nu^2}<\frac{1}{\alpha}$, which implies that in the interval $0\leq t<\frac{\nu^2}{\alpha^2}$, the unconstrained optimum corresponds to the constrained optimum.
+
+Otherwise for $t\geq \frac{\nu^2}{\alpha^2}$, considering that the function $g(.,t)=\frac{\lambda^2\nu^2}{2}-\lambda t$ is monotonically decreasing, in the interval $[0,\lambda^*)$, the constrained minimum is obtained at the boundary - i.e. $\lambda^\#=\frac{1}{\alpha}$, which leads to the minimum
+\[
+g^*(t)=g(\lambda^\#,t)=-\frac{t}{\alpha}+\frac{1}{2\alpha}\frac{\nu^2}{\alpha}\leq- \frac{t}{2\alpha}
+\]
+where this inequality used the fact that $\frac{\nu^2}{\alpha}\leq t$.
+
+The results above lead to the sub-exponential tail bounds as follows
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+\begin{block}{Sub-exponential tail bounds}
+Suppose $X$ is sub-exponential with parameters $(\nu,\alpha)$. Then
+\[
+P[X-\mu\geq t]\leq
+\begin{cases}
+\exp\left(-\frac{t}{2\nu^2}\right)\quad 0\leq t\leq\frac{\nu^2}{\alpha},\\
+\exp\left(-\frac{t}{2\alpha}\right)\quad t>\frac{\nu^2}{\alpha}.
+\end{cases}
+\]
+\end{block}
+The sub-exponential property can be verified by computing or bounding the mgf, which may not be practical in many different settings. One other approach is based on the control of the polynomial moments of $X$, which leads to the \textcolor{red}{Bernstein condition}
+\begin{block}{Bernstein condition}
+Given a r.v. $X$ with mean $\mu=\E[X]$ and variance $\sigma^2=\E[X^2]-\mu^2$, the Bernstein condition with parameter $b$ holds if
+\[
+\lvert \E[(X-\mu)^k]\rvert\leq\frac{1}{2}k!\sigma^2b^{k-2},\quad k\geq 2
+\]
+\end{block} 
+One sufficient condition for the Bernstein condition to hold is that $X$ is bounded. When $X$ satisfies the Bernstein condition, then it is sub-exponential with parameters $\sigma^2$ and $b$. The Maclaurin-series expansion of the mgf can be expressed as follows
+\begin{align*}
+\E[\exp(\lambda(X-\mu))]&=\E\left\{\sum\limits_{i=0}^{\infty}\frac{f^{(i)}(0)}{i!}\left[\lambda(X-\mu)\right]^i\right\}\\
+&=\sum\limits_{i=0}^{\infty}\E\left\{\frac{f^{(i)}(0)}{i!}\left[\lambda(X-\mu)\right]^i\right\}\\
+&=1+\lambda\E[(X-\mu)]+\frac{\lambda^2\E[(X-\mu)]^2}{2}+\sum\limits_{i=3}^{\infty}\frac{\lambda^i\E[(X-\mu)^i]}{i!}\\
+&=1+\frac{\lambda^2\sigma^2}{2}+\sum\limits_{i=3}^{\infty}\frac{\lambda^i\E[(X-\mu)^i]}{i!}
+\end{align*}
+Note that from the definition of Bernstein condition, we have
+\[
+\frac{\lvert \E[(X-\mu)^i]\rvert}{i!}\leq\frac{1}{2}\sigma^2b^{i-2}
+\]
+Therefore,
+\[
+\E[\exp(\lambda(X-\mu))]\leq1+\frac{\lambda^2\sigma^2}{2}+\frac{\lambda^2\sigma^2}{2}\sum\limits_{i=3}^{\infty}(\lvert\lambda \rvert b)^{i-2}
+\]
+For $\lvert\lambda\rvert<\frac{1}{b}$, we sum the geometric series,
+\[
+\sum\limits_{i=3}^{\infty}(\lvert\lambda \rvert b)^{i-2}=\frac{1}{1-\lvert\lambda\rvert b}
+\] 
+which leads to the following inequality
+\[
+\E[\exp(\lambda(X-\mu))]\leq 1+\frac{\lambda^2\sigma^2}{2}+\frac{\lambda^2\sigma^2}{2}\frac{1}{1-\lvert\lambda\rvert b}
+\]
+Noting that 
+\begin{align*}
+\exp\left(\frac{\lambda^2\sigma^2/2}{1-\lvert\lambda\rvert b}\right)&=1+\frac{\lambda^2\sigma^2/2}{1-\lvert\lambda\rvert b}+\cdots\\
+&\geq 1+\frac{\lambda^2\sigma^2/2}{1-\lvert\lambda\rvert b}
+\end{align*}
+leading to \textcolor{red}{Bernstein-type bound}.
+\begin{block}{Bernstein-type bound}
+For any r.v. satisfying the Bernstein condition, we have
+\[
+E[\exp(\lambda(X-\mu))]\leq \exp\left(\frac{\lambda^2\sigma^2/2}{1-\lvert\lambda\rvert b}\right),\quad \forall\lvert\lambda\rvert<\frac{1}{b}
+\]
+\end{block}
+
+As with the sub-Gaussian property, the sub-exponential property is preserved under summation for independent r.v.s. Consider the independent sequence $X_1,\cdots,X_n$, with means $\mu_1,\cdots,\mu_n$ and sub-exponential parameters $(\nu_1,\alpha_1),\cdots,(\nu_n,\alpha_n)$. The mgf can be calculated as follows
+\[
+\E\left[\exp\left(\lambda\sum_{i=1}^n(X_i-\mu_i)\right)\right]=\prod\limits_{i=1}^n\E[\exp(\lambda(X_i-\mu_i))]\leq \prod\limits_{i=1}^n\exp\left(\frac{\lambda^2\nu_i^2}{2}\right)
+\]
+for all $\lvert\lambda\rvert<(\max_{i=1,\cdots,n})^{-1}$. Hence, the variable $\sum_{i=1}^n(X_i-\mu_i)$ is sub-exponential with parameters $(\nu^*,\alpha^*)$, where 
+\[
+\alpha^*:=max_{i=1,\cdots,n}\alpha_i,\quad\text{and}\quad\nu^*:=\sqrt{\sum\limits_{i=1}^{n}\nu_i^2}
+\]
+which  using a Chernoff-type approach as before, leads to upper tail bound
+\[
+P\left[\frac{1}{n}\sum\limits_{i=1}^{n}(X_i-\mu_i)\geq t\right]\leq
+\begin{cases}
+\exp\left(-\frac{nt^2}{2(\nu^{*2}/n)}\right),\quad &0\leq t\leq \frac{\nu^{*2}}{n\alpha^*}\\
+\exp\left(-\frac{nt}{2\alpha^{*}}\right),\quad &t\geq \frac{\nu^{*2}}{n\alpha^*}
+\end{cases}
+\]
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+\frametitle{References}
+\bibliographystyle{apa}
+\bibliography{References_HDStat}
+\end{frame}
+
+\end{document}

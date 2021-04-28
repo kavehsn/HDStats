@@ -1,0 +1,370 @@
+\documentclass[10pt,handout,english]{beamer}
+\usetheme{Warsaw}
+\usepackage{graphicx}
+\usepackage{placeins}
+\usepackage{amsmath}
+\usepackage{tabu}
+\usepackage{bbm}
+\usepackage{booktabs}
+\usepackage[round]{natbib}
+\usepackage{bm}
+\usepackage{ragged2e}
+\usepackage{hyperref}
+\usepackage{amsmath}
+\usepackage{xcolor}
+\usepackage[super]{nth}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=blue,      
+    urlcolor=blue,
+    citecolor=black,
+}
+
+\apptocmd{\frame}{}{\justifying}{} % Allow optional arguments after frame.
+
+\setbeamertemplate{frametitle continuation}{}
+
+\newcommand\setItemnumber[1]{\setcounter{enumi}{\numexpr#1-1\relax}}
+
+\newcommand{\ts}{\textsuperscript}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\F}{\mathcal{F}}
+\newcommand{\1}{\mathbbm{1}}
+
+\title[]{Basic tail and concentration bounds (Part II)}
+\author[Kaveh S. Nobari]{Kaveh S. Nobari}
+\institute[]{Reading Sessions in High-Dimensional Statistics}
+\date[27/10/2020]
+{Department of Mathematics and Statistics\\ Lancaster University}
+	
+\begin{document}
+\begin{frame}
+\titlepage
+\end{frame}
+
+
+\begin{frame}{Contents}
+\tableofcontents
+\end{frame}
+
+\section{Motivation}
+\begin{frame}[allowframebreaks]{Motivation}
+\begin{itemize}
+\setlength\itemsep{0.5em}
+\item In the previous session we reviewed the bounds \textcolor{red}{on sums of independent random variables} that had been outlined by \citet{wainwright2019high} and \citet{vershynin2018high}. \justifying
+\item In what follows we provide bounds \textcolor{red}{on more general functions of random variables}.\justifying 
+\item A classical approach is based on martingale decomposition.\justifying
+\end{itemize}
+\end{frame}
+
+\section{Martingale-based methods}
+\subsection{Martingales, MDS and telescoping decomposition \textcolor{red}{[Pages 32-35]}}
+\frame{\tableofcontents[currentsection,currentsubsection]}
+
+\begin{frame}[allowframebreaks]
+ Consider the independent random variables $X_1,\cdots,X_n$ and consider a function $f(X)=f(X_1,\cdots,X_n)$ with the mapping $f:\R^n\to\R$. Suppose our goal is to obtain bounds on the deviations of $f$ from its mean. To achieve this, let us consider the sequence of r.v.s given by $Y_0=\E[f(X)]$, $Y_n=f(X)$, and
+\[
+Y_k=\E[f(X)\mid X_1,\cdots,X_k]\quad k=1,\cdots,n-1,
+\]
+where $Y_0$ is a constant and the variables $Y_1,\cdots,Y_n$ tend to exhibit more fluctuations as they move along the sequence. Based on this intuition the martingale approach is based on the \textcolor{red}{telescoping decomposition} 
+\[
+f(X)-\E[f(X)]=Y_n-Y_0=\sum\limits_{i=1}^n\underbrace{Y_i-Y_{i-1}}_{D_i}
+\]
+Thus,$f(X)-\E[f(X)]$ is expressed as the sum of increments $D_1,\cdots,D_n$. This is a specific example of a \textcolor{red}{martingale sequence}, most commonly referred to as \textcolor{red}{Doob martingale}, whereas $D_{1},\cdots,D_n$ is a \textcolor{red}{martingale difference sequence} (MDS hereafter).
+\end{frame}
+\begin{frame}[allowframebreaks]
+\textbf{Example (Random Walk process):} Let us consider a Random Walk process
+\[
+x_t=x_{t-1}+\varepsilon_t,\quad\varepsilon_t\sim N(0,\sigma^2)\quad \text{for}\quad t=1,\cdots,n
+\]
+We know that $x_n=f(x_1,\cdots,x_{n-1})$, since using backward iteration, we may express the above expressions
+
+\begingroup
+\allowdisplaybreaks
+\begin{align*}
+x_n&=x_{n-1}+\varepsilon_n\\
+&= x_{n-2}+\varepsilon_{n-1}+\varepsilon_n\\
+&\textcolor{white}{=}\vdots\\
+x_n&=x_0+\sum\limits_{i=0}^{n-1}\varepsilon_{n-i}
+\end{align*} 
+\endgroup
+where $x_0$ is a constant. Hence,
+\begin{align*}
+\E[x_n]&=\E\left[x_0+\sum\limits_{i=0}^{n-1}\varepsilon_{n-i}\right]\\
+&=x_0+\sum\limits_{i=1}^{n-1}\E[\varepsilon_{n-i}]\\
+&=x_0
+\end{align*}
+Hence, 
+\begingroup
+\begin{align*}
+f(x)-\E[f(x)]&=x_n-\E[x_n]\\
+&=x_n-x_0\\
+&=\sum\limits_{i=1}^{n}\underbrace{X_i-X_{i-1}}_{\varepsilon_i}
+\end{align*}
+\endgroup
+\end{frame}
+\begin{frame}[allowframebreaks]
+We now provide a quick recap of probability triples before providing definition for the next sections. For a quick recap see \citet{williams1991probability}.\justifying
+\begin{itemize}
+\setlength\itemsep{0.5em}
+\item A model for experiment involving randomness takes the form of a probability triple \textcolor{red}{$(\Omega,\F,P)$}.
+\item $\Omega$ is the \textcolor{red}{sample space}, where a point $\omega$ in $\Omega$ is a \textcolor{red}{sample point}.
+\item The $\sigma$-algebra $\F$ on $\Omega$ is called the \textcolor{red}{family of events}, so that an event is an element of $\F$, that is an $\F$-measurable subset of $\Omega$.
+\item Finally, $P$ is the \textcolor{red}{probability measure} on $(\Omega,\F)$.
+\end{itemize}
+\textbf{Example ($(\Omega,\F)$ pairs):}   Toss a coin once and following \citet{shreve2004stochastic}, let us define $A_H$ as the set of all sequences beginning with Head or $H=\{\omega;\omega_1=H\}$ and $A_T$ as the set of all sequences beginning with Tail or $T=\{\omega;\omega_1=T\}$. The sample space is thus, 
+\[
+\Omega=\{A_H,A_T\}
+\]
+where the $\sigma$-field 
+\[
+\F_1=\mathcal{P}(\Omega)=2^\Omega:=\{H,T,\emptyset,\Omega\}
+\]
+is the $\sigma$-field spanned by one coin toss. Now we toss the coin twice. The sample space would then be
+\[
+\Omega=\{A_{HH},A_{TT},A_{HT},A_{TH}\}
+\]
+and 
+\begin{equation*}
+\F_2=\left\{
+\!\begin{aligned}
+&\Omega,\emptyset,A_{H},A_{T},A_{HH},A_{TT},A_{HT},A_{TH},A^c_{HH},A^c_{TT},A^c_{HT},A^c_{TH},\\
+&A_{HH}\cup A_{TH},A_{HH}\cup A_{TT},A_{HT}\cup A_{TH},A_{HT}\cup A_{TT}
+\end{aligned}
+\right\}
+\end{equation*}
+It is evident that $\F_1\subset\F_2$, and in fact we may generalize this for infinite independent coin tosses to
+\[
+\F_1\subset \F_2\subset\F_3\subset\cdots
+\]
+\end{frame}
+\begin{frame}[allowframebreaks]
+We now provide a general definition of a martingale sequence by first defining a \textcolor{red}{filtration} as follows
+\begin{block}{Filtration}
+Let $\{\F_i\}_{i=1}^{\infty}$ be a sequence of $\sigma$-fields that are nested, meaning that $\F_{m}\subseteq\F_{n}$ for $n\geq m$. Such a sequence is known as a filtration.
+\end{block}
+In the Doob martingale described earlier, the $\sigma$-field $\sigma(X_1,\cdots,X_m)$ is spanned by the first $m$ variables $X_1,\cdots,X_m$ and plays the role of $\F_m$. 
+
+
+Let $\{Y_i\}_{i=1}^{\infty}$ be a sequence of random variables such that $Y_i$ is measurable with respect to the $\sigma$-field $\F_{i}$. We say that $\{Y_i\}_{i=1}^{\infty}$ is \textcolor{red}{adapted} to the filtration $\{\F_{i}\}_{i=1}^{\infty}$. 
+\begin{block}{Martingale}
+Given a sequence $\{Y_{i}\}_{i=1}^{\infty}$ of r.v.s adapted to a filtration $\{\F_i\}_{i=1}^{\infty}$, the pair $\{(Y_i,\F_i)\}_{i=1}^{\infty}$ is a martingale if, for all $i\geq 1$
+\[
+\E[\lvert Y_i\rvert]<\infty\quad\text{and}\quad\E[Y_{i+1}\mid\F_{i}]=Y_{i}.
+\]
+\end{block}
+\begin{example}[Partial sums as martingales]
+Let $\{X_i\}_{i=1}^{\infty}$ be a sequence of i.i.d random variables with mean $\mu$, and define the partial sums $S_m:=\sum\limits_{i=1}^mX_i$. Define $\F_{m}=\sigma(X_1,\cdots,X_m)$, the r.v. $S_m$ is measurable w.r.t to $\F_m$, and, we have
+\begin{align*}
+\E[S_{m+1}\mid \F_{m}]&=\E[X_{m+1}+S_{m}\mid X_1,\cdots,X_m ]\\
+&=\E[X_{m+1}\mid X_1,\cdots,X_m]+\E[S_{m}\mid X_1,\cdots,X_m ]\\
+&=\E[X_{m+1}]+S_m=\mu+S_m.
+\end{align*}
+\end{example}
+A closely related concept is that of the \textcolor{red}{martingale difference sequence}, which is an adapted sequence $\{(D_i,\F_{i})\}_{i=1}^{\infty}$ such that, for all $i\geq 1$,
+\[
+\E[\lvert D_i\rvert]<\infty\quad\text{and}\quad\E[D_{i+1}\mid\F_{i}]=0.
+\] 
+Difference sequences arise naturally from martingales. Given a martingale $\{(Y_i,\F_{i})\}_{i=0}^{\infty}$, define $D_i=Y_i-Y_{i-1}$ for $i\geq 1$. We then have
+\begin{align*}
+\E[D_{i+1}\mid\F_{i}]&=\E[Y_{i+1}-Y_{i}\mid\F_i]\\
+&=\E[Y_{i+1}\mid\F_i]-Y_i\\
+&=Y_i-Y_i=0
+\end{align*}
+using the martingale property and the fact that $Y_i$ is measurable w.r.t to $\F_i$. Thus, for any martingale sequence $\{Y_i\}_{i=0}^{n}$, we have the telescoping decomposition.
+\begin{block}{Telescoping decomposition}
+Let $\{D_i\}_{i=1}^{\infty}$ be a MDS. Then for any martingale sequence $\{Y_i\}_{i=0}^{\infty}$, we have the telescoping decomposition
+\[
+Y_n-Y_0=\sum\limits_{i=1}^{n}D_i
+\]
+\end{block} 
+\begin{example}[Doob construction]
+Consider the sequence on independent random variables $X_1,\cdots,X_n$, recall the sequence $Y_{k}=\E[f(X)\mid X_1,\cdots,X_k]$ previously defined, and suppose that $\E[\lvert f(X) \rvert]<\infty$. We claim that $Y_0,\cdots,Y_n$ is a martingale w.r.t to $X_1,\cdots,X_n$. We have
+\[
+\E[\lvert Y_k\rvert]=\E[\lvert\E[f(X)\mid X_1,\cdots,X_k]\rvert].
+\] 
+From Jensen's inequality, we have 
+\[
+\E[\lvert\E[f(X)\mid X_1,\cdots,X_k]\rvert]\leq\E[\lvert f(X)\rvert]<\infty.
+\] 
+From the 2\ts{nd} property of martingales, we have
+\[ 
+\E[Y_{k+1}\mid X_{1}^k]=\E[\E[f(X)\mid X_{1}^{k+1}]\mid X_{1}^{k}]=\E[f(X)\mid X_{1}^{k}]=Y_k
+\]
+\end{example}
+\end{frame}
+
+\subsection{Concentration bounds for MDS [\textcolor{red}{Pages 35-40}]}
+\frame{\tableofcontents[currentsection,currentsubsection]}
+\begin{frame}[allowframebreaks]
+We now turn to the derivation of concentration inequalities for martingales, either
+\begin{itemize}
+\item[1)] as bounds for the difference $Y_n-Y_0$; or
+\item[2)] as bounds for the sum $\sum_{i=1}^nD_i$ of the associated MDS.
+\end{itemize}
+We begin by stating and proving a general Bernstein-type bound for a MDS, based on imposing a sub-exponential condition on the martingale differences. To do so, \textcolor{red}{we adopt the standard approach of controlling the mgf of $\sum_{i=1}^{n}D_i$ and then applying the Chernoff bound}. 
+
+
+Let $\{(D_i,\F_i)\}_{i=1}^{\infty}$ be a MDS and suppose that $\E[\exp(\lambda D_i)\mid\F_{i-1}]\leq\exp\left(\frac{\lambda^2\nu^2_i}{2}\right)$ a.s. for any $\lvert\lambda\rvert<\frac{1}{\alpha_i}$
+\begingroup
+\allowdisplaybreaks
+\begin{align*}
+\E\left[\exp\left(\lambda\sum_{i=1}^n D_i\right)\right]&=\E\left[\E\left[\exp\left(\lambda\sum_{i=1}^n D_i\right)\biggm\vert\F_{n-1}\right]\right]\\
+&=\E\left[\E\left[\exp(\lambda D_n)\exp\left(\lambda\sum_{i=1}^{n-1} D_i\right)\biggm\vert\F_{n-1}\right]\right]\\
+&=\E\left[\exp\left(\lambda\sum_{i=1}^{n-1} D_i\right)\E\left[\exp\left(\lambda D_n\right)\biggm\vert\F_{n-1}\right]\right]\\
+&\leq\E\left[\exp\left(\lambda\sum_{i=1}^{n-1} D_i\right)\right]\exp\left(\frac{\lambda^2\nu^2_n}{2}\right)
+\end{align*} 
+\endgroup
+we may iterate this procedure again for $\E[\exp(\lambda\sum_{i=1}^{n-1} D_i)]$ and we'd obtain,
+\begingroup
+\allowdisplaybreaks
+\begin{align*}
+\E\left[\exp\left(\lambda\sum_{i=1}^{n-1} D_i\right)\right]&=\E\left[\E\left[\exp\left(\lambda\sum_{i=1}^{n-1} D_i\right)\biggm\vert\F_{n-2}\right]\right]\\
+&=\E\left[\E\left[\exp\left(\lambda D_{n-1}\right)\exp\left(\lambda\sum_{i=1}^{n-2} D_i\right)\biggm\vert\F_{n-2}\right]\right]\\
+&=\E\left[\exp\left(\lambda\sum_{i=1}^{n-2} D_i\right)\E\left[\exp\left(\lambda D_{n-1}\right)\biggm\vert\F_{n-2}\right]\right]\\
+&\leq\E\left[\exp\left(\lambda\sum_{i=1}^{n-2} D_i\right)\right]\exp\left(\frac{\lambda^2\nu^2_{n-1}}{2}\right)
+\end{align*} 
+\endgroup
+Continuously iterating this process yields,
+\[
+\E\left[\exp\left(\lambda\sum_{i=1}^n D_i\right)\right]\leq\exp\left(\frac{\lambda^2\sum_{i=1}^{n}\nu_i^2}{2}\right), 
+\]
+valid for all $\lvert\lambda\rvert< \frac{1}{\alpha^*}$. Hence, by definition, it can be concluded that $\sum_{i=1}^nD_i$ is sub-exponential with parameters $(\sqrt{\sum_{i=1}^n\nu_i^2},\alpha^*)$.  The tail bounds can be derived by using the Chernoff-type approach as before. In other words we are interested in
+\[
+P\left[\sum\limits_{i=1}^n D_i\geq t\right]=P\left[\exp\left(\lambda\sum\limits_{i=1}^{n} D_i\right)\geq \exp\left(\lambda t\right)\right]\leq\frac{\E\left[\exp\left(\lambda\sum\limits_{i=1}^{n} D_i\right)\right]}{\exp(\lambda t)}
+\]
+where from the definition of sub-exponential variables and the earlier results, we know that
+\[
+P\left[\exp\left(\lambda\sum\limits_{i=1}^{n} D_i\right)\geq \exp\left(\lambda t\right)\right]\leq\exp\left(\frac{\lambda^2\sum_{i=1}^n\nu_i^2}{2}-\lambda t\right),\quad\forall \lambda\in\left[0,\frac{1}{\alpha^*}\right)
+\]
+where the Chernoff optimisation problem is
+\[
+\log P\left[\sum\limits_{i=1}^n D_i\geq t\right]\leq \inf_{\lambda\in[0,\alpha_{*}^{-1}]}\left\{\underbrace{\frac{\lambda^2\sum_{i=1}^n\nu_i^2}{2}-\lambda t}_{g(\lambda,t)}\right\}.
+\]
+To complete the proof, it remains to compute for each $t\geq0$, the quantity $g^*(t):=\inf_{\lambda\in[0,\alpha^{-1})}g(\lambda,t)$, where using the same unconstrained optimisation approach as for the sub-Gaussian variables, we'd obtain $\lambda_{opt}=\frac{t}{\sum_{i=1}^n\nu_i^2}$ as the unconstrained minimum of the function $g(.,t)$, which yields the minimum $-\frac{t^2}{2\sum_{i=1}^{n}\nu_i^2}$.
+
+Recall the constraint $0\leq\lambda<\frac{1}{\alpha^*}$. This implies that the unconstrained optimal $\lambda_{opt}$ must be between $0\leq\frac{t}{\sum_{i=1}^n\nu_i^2}<\frac{1}{\alpha^*}$, which implies that in the interval $0\leq t<\frac{\sum_{i=1}^n \nu_i^2}{\alpha_*}$, the unconstrained optimum corresponds to the constrained optimum. 
+
+Otherwise for $t\geq\frac{\sum_{i=1}^n\nu_i^2}{\alpha_*^2}$, considering that the function $g(.,t)=\frac{\lambda^2\sum_{i=1}^{n}\nu_i^2}{2}-\lambda t$ is monotonically decreasing, in the interval $[0,\lambda_{opt})$, the constrained minimum
+is obtained at the boundary - i.e. $\lambda^\#=\frac{1}{\alpha}$, which leads to the minimum
+\[
+g^*(t)=g(\lambda^\#,t)=-\frac{t}{\alpha^*}+\frac{1}{2\alpha^*}\frac{\sum_{i=1}^{n}\nu_i^2}{\alpha^*}\leq-\frac{t}{2\alpha^*}
+\]
+where this inequality used the fact that $\frac{\sum_{i=1}^{n}\nu_i^2}{\alpha}\leq t$, which leads to the following
+\begin{block}{Concentration inequalities for MDS}
+Let $\{(D_i,\F_i)\}_{i=1}^{\infty}$ be a martingale difference sequence and suppose that $\E[\exp(\lambda D_i)\mid\F_{i-1}]\leq\frac{\lambda^2\nu_i^2}{2}$ a.s. for any $\lvert\lambda\rvert<\frac{1}{\alpha}$. Then the following hold
+\begin{itemize}
+\item The sum $\sum_{i=1}^{n}D_i$ is sub-exponential with parameters $\left(\sqrt{\sum_{i=1}^{n}\nu_i^2},\alpha^*\right)$, where $\alpha^*:=\max_{i=1,\cdots,n}\alpha_i$.
+\item The sum satisfies the concentration inequality
+\[
+P\left[\biggl\vert \sum\limits_{i=1}^nD_i\biggr\vert\geq t\right]\leq
+\begin{cases}
+2\exp\left(-\frac{t^2}{2\sum_{i=1}^{n}\nu_i^2}\right),\quad &0\leq t\leq\frac{\sum_{i=1}^{n}\nu_i^2}{\alpha^*}\\
+2\exp\left(-\frac{t}{2\alpha^*}\right),\quad &t>\frac{\sum_{i=1}^{n}\nu_i^2}{\alpha^*}
+\end{cases}
+\]
+\end{itemize}
+\end{block}
+For the concentration inequalities to be useful in practice, we must isolate sufficient easily checkable conditions for the differences $D_i$ to be a.s. sub-exponential (or sub-Gaussian when $\alpha=0$). As mentioned earlier, bounded r.v.s are sub-Gaussian, which leads to the following corollary
+\begin{block}{Azuma-Hoeffding}
+Let $\{(D_i,\F_i)\}_{i=1}^{\infty}$ be a MDS for which there are constants $\{(a_i,b_i)\}_{i=1}^n$ such that $D_i\in[a_i,b_i]$ a.s. for all $k=1,\cdots,n$. Then for all $t\geq0$
+\[
+P\left[\biggl\vert\sum\limits_{i=1}^{n}D_i\biggr\vert\geq t\right]\leq2\exp\left(-\frac{2t^2}{\sum_{i=1}^{n}(b_i-a_i)^2}\right)
+\]
+\end{block}
+
+\textbf{Proof:}
+All that needs showing is that the $\E[\exp(\lambda D_i\mid\F_{i-1})]\leq\exp\left(\frac{\lambda^2(b_i-a_i)^2}{8}\right)$ a.s. for each $i=1,\cdots,n$. But since $D_i\in[a_i,b_i]$ a.s., the conditioned variables $(D_i\mid\F_{i-1})$ also belongs to this interval a.s.
+\end{frame}
+
+\begin{frame}
+\begin{block}{Bounded differences property}
+Given vectors $x,x'\in\R^n$ and an index $k\in\{1,2,\cdots,n\}$, define the vector $\{x^{\backslash k}\in\R^n\}$ via
+\[
+x^{\backslash k}:=(x_1,x_2,\cdots,x_{k-1},x'_k,x_{k+1},\cdots,x_n)'.
+\]
+We say that $f:\R^n\to\R$ satisfies the bounded difference property with parameters $(L_1,\cdots,L_n)$ if, for each $k=1,2,\cdots,n$,
+\[
+\lvert f(x)-f(x^{\backslash k})\rvert\leq L_k\quad \forall x,x'\in\R^n
+\]
+\end{block}
+\end{frame}
+\begin{frame}
+\begin{block}{Bounded differences inequality}
+Suppose that $f$ satisfies the bounded difference property with parameters $(L_1,\cdots,L_n)$ and that the random vector $X=(X_1,X_2,\cdots,X_n)'$ has independent components. Then
+\[
+P[\lvert f(X)-\E[f(X)]\rvert\geq t]\leq 2\exp\left(-\frac{2t^2}{\sum_{i=1}^{n}L_k^2}\right),\quad \forall t\geq 0
+\]
+\end{block}
+\end{frame}
+\begin{frame}
+\begin{example}
+Say we have the bounded r.v.s $X_i\in[a,b]$ almost surely, and consider the function $f(x_1,\cdots,x_n)=\sum_{i=1}^n(x_i-\mu_i)$, where $\mu_i=\E[X_i]$ is the mean of the $i$\ts{th} rv. For any index $l\in\{1,\cdots,n\}$, we have
+\begin{align*}
+\lvert f(x)-f(x^{\backslash k})\rvert&=\lvert (x_k-\mu_k)-(x'_k-\mu_k)\rvert\\
+&=\lvert x_k-x'_k\rvert\leq b-a 
+\end{align*}
+which shows that $f$ satisfies the bounded difference inequality in each coordinate with parameter $L=b-a$. Consequently, from the bounded inequality it follows
+\[
+P\left[\lvert\sum\limits_{i=1}^{n}(x_i-\mu_i)\rvert\geq t\right]\leq 2\exp\left(-\frac{2t^2}{n(b-a)^2}\right)
+\]
+which is classical Hoeffding bound for independent r.v.s.
+\end{example}
+\end{frame}
+\section{Lipschitz functions of Gaussian variables \textcolor{red}{[40-44]}}
+\frame{\tableofcontents[currentsection]}
+
+\begin{frame}[allowframebreaks]
+Consider a Gaussian random variable $X\sim N(0,I_n)$ and a function $f:\R^n\to\R$. When does the random vector $f(X)$ concentrate about its mean, i.e.,
+\[
+f(X)\approx \E f(X)
+\]
+with high probability?
+
+In the case of \textcolor{red}{linear functions} $f$ this question is easy, where $f(X)$ has a normal distribution, and it concentrates around its mean well. However, we must also consider the the case of \textcolor{red}{non-linear functions} $f(X)$ of random vectors $X$. We cannot expect to have good concentration for completely arbitrary $f$. However, \textcolor{red}{if $f$ does not oscillate too wildly}, we might expect concentration. The concept of Lipschitz functions will help us to rule out functions that have wild oscillations.
+\begin{block}{$L$-Lipschitz functions}
+We say a function $f:\R^n\to\R$ is $L$-Lipschitz w.r.t the Euclidean norm $\lVert.\rVert_2$ if
+\[
+\lvert f(x)-f(y)\rvert\leq L\lVert x-y\rVert_2,\quad\forall x,y\in\R^n
+\]
+\end{block}
+In other words, Lipschitz functions may not blow up distance between points too much.
+The following guarantees that any such function is sub-Gaussian with parameter at most $L$:
+\begin{block}{}
+Let $(X_1,\cdots,X_n)$ be a vector of i.i.d. standard Gaussian variables, and let $f:\R^n\to\R$ be $L$-Lipschitz w.r.t the Euclidean norm. Then the variable $f(X)-\E[f(X)]$ is sub-Gaussian with parameter at most $L$, and hence
+\[
+P[\lvert f(X)-\E[f(X)]\rvert\geq t]\leq 2\exp\left(-\frac{t^2}{2L^2}\right),\quad\forall t\geq0
+\]
+\end{block}
+
+The earlier result is of great importance, as it guarantees that any $L$-Lipschitz function of a standard  Gaussian random vector, regardless of the dimension, exhibits concentration like a scalar Gaussian variable with variance $L^2$. 
+
+Any Lipschitz function is differentiable almost everywhere and the Lipschitz property further guarantees $\lVert\nabla f(x)\rVert_2\leq L$ for all $x\in\R^n$. Therefore, to prove the earlier results, we first begin by providing the following Lemma:
+\begin{lemma}
+Suppose that $f:\R^n\to\R$ is differentiable. Then for any convex function $\phi:\R\to\R$, we have
+\[
+\E_X[\phi(f(X)-\E(f(X)))]\leq\E_{X,Y}\left[\phi\left(\frac{\pi}{2}\left\langle\nabla f(X),Y\right\rangle\right)\right]
+\]
+where $X,Y\sim N(0,I_n)$ are standard multivariate and independent.
+\end{lemma}
+
+\textbf{Proof:}
+For any fixed $\lambda\in\R$ applying the inequality in above Lemma to the convex function $f: t\to \exp(\lambda t)$ yields
+ \[
+\E_{X}[\exp(\lambda\{f(X)- \E[f(X)]\})]\leq \E_{X,Y}\left[\exp\left(\frac{\pi}{2}\langle \nabla f(X),Y \rangle\right)\right]
+\]
+
+\end{frame}
+
+
+
+
+\begin{frame}[allowframebreaks]
+\frametitle{References}
+\bibliographystyle{apa}
+\bibliography{References_HDStat}
+\end{frame}
+
+\end{document}

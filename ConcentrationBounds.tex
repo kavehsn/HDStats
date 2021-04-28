@@ -31,10 +31,11 @@
 \newcommand{\E}{\mathbb{E}}
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\F}{\mathcal{F}}
+\newcommand{\1}{\mathbbm{1}}
 
-\title[]{Basic tail and concentration bounds}
+\title[]{Basic tail and concentration bounds (Part I)}
 \author[Kaveh S. Nobari]{Kaveh S. Nobari}
-\institute[]{Lectures in High-Dimensional Statistics}
+\institute[]{Reading Sessions in High-Dimensional Statistics}
 \date[27/10/2020]
 {Department of Mathematics and Statistics\\ Lancaster University}
 	
@@ -49,14 +50,19 @@
 \tableofcontents
 \end{frame}
 
+\section{Motivation}
 \begin{frame}[allowframebreaks]{Motivation}
-It is often of interest to obtain bounds on the tails of a random variable, or two-sided inequalities, which guarantee that the random variable is close to its mean or median. These slides follow the structure of chapter 2 of \citet{wainwright2019high} to shed light on the elementary techniques for obtaining \textcolor{red}{deviation} and \textcolor{red}{concentration} inequalities.
+It is often of interest to obtain bounds on the tails of a random variable, or two-sided inequalities, which guarantee that the random variable is close to its mean or median. These slides follow the structure of chapter 2 of \citet{wainwright2019high} and chapters 1 and 2 of \citet{vershynin2018high} to shed light on elementary techniques for obtaining \textcolor{red}{deviation} and \textcolor{red}{concentration} inequalities.
 {\vskip 0.5em}
-One way of controlling a tail probability $P[X\geq t]$ is by controlling the moments of the random variable $X$, where by controlling higher-order moments of the variable $X$, we can obtain sharper bounds on tail probabilities. This motivates the "Classical bounds" section of the notes. 
+Concentration inequalities generally take the form of 
+\[
+P[\lvert X-\mu\rvert\geq t]\leq something\;small
+\]
+One way of controlling a tail probability $P[X\geq t]$ is by controlling the moments of the random variable $X$, where \textcolor{red}{by controlling higher-order moments of the variable $X$, we can obtain sharper bounds on tail probabilities}. This motivates the "Classical bounds" section of the notes. 
 {\vskip0.5em}
 We then extend the derivation of bounds to more general functions of the random variables in the "Martingale-based methods" section using \textcolor{red}{martingale decompositions}, as opposed to limiting the techniques to deriving bounds on \textcolor{red}{the sum of independent} random variables.  
 {\vskip  0.5em}
-Finally, the seminar is concluded with a classical result on the concentration properties of Lipschitz functions of Gaussian variables. 
+Finally, we conclude this with a classical result on the concentration properties of Lipschitz functions of Gaussian variables. 
 \end{frame}
 
 \section{Classical bounds}
@@ -72,6 +78,18 @@ Given a non-negative random variable $X$ with finite mean - i.e. $\E[X]<\infty$,
 P[X\geq t]\leq\frac{\E[X]}{t},\quad \forall t>0
 \]
 \end{block}
+\textbf{Proof:} For $t\geq 0$, we can express any real number $x$, as 
+\[
+x=x\1\{x\geq t\}+x\1\{x<t\}
+\]
+Substituting the random variable $X$ for $x$ and taking expectations from both sides, we obtain
+\begin{align*}
+\E[X]&=\E[X\1\{X\geq t\}]+\E[X\1\{X<t\}]\\
+&\geq\E[t\1\{X\geq t\}]+0\\
+&\geq tP[X\geq t]
+\end{align*}
+Thus, dividing both sides by $t$ yields Markov's inequality.
+
 It is immediately obvious that Markov's inequality \textcolor{red}{requires only the existence of the first moment}. If the random variable $X$ also has finite variance - i.e. $\text{var}(X)<\infty$, we have \textcolor{red}{Chebyshev's inequality}:
 \begin{block}{Chebyshev's inequality}
 For a random variable $X$ that has a finite mean and variance, we have
@@ -80,22 +98,40 @@ P[\lvert X-\mu \rvert\geq t]\leq\frac{\text{var}(X)}{t^2},\quad \forall t>0
 \]
 \end{block} 
 \end{frame}
-\begin{frame}
+\begin{frame}[allowframebreaks]
 
 \textbf{Proof:}
 Chebyshev's inequality follows from Markov's inequality, by considering the variable $(X-\E[X])^2$ and the constant $t^2$. By substituting these in the Markov inequality, we get
-\begin{align}
+\begin{align*}
 P[(X-\E[X])^2\geq t^2]&\leq \frac{\E[(X-\E[X])^2]}{t^2}\\
 P[\lvert X-\E[X] \rvert\geq t]&\leq\frac{\E[(X-\E[X])^2]}{t^2}
-\end{align}
+\end{align*}
 Since, $\E[X]=\mu$ and $\text{var}(X)=\E[(X-\E[X])^2]$, we get
 \[
 P[\lvert X-\mu \rvert\geq t]\leq\frac{\text{var}(X)}{t^2}
 \]
-
 \end{frame}
-
 \begin{frame}[allowframebreaks]
+\textbf{Example:} Toss a fair coin $N$ times. What is the probability that we get at least $\frac{3N}{4}$ heads?
+{\vskip 0.5em}
+Let us express the outcome of the coin toss as a random variable $X$ that takes values in $\{1,0\}$, that signify head and tail respectively. We know that $P[X=1]=P[X=0]=1/2$, since it is a fair coin; thus, $X\sim binom(1,0.5)$. Now we are interested in the sum $S_N=X_1+X_2+\cdots+X_N$, where $S_N$ follows a $S_N\sim binom(N,0.5)$ with $\E[S_N]=Np$ and $Var(S_N)=Np(1-p)$. We are interested in the probability 
+\[
+P\left[S_n\geq \frac{3N}{4}\right].
+\]   
+
+We know that
+\[
+\E[S_N]=\frac{N}{2}\quad\text{and}\quad Var(S_N)=\frac{N}{4}
+\]
+Thus, from Chebyshev's inequality, we can show that
+\[
+P\left[\left\lvert S_n-\frac{N}{2}\right\rvert\geq t\right]\leq\frac{N}{4t}
+\]
+Thus, substituting $N/4$ for $t$, we get
+\[
+P\left[\left\lvert S_n-\frac{N}{2}\right\rvert\geq \frac{N}{4}\right]\leq\frac{4}{N}
+\]
+So the probability converges to at least linearly in $N$.
 The earlier results can be generalised as follows:
 \begin{block}{Extensions of Markov's inequality}
 Whenever a variable $X$ has a central moment of order $k$, an application of Markov's inequality to the random variable $\lvert X-\mu\rvert^k$ yields:
@@ -104,8 +140,9 @@ P[\lvert X-\mu\rvert\geq t]\leq\frac{\E[\lvert X-\mu \rvert]^k}{t^k},\quad \fora
 \]
 \end{block}
 and this is not limited to polynomials $\lvert X-\mu \rvert^k $:
-
-Suppose $X$ has a mgf in a neighbourhood of zero,such that there is a constant $b>0$ that the functions $\rho(\lambda)=\E[\exp(\lambda(X-\mu))]$ exists for all $\lambda<\lvert b\rvert$. Thus, for any $\lambda\in[0,b]$, we may apply Markov's inequality to the random variable $Y=\exp(\lambda(X-\mu))$, obtaining the upper bound:
+\end{frame}
+\begin{frame}[allowframebreaks]
+Suppose $X$ has a moment generating function in a neighbourhood of zero, such that there is a constant $b>0$ that the functions $\rho(\lambda)=\E[\exp(\lambda(X-\mu))]$ exists for all $\lambda<\lvert b\rvert$. Thus, for any $\lambda\in[0,b]$, we may apply Markov's inequality to the random variable $Y=\exp(\lambda(X-\mu))$, obtaining the upper bound:
 \[
 P[(X-\mu)\geq t]=P[\exp(\lambda(X-\mu))\geq \exp(\lambda t)]\leq\frac{\E[\exp(\lambda(X-\mu))]}{\exp(\lambda t)}
 \]
@@ -113,7 +150,7 @@ By taking the $\log$ of both side of the latter inequality, we get:
 \[
 \log P[(X-\mu)\geq t]\leq \log\E[\exp(\lambda(X-\mu))]-\lambda t
 \]
-Optimising, our choice of $\lambda$, we can obtain the tightest results that yields the Chernoff bound:
+Optimising our choice of $\lambda$, we can obtain the tightest results that yields the Chernoff bound:
 \begin{block}{Chernoff bound}
 \[
 \log P[(X-\mu)\geq t]\leq \inf_{\lambda\in [0,b]}\{\log\E[\exp(\lambda(X-\mu))]-\lambda t\}.
@@ -124,17 +161,19 @@ Optimising, our choice of $\lambda$, we can obtain the tightest results that yie
 
 
 \subsection{Sub-Gaussian variables and Hoeffding bounds}
-\frame{\tableofcontents[currentsubsection]}
+\frame{\tableofcontents[currentsection, currentsubsection]}
 
 \begin{frame}[allowframebreaks]
-Evidently, the form of the tail bound obtained using the Chernoff approach depends on the growth rate of the mgf. Naturally, in the study of the tail bounds the random variables are then classified in terms of their mgfs. The simplest type of behaviour is known as sub-Gaussian, which shall be motivated by deriving tail bounds for a Gaussian variables, say, X, such that $X\sim N(\mu,\sigma^2)$, with density
+Evidently, the form of the tail bound obtained using the Chernoff approach depends on the growth rate of the mgf. Naturally, in the study of the tail bounds the random variables are then classified in terms of their mgfs. The simplest type of behaviour is known as sub-Gaussian, which shall be motivated by deriving tail bounds for a Gaussian variables, say X, such that $X\sim N(\mu,\sigma^2)$, with density
 \[
-f(X)=\frac{1}{\sigma\sqrt{2\pi}}\exp\left(-\frac{(X-\mu)^2}{2\sigma^2}\right)
+f(x)=\frac{1}{\sigma\sqrt{2\pi}}\exp\left(-\frac{(X-\mu)^2}{2\sigma^2}\right)
 \]
 and thus, the mgf
-\[
-\E[\exp(\lambda X)]=\exp\left(\mu\lambda+\frac{\sigma^2\lambda^2}{2}\right),\quad\forall\lambda\in\R
-\]
+\begin{align*}
+\E[\exp(\lambda X)]&=\int_{\R}\exp(\lambda x)f(x)dx\\
+&=\int_{\R}\exp(\lambda x)\frac{1}{\sigma\sqrt{2\pi}}\exp\left(-\frac{(X-\mu)^2}{2\sigma^2}\right)dx\\
+&=\exp\left(\mu\lambda+\frac{\sigma^2\lambda^2}{2}\right),\quad\forall\lambda\in\R
+\end{align*}
 \begin{example}[Gaussian tail bounds]
 Let $X\sim N(\mu,\sigma^2)$ be a Gaussian r.v., which has mgf
 \[
@@ -164,22 +203,31 @@ which leads to $\lambda_{opt}=\frac{t}{\sigma^2}$. Substituting $\lambda_{opt}$ 
 \end{proof}
 \end{frame}
 
-\begin{frame}
+\begin{frame}[allowframebreaks]
 \begin{definition}[Sub-Gaussianity]
 A r.v. $X$ with mean $\mu=\E[X]$ is sub-Gaussian if there is a positive number $\sigma$, such that
 \[
 \E[\exp(\lambda(X-\mu))]\leq\exp\left(\frac{\sigma^2\lambda^2}{2}\right),\quad\forall\lambda\in\R
 \]
-where the constant $\sigma$ is referred to as the \textcolor{red}{sub-Gaussian parameter}. Moreover, by the symmetry of the definition, the variable $-X$ is sub-Gaussian iff $X$ is sub-Gaussian, so that we also have lower deviation inequality $P[X\leq\mu-t ]\leq\exp\left(-\frac{t^2}{2\sigma^2}\right), \quad\forall t\geq 0$. Thus, we conclude that any sub-Gaussian variable satisfies the \textcolor{red}{concentration inequality}
+where the constant $\sigma$ is referred to as the \textcolor{red}{sub-Gaussian parameter}. 
+\end{definition}
+Moreover, when the above condition is combined with Chernoff bound, as in the Gaussian example, with $x\sim N(\mu,\sigma^2)$, it then satisfies the upper deviation inequality
+\[
+P[X\geq\mu+t]\leq\exp\left(-\frac{t^2}{2\sigma^2}\right)
+\]
+ By the symmetry of the definition, the variable $-X$ is sub-Gaussian iff $X$ is sub-Gaussian, so that we also have lower deviation inequality 
+\[
+P[X\leq\mu-t ]\leq\exp\left(-\frac{t^2}{2\sigma^2}\right), \quad\forall t\geq 0.
+\]
+Thus, we conclude that any sub-Gaussian variable satisfies the \textcolor{red}{concentration inequality}
 \[
 P[\lvert X-\mu\rvert\geq t]\leq2\exp\left(-\frac{t^2}{2\sigma^2}\right),\quad\forall t\in\R.
 \]
-\end{definition}
+We may have scenarios in which sub-Gaussian variables are non-Gaussian.
 \end{frame}
 \begin{frame}
-We may have scenarios in which sub-Gaussian variables are non-Gaussian.
 \begin{example}[Rademacher variables]
-A Rademacher r.v. $\varepsilon$ takes the values $[-1,+1]$ equiprobably -i.e $P[\varepsilon=-1]=P[\varepsilon=+1]=\frac{1}{2}$. Thus, the mgf of $\varepsilon$ is as follows
+A Rademacher r.v. $\varepsilon$ takes the values $[-1,+1]$ equiprobably - i.e $P[\varepsilon=-1]=P[\varepsilon=+1]=\frac{1}{2}$. Thus, the mgf of $\varepsilon$ is as follows
 \[
 \E[\exp(\lambda \varepsilon)]=\sum_{i\in\{-1,+1\}} \exp(\lambda\varepsilon_i)p(\varepsilon=i)=\frac{1}{2}[\exp(-\lambda)+\exp(\lambda)]
 \]
@@ -193,7 +241,11 @@ with the sub-Gaussian parameter $\sigma=1$.
 \end{frame}
 
 \begin{frame}
-\textbf{Some preliminaries:}  The exponential function $g(z)=\exp(z)$ is convex; thus, Jensen's inequality for convex functions applies as follows
+\textbf{Some preliminaries:} By definition, a function $g$ is convex if 
+\[
+g(\lambda x+(1-\lambda)y)\leq \lambda g(x)+(1-\lambda)g(y),\quad \forall \lambda\in[0,1]
+\]
+For a convex function $g:\R\to\R$, Jensen's inequality applies as follows
 \[
 g(\E[z])\leq \E[g(z)]
 \] 
@@ -253,6 +305,51 @@ P\left[\sum\limits_{i=1}^n(X_i-\mu_i)\geq t\right]\leq\exp\left\{-\frac{t^2}{2\s
 \end{block}
 \end{frame}
 \begin{frame}[allowframebreaks]
+\textbf{Exercise 2.4 of \citet{wainwright2019high}:} Consider a r.v. $X$ with mean $\mu=\E[X]$, and such that for scalars $b>a$, $X\in[a,b]$ almost surely.
+\begin{itemize}
+\item[1)]Defining the function $\psi(\lambda)=\log\E[\exp(\lambda X)]$, show that $\psi(0)=0$ and $\psi'(0)=\mu$.
+\item[2)]Show that $\psi''(\lambda)=\E_{\lambda}[X^2]-(\E_{\lambda}[X])^2$, where we define $\E_{\lambda}[f(X)]:=\frac{\E[f(X)\exp(\lambda X)]}{\E[\exp(\lambda X)]}$. Use this fact to obtain an upper bound on $\sup_{\lambda\in\R}\lvert\psi''(\lambda)\rvert$.
+\item[3)] Use parts (a) and (b) to establish that $X$ is sub-Gaussian with parameter at most $\sigma=\frac{b-a}{2}$. 
+\end{itemize}
+
+\textbf{Solution:}
+
+\underline{Part 1:}
+\[
+\psi(0)=\log\E[\exp(0)]=\log 1=0
+\]
+For $\psi'(0)$, we know that the derivative of the m.g.f equals $\mu$, so
+\[
+\psi'(0)=\frac{\mu}{\E[\exp(0X)]}=\mu.
+\]
+
+\underline{Part 2:}
+
+The identity for $\psi''(\lambda)$ follows from the chain rule. For the upper bound, observe that we can define a new distribution $Q_{\lambda}$ by taking $\exp(\lambda X)/\E[\exp(\lambda X)]$ to be its Radon–Nikodym derivative (density) with respect to the distribution of X. Hence establishing a bound on $\psi''(\lambda)$ is equivalent to bounding the supremum over variances of random variables $X_{\lambda}\sim Q_{\lambda}$.
+
+Taking, $m:=\frac{1}{2}(a+b)$, using that the mean minimises the mean squared error, and using that $X_{\lambda}\in[a,b ]$  a.s. for all $\lambda$,
+\[
+\sup_{\lambda} Var(X_{\lambda})=\sup_{\lambda} \E[(X-\E[X_{\lambda}])^2]\leq \sup_{\lambda} \E[(X-m)^2]\leq (b-m)^2=\frac{(b-a)^2}{4}.
+\]
+
+\underline{Part 2:}
+
+Taking a Maclaurin expansion of $\psi(\lambda)$
+\[
+\psi(\lambda)=\psi(0)+\lambda\psi'(0)+\frac{\lambda^2}{2}\psi''(\varepsilon),
+\]
+for some $\varepsilon\in(0,\lambda)$. Substituting the results from 1 and 2 ,
+\[
+\psi(\lambda)\leq\lambda\mu+\frac{\lambda^2}{2}\frac{(b-a)^2}{5}
+\]
+as desired.
+
+\textbf{Conclusion:} If $X_i\in [a,b]$ for all $i=1,2,\cdots,n$, then it is sub-Gaussian with parameter $\sigma=\frac{b-a}{2}$, so that we obtain the bound
+\[
+P\left[\sum\limits_{i=1}^n(X_i-\mu_i)\geq t\right]\leq\exp\left(-\frac{2t^2}{n(b-a)^2}\right)
+\]
+\end{frame}
+\begin{frame}[allowframebreaks]
 To prove the equivalent characterizations of sub-Gaussian variables, it is of interest to first answer Exercise 2.2 of \citet{wainwright2019high} which introduces \textcolor{red}{Mills ratio}.
 
 \textbf{Exercise 2.2 of \citet{wainwright2019high}:} Let $\phi(z)=\frac{1}{\sqrt{2\pi}}\exp\left(\frac{-z^2}{2}\right)$ be the density function of a standard normal $Z\sim N(0,1)$ variate.
@@ -277,13 +374,13 @@ thus,
 
 Note that $P[Z\geq z]=\int_{z}^{\infty}\phi(t)dt$. Furthermore, from part 1, we know that $\phi(z)=\frac{-\phi'(z)}{z}$. By substituting $\frac{-\phi'(z)}{z}$ into the earlier integral, we get
 \[
-\int_{z}^{\infty}\phi(t)dt=\int_{z}^{\infty}\frac{-\phi'(t)}{t}dt=\left[\frac{-\phi'(t)}{t}\right]_{z}^{\infty}-\int_{z}^{\infty} \frac{\phi(t)}{t^2}dt
+\int_{z}^{\infty}\phi(t)dt=\int_{z}^{\infty}\frac{-\phi'(t)}{t}dt=\left[\frac{-\phi(t)}{t}\right]_{z}^{\infty}-\int_{z}^{\infty} \frac{\phi(t)}{t^2}dt
 \]
-We know that $\lim_{t\to \infty}\frac{-\phi'(t)}{t}=0$, therefore, we may apply the the above expression can be written as
+We know that $\lim_{t\to \infty}\frac{-\phi(t)}{t}=0$, therefore, the above expression can be written as
 \[
 \frac{\phi(z)}{z}-\int_{z}^{\infty} \frac{-\phi'(t)}{t^3}dt
 \] 
-using the substitution derived from Miller's ratio. Using integration by parts yet again, we obtain
+using the substitution derived from Mill's ratio. Using integration by parts yet again, we obtain
 \begin{align*}
 \frac{\phi(z)}{z}-\int_{z}^{\infty} \frac{-\phi'(t)}{t^3}dt&=\frac{\phi(z)}{z}+\left[\frac{\phi(t)}{t^3}\right]_{z}^{\infty}-\int_{z}^{\infty}\frac{-3\phi(t)}{t^4}dt\\
 &=\frac{\phi(z)}{z}+\frac{\phi(z)}{z^3}+\int_{z}^{\infty}\frac{3\phi(t)}{t^4}dt\\
@@ -292,7 +389,7 @@ P[Z\geq z]&=\phi(z)\left(\frac{1}{z}+\frac{1}{z^3}\right)+\underbrace{\int_{z}^{
 \end{align*}
 Applying the same procedure again will prove the upper inequality. This is left as an exercise to the reader.
 \end{frame}
-\begin{frame}
+\begin{frame}[allowframebreaks]
 \begin{block}{Equivalent characterizations of the sub-Gaussian variables (I-II)}
 \begin{itemize}
 \item[(I)] From the definition of sub-Gaussian variables, a r.v. with $\mu=\E[X]=0$ is sub-Gaussian for $\sigma\geq 0$,
@@ -302,6 +399,18 @@ Applying the same procedure again will prove the upper inequality. This is left 
 \item[(II)] There is a constant $c\geq 0$ and Gaussian r.v. $Z\sim N(0,\tau^2)$, such that
 \[
 P[\lvert X\rvert\geq s]\leq cP[\lvert Z\rvert\geq s],\quad\forall s\geq0.
+\]
+\end{itemize}
+\end{block}
+\begin{block}{Equivalent characterizations of the sub-Gaussian variables (III-IV)}
+\begin{itemize}
+\item[(III)] There is a constant $\theta\geq 0$ such that
+\[
+\E\left[X^{2k}\right]\leq\frac{(2k)!}{2^kk!}\theta^{2k},\quad \forall k=1,2,\cdots
+\] 
+\item[(IV)] There is a constant $\sigma\geq 0$ such that
+\[
+\E\left[\exp\left(\frac{\lambda X^2}{2\sigma^2}\right)\right]\leq\frac{1}{\sqrt{1-\lambda}},\quad\forall\lambda\in[0,1).
 \]
 \end{itemize}
 \end{block}
