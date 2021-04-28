@@ -15,7 +15,7 @@ library(MASS)
 ## rho is the AR(1) parameter. Unless specified it is set to zero.
 ## equicor is for the case of equicorrelated errors
 
-SparseDGP<-function(n,p,theta,s,mu_x=TRUE,rho=0,equicor=FALSE,SV=FALSE,BIV=FALSE,GARCH=FALSE){
+SparseDGP<-function(n,p,theta,s,mu_x=TRUE,rho=0,equicor=FALSE,EV=FALSE,BIV=FALSE,GARCH=FALSE){
 
 
 	#Generate random sparse coefficeints, where parameter s is the sparsity percentage. Finally, add a random intercept.
@@ -45,15 +45,45 @@ SparseDGP<-function(n,p,theta,s,mu_x=TRUE,rho=0,equicor=FALSE,SV=FALSE,BIV=FALSE
 	if(equicor==TRUE){
 
 		Omega<-(1-rho)*diag(n)+rho*matrix(data=1,ncol=n,nrow=n)
-	
-	}else if(SV==TRUE){
+		e<-mvrnorm(n=1,mu=rep(0,times=n),Sigma=Omega)
+
+
+	}else if(EV==TRUE){
+
+
+		Sqnc<-exp(0.5*(1:n))
+		sqnc<-Sqnc^2
+		Omega<-diag(sqnc)
+		e<-mvrnorm(n=1,mu=rep(0,times=n),Sigma=Omega)
 
 
 	}else if(BIV==TRUE){
 
 
+		Sigma<-diag(n)
+		t<-round(n/2)
+		Sigma[t,t]<-1000
+		Omega<-Sigma
+		e<-mvrnorm(n=1,mu=rep(0,times=n),Sigma=Omega)
+
+
+
 	}else if(GARCH==TRUE){
 
+		
+		e<-rep(0,times=n)
+		e[1]<-rnorm(1)
+		Sigma<-rep(0,times=n)
+		Sigma[1]<-1
+
+		for(t in 2:n){
+
+			Sigma[t]<-0.00037+0.0888*e[t-1]^2+0.9024*Sigma[t-1]
+			e[t]<-rnorm(1,mean=0,sd=sqrt(Sigma[t]))
+
+		}
+
+		Omega<-diag(Sigma)
 
 	}else{
 
@@ -61,13 +91,9 @@ SparseDGP<-function(n,p,theta,s,mu_x=TRUE,rho=0,equicor=FALSE,SV=FALSE,BIV=FALSE
 		sqnc<-rho^seq(0,n,by=1)
 		Sigma<-toeplitz(sqnc[1:n])
 		Omega<-(1/(1-rho^2))*Sigma
+		e<-mvrnorm(n=1,mu=rep(0,times=n),Sigma=Omega)
 
 	}
-
-
-
-
-	e<-mvrnorm(n=1,mu=rep(0,times=n),Sigma=Omega)
 
 
 
