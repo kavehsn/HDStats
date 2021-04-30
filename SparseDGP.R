@@ -1,8 +1,8 @@
+
 install.packages("MASS")
 
 
 library(MASS)
-
 
 #The Data generating process
 
@@ -15,19 +15,19 @@ library(MASS)
 ## rho is the AR(1) parameter. Unless specified it is set to zero.
 ## equicor is for the case of equicorrelated errors
 
-SparseDGP<-function(n,p,theta,s,mu_x=TRUE,rho=0,equicor=FALSE,EV=FALSE,BIV=FALSE,GARCH=FALSE){
+SparseDGP<-function(n,p,s,theta=0,mu_x=rep(0,times=p),rho=0,equicor=FALSE,EV=FALSE,BIV=FALSE,GARCH=FALSE){
 
 
 	#Generate random sparse coefficeints, where parameter s is the sparsity percentage. Finally, add a random intercept.
 	ss<-round((1-s)*p)
-	coefs<-rnorm(p,mean=0,sd=1)
+	coefs<-rnorm(p+1,mean=0,sd=1)
 	toReplace<-sample(p,ss)
-	scoefs<-replace(coefs,toReplace,0)
-	sCoefs<-c(rnorm(1),scoefs)
+	sCoefs<-replace(coefs,toReplace,0)
+	
 
 
 	#Generate the random design matrix. If mu_x==TRUE, then the means are zero.
-	if(mu_x==TRUE){
+	if(mu_x!=rep(0,times=p)){
 		mu_x<-rep(0,times=p)	
 	}
 	
@@ -101,7 +101,9 @@ SparseDGP<-function(n,p,theta,s,mu_x=TRUE,rho=0,equicor=FALSE,EV=FALSE,BIV=FALSE
 
 	y<-X%*%sCoefs+e
 
-	data_list<-list(y,X,sCoefs,e,Omega)
+	X_NI<-X[,2:p]
+
+	data_list<-list(y,X_NI,sCoefs,e,Omega)
 	names(data_list)<-c("Y_Gen","X_Gen","sparseCoefs","eps","Omega")
 	dataSparse<-return(data_list)
 
