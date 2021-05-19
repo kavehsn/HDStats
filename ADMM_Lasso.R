@@ -7,50 +7,6 @@ ADMM_Lasso <- function(A,b,lambda=1,rho=1,alpha=1,MAX_ITER=1000,ABSTOL=1e-4, REL
 
 
 
-	#The shrinkage parameter
-
-	shrinkage <- function(x,kappa){
-
-		z <- pmax(0,x-kappa)-pmax(0,-x-kappa)
-	}
-
-
-	
-	#Cholesky decomposition of (A'A+rho*I)
-
-	factor <- function(A,rho){
-
-		dim_A <- dim(A)
-
-		r_dim <- dim_A[1]
-		c_dim <- dim_A[2]
-
-		if(r_dim>=c_dim){
-
-			U <- chol(t(A)%*%A + rho*diag(c_dim))
-
-		}else{
-
-			U <- chol(diag(r_dim)+(1/rho)*(A%*%t(A)))
-
-		}
-
-
-		L <<- Matrix(t(R),sparse=TRUE)
-		U <<- Matrix(R,sparse=TRUE)
-
-	}
-
-	#Opbjective function for the ADMM_LASSO optimization problem
-
-	objective <- function(A,b,lambda,x,z){
-
-		p <- (1/(2*r_dim))*sum(((A%*%x)-b)^2)+(lambda*norm(z)) 
-
-	}
-
-
-
 	dim_A <- dim(A)
 
 	r_dim <- dim_A[1]
@@ -69,6 +25,8 @@ ADMM_Lasso <- function(A,b,lambda=1,rho=1,alpha=1,MAX_ITER=1000,ABSTOL=1e-4, REL
 	eps_pri <- rep(0,times=MAX_ITER)
 	eps_dual <- rep(0,times=MAX_ITER)
 
+
+	factor(A,rho)
 
 	for(k in 1:MAX_ITER){
 
@@ -91,6 +49,7 @@ ADMM_Lasso <- function(A,b,lambda=1,rho=1,alpha=1,MAX_ITER=1000,ABSTOL=1e-4, REL
 		zold <- z
 		x_hat <- alpha*x+(1-alpha)*zold
 		z <- shrinkage(x_hat+u, lambda/rho)
+		z <- matrix(data=z,nrow=length(z),ncol=1)
 
 
 	#u-update
@@ -129,3 +88,52 @@ ADMM_Lasso <- function(A,b,lambda=1,rho=1,alpha=1,MAX_ITER=1000,ABSTOL=1e-4, REL
 	x_opt <<- x
 
 }
+
+
+#The shrinkage parameter
+
+shrinkage <- function(x,kappa){
+
+	z <- pmax(0,x-kappa)-pmax(0,-x-kappa)
+}
+
+
+
+	#Cholesky decomposition of (A'A+rho*I)
+
+factor <- function(A,rho){
+
+	dim_A <- dim(A)
+
+	r_dim <- dim_A[1]
+	c_dim <- dim_A[2]
+
+	if(r_dim>=c_dim){
+
+		U <- chol(t(A)%*%A + rho*diag(c_dim))
+
+	}else{
+
+		U <- chol(diag(r_dim)+(1/rho)*(A%*%t(A)))
+
+	}
+
+
+	L <<- Matrix(t(U),sparse=TRUE)
+	U <<- Matrix(U,sparse=TRUE)
+
+}
+
+	#Opbjective function for the ADMM_LASSO optimization problem
+
+objective <- function(A,b,lambda,x,z){
+
+	dim_A <- dim(A)
+
+	r_dim <- dim_A[1]
+	c_dim <- dim_A[2]
+
+	p <- (1/(2*r_dim))*sum(((A%*%x)-b)^2)+(lambda*norm(z,type="1")) 
+
+}
+
