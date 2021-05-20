@@ -110,7 +110,7 @@ BPSuccess<-function(n_min,n_max,p_rng,sss,step,iter=1000,errStd=1,intcpt=FALSE,e
 				lambda_martin <- sqrt(((2*(errStd^2)*log(k_p)*log(d-k_p))/n_sim))
 
 				#Estimate the Lasso model using 'glmnet'. For Lasso argument 'lambda' is set to '1'.
-				lasso_model <- glmnet(X, Y, alpha = 1, lambda = lambda_martin, standardize = FALSE, intercept=FALSE)
+				lasso_model <- glmnet(X, Y, alpha = 1, lambda = lambda_martin, standardize = FALSE)
 				Betahat <- coef(lasso_model)
 
 				
@@ -130,11 +130,11 @@ BPSuccess<-function(n_min,n_max,p_rng,sss,step,iter=1000,errStd=1,intcpt=FALSE,e
 
 				# Remove the first value of 'Betahat' corresponding to the intercept. 
 
-				Betahat_noC <- Betahat
+				Betahat_noC <- Betahat[-1]
 
 				# Compare the signs of 'Betahat' and 'Beta'.
 
-				if(exact=TRUE){
+				if(exact==TRUE){
 
 					if(all(sign(Betahat_noC)==sign(Beta_noC))){
 
@@ -146,7 +146,7 @@ BPSuccess<-function(n_min,n_max,p_rng,sss,step,iter=1000,errStd=1,intcpt=FALSE,e
 
 				}else{
 
-					if(all(sign(Beta_noC)-sign(Betahat_noC)>=0)){
+					if(isSubset(Betahat_noC,Beta_noC)==TRUE){
 
 					# If the the subset condition holds, add one to the counter of at row 'j' and column 't'.
 
@@ -170,13 +170,22 @@ BPSuccess<-function(n_min,n_max,p_rng,sss,step,iter=1000,errStd=1,intcpt=FALSE,e
 }
 
 
+isSubset <- function(a,b){
+  # looks at support (subset) recovery
+  # is supp(a) subset supp(b)
+  s1 <- which(abs(a)>0)
+  s2 <- which(abs(b)>0)
+  return(all(s1 %in% s2))
+}
+
+
 ## Example
 
 BPSuccess(n_min=350,n_max=350,p_rng=c(128,256,512),errStd=0.5,iter=20,sss=0.1,step=10) 
 
 
 
-x_axis<- seq(5,600,by=10)
+x_axis<- seq(5,350,by=10)
 
 
 
