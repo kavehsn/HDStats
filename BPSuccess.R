@@ -1,9 +1,11 @@
 install.packages("lars")
 install.packages("glmnet")
+install.packages("ADMM")
 
 
 library(lars)
 library(glmnet)
+library(ADMM)
 
 ## Replication of Fig 2 of Wainwright's Sharp Thresholds for HD and Noisy Sparsity Recovery 
 
@@ -19,7 +21,7 @@ library(glmnet)
 
 
 
-BPSuccess<-function(n_min,n_max,p_rng,sss,step,iter=1000,errStd=1,intcpt=FALSE,...){
+BPSuccess<-function(n_min,n_max,p_rng,sss,step,iter=1000,errStd=1,intcpt=FALSE,exact=FALSE,...){
 
 
 	m <-length(p_rng)
@@ -93,7 +95,7 @@ BPSuccess<-function(n_min,n_max,p_rng,sss,step,iter=1000,errStd=1,intcpt=FALSE,.
 				Sigma <- DGP_list$Omega
 
 				# Number of non-zero elements of the random coefficient vector.					
- 
+
 				k_p <- round(sss*d)
 
 
@@ -108,10 +110,9 @@ BPSuccess<-function(n_min,n_max,p_rng,sss,step,iter=1000,errStd=1,intcpt=FALSE,.
 				lambda_martin <- sqrt(((2*(errStd^2)*log(k_p)*log(d-k_p))/n_sim))
 
 				#Estimate the Lasso model using 'glmnet'. For Lasso argument 'lambda' is set to '1'.
-
-
-				lasso_model <- glmnet(X, Y, alpha = 1, lambda = lambda_martin, standardize = TRUE)
+				lasso_model <- glmnet(X, Y, alpha = 1, lambda = lambda_martin, standardize = FALSE, intercept=FALSE)
 				Betahat <- coef(lasso_model)
+
 				
 				if(intcpt==TRUE){
 
@@ -129,16 +130,29 @@ BPSuccess<-function(n_min,n_max,p_rng,sss,step,iter=1000,errStd=1,intcpt=FALSE,.
 
 				# Remove the first value of 'Betahat' corresponding to the intercept. 
 
-				Betahat_noC <- Betahat[-1] 
+				Betahat_noC <- Betahat
 
 				# Compare the signs of 'Betahat' and 'Beta'.
 
-				if(all(sign(Beta_noC)==sign(Betahat_noC))){
+				if(exact=TRUE){
 
+					if(all(sign(Betahat_noC)==sign(Beta_noC))){
 
 					# If the the equality holds, add one to the counter of at row 'j' and column 't'.
 
-					counter[j,t] <- counter[j,t]+1
+						counter[j,t] <- counter[j,t]+1
+
+					}
+
+				}else{
+
+					if(all(sign(Beta_noC)-sign(Betahat_noC)>=0)){
+
+					# If the the subset condition holds, add one to the counter of at row 'j' and column 't'.
+
+						counter[j,t] <- counter[j,t]+1
+
+					}				
 
 				}
 			}
@@ -149,7 +163,7 @@ BPSuccess<-function(n_min,n_max,p_rng,sss,step,iter=1000,errStd=1,intcpt=FALSE,.
 		# The success probablity is calculated as 'counter / B'. 
 
 		successRate <- counter/B
-		counterTbl <<-counter
+		counterTbl <<- counter
 		probSuccess <<- successRate 
 	}
 
@@ -158,4 +172,24 @@ BPSuccess<-function(n_min,n_max,p_rng,sss,step,iter=1000,errStd=1,intcpt=FALSE,.
 
 ## Example
 
-BPSuccess(n_min=5,n_max=350,p_rng=c(128,256,512),errStd=0.5,iter=250,sss=0.1,step=10) 
+BPSuccess(n_min=350,n_max=350,p_rng=c(128,256,512),errStd=0.5,iter=20,sss=0.1,step=10) 
+
+
+
+x_axis<- seq(5,600,by=10)
+
+
+
+plot(x_axis, probSuccess[,1], type = "b", frame = FALSE, pch = 19, 
+	col = "red", xlab = "Number of observations", ylab = "Probablity of success")
+
+
+lines(x_axis, probSuccess[,2], pch = 18, col = "blue", type = "b", lty = 2)
+
+lines(x_axis, probSuccess[,3], pch = 18, col = "green", type = "b", lty = 2)
+
+
+legend("topleft", legend=c("d=128", "d=256","d=512"),
+	col=c("red", "blue","green"), lty = 1:2, cex=0.8)
+
+png(filename="/home/kaveh/Desktop/WainwrightSim.png")
