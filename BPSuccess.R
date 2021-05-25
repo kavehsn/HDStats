@@ -1,11 +1,13 @@
 install.packages("lars")
 install.packages("glmnet")
 install.packages("ADMM")
+install.packages("tidyverse")
 
 
 library(lars)
 library(glmnet)
 library(ADMM)
+library(tidyverse)
 
 ## Replication of Fig 2 of Wainwright's Sharp Thresholds for HD and Noisy Sparsity Recovery 
 
@@ -21,7 +23,7 @@ library(ADMM)
 
 
 
-BPSuccess<-function(n_min,n_max,p_rng,sss,step,iter=1000,errStd=1,intcpt=FALSE,exact=FALSE,...){
+BPSuccess<-function(n_min,n_max,p_rng,sss,step,iter=1000,errStd=1,intcpt=FALSE,exact=FALSE,GLS=FALSE,lambda_star=FALSE,...){
 
 
 	m <-length(p_rng)
@@ -107,52 +109,162 @@ BPSuccess<-function(n_min,n_max,p_rng,sss,step,iter=1000,errStd=1,intcpt=FALSE,e
 				
 				# Following Wainwright's paper, calculate the scaled 'lambda' for each dimension 'd', sample size 'n' and 'errStd'. 
 
-				lambda_martin <- sqrt(((2*(errStd^2)*log(k_p)*log(d-k_p))/n_sim))
+
+				if(lambda_star==TRUE){
+					
+
+					if(GLS==FALSE){
+
+
+						lambda_martin <- sqrt(((2*(errStd^2)*log(k_p)*log(d-k_p))/n_sim))
 
 				#Estimate the Lasso model using 'glmnet'. For Lasso argument 'lambda' is set to '1'.
-				lasso_model <- glmnet(X, Y, alpha = 1, lambda = lambda_martin, standardize = FALSE)
-				Betahat <- coef(lasso_model)
+						lasso_model <- glmnet(X, Y, alpha = 1, lambda = lambda_martin, standardize = FALSE)
+						Betahat <- coef(lasso_model)
 
-				
-				if(intcpt==TRUE){
 
-					# If intercept is present in the DGP, remove the first value of Beta. 
+					}else{
 
-					Beta_noC <- Beta[-1]
+
+						#***THE TRUE LAMBDA MUST CHANGE ONCE THERE IS SUFFICIENT THEORY***
+
+						lambda_martin <- sqrt(((2*(errStd^2)*log(k_p)*log(d-k_p))/n_sim))
+
+						Rotation(Y=Y,X=X,Sigma=Sigma)
+
+						lasso_model <- glmnet(X=xStar, Y=yStar, alpha = 1, lambda = lambda_martin, standardize = FALSE)
+						Betahat <- coef(lasso_model)
+
+					}
 
 
 				}else{
 
+					if(GLS==FALSE){
 
-					Beta_noC <- Beta
+
+						lasso_model <- lars(x=X,y=Y,type="lasso",use.Gram=FALSE) 
+						Betahat <- coef(lasso_model)
+
+
+
+					}else{
+
+
+						objRot <- Rotation(Y=Y,X=X,Sigma=Sigma)
+
+						xRot <- objRot$xStar
+						yRot <- objRot$yStar
+
+						lasso_model <- lars(x=xRot,y=yRot,type="lasso",use.Gram=FALSE) 
+						Betahat <- coef(lasso_model)
+						
+					}
 
 				}
 
+				
+				if(lambda_star==TRUE){
+
+					if(intcpt==TRUE){
+
+					# If intercept is present in the DGP, remove the first value of Beta. 
+
+						Beta_noC <- Beta[-1]
+
+
+					}else{
+
+
+						Beta_noC <- Beta
+
+					}
+
 				# Remove the first value of 'Betahat' corresponding to the intercept. 
 
-				Betahat_noC <- Betahat[-1]
+					Betahat_noC <- Betahat[-1]
 
 				# Compare the signs of 'Betahat' and 'Beta'.
 
-				if(exact==TRUE){
+					if(exact==TRUE){
 
-					if(all(sign(Betahat_noC)==sign(Beta_noC))){
+						if(all(sign(Betahat_noC)==sign(Beta_noC))){
 
 					# If the the equality holds, add one to the counter of at row 'j' and column 't'.
 
-						counter[j,t] <- counter[j,t]+1
+							counter[j,t] <- counter[j,t]+1
+
+						}
+
+					}else{
+
+						if(isSubset(Betahat_noC,Beta_noC)==TRUE){
+
+					# If the the subset condition holds, add one to the counter of at row 'j' and column 't'.
+
+							counter[j,t] <- counter[j,t]+1
+
+						}				
 
 					}
 
 				}else{
 
-					if(isSubset(Betahat_noC,Beta_noC)==TRUE){
+
+					dimBetahat <- dim(Betahat)
+					nRowBetahat <- dimBetahat[1]
+
+					if(intcpt==TRUE){
+
+					# If intercept is present in the DGP, remove the first value of Beta. 
+
+						Beta_noC <- Beta[-1]
+
+
+					}else{
+
+
+						Beta_noC <- Beta
+
+					}
+
+					if(exact==TRUE){
+
+
+						for(jj in 1:nRowBetahat){
+
+
+							if(all(sign(Betahat[jj,])==sign(Beta_noC))){
+
+								counter[j,t] <- counter[j,t]+1
+
+								break
+
+							}
+
+
+						}
+
+
+					}else{
+
+						for(kk in 1:nRowBetahat){
+
+							if(isSubset(Betahat[kk,],Beta_noC)==TRUE){
 
 					# If the the subset condition holds, add one to the counter of at row 'j' and column 't'.
 
-						counter[j,t] <- counter[j,t]+1
+								counter[j,t] <- counter[j,t]+1
 
-					}				
+								break
+
+							}
+
+						}
+
+
+					}
+
 
 				}
 			}
@@ -173,15 +285,35 @@ BPSuccess<-function(n_min,n_max,p_rng,sss,step,iter=1000,errStd=1,intcpt=FALSE,e
 isSubset <- function(a,b){
   # looks at support (subset) recovery
   # is supp(a) subset supp(b)
-  s1 <- which(abs(a)>0)
-  s2 <- which(abs(b)>0)
-  return(all(s1 %in% s2))
+	s1 <- which(abs(a)>0)
+	s2 <- which(abs(b)>0)
+	return(all(s1 %in% s2))
+}
+
+
+Rotation <- function(Y,X,Sigma){
+
+	#Cholesky factorization of the covariance matrix
+	U <- chol(Sigma)
+	L <- t(U)
+
+	#Transform the variables
+	yStar <- solve(L)%*%Y
+	xStar <- solve(L)%*%X
+
+
+	#Create a list of the variables
+	data_list <- list(yStar, xStar)
+	names(data_list) <- c("yStar", "xStar")
+	rotatedVars <<- data_list
+
 }
 
 
 ## Example
 
 BPSuccess(n_min=350,n_max=350,p_rng=c(128,256,512),errStd=0.5,iter=20,sss=0.1,step=10) 
+BPSuccess(n_min=5,n_max=350,p_rng=c(128,256,512),sss=0.1,step=10,iter=100,GLS=TRUE,exact=TRUE, rho=0.5)  
 
 
 
