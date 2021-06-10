@@ -1,0 +1,372 @@
+\documentclass[10pt,handout,english]{beamer}
+\usetheme{Warsaw}
+\usepackage{graphicx}
+\usepackage{placeins}
+\usepackage{amsmath, amssymb}
+\usepackage{tabu}
+\usepackage{bbm}
+\usepackage{booktabs}
+\usepackage[round]{natbib}
+\usepackage{bm}
+\usepackage{ragged2e}
+\usepackage{bbm}
+\usepackage{hyperref}
+\usepackage{amsmath}
+\usepackage{xcolor}
+\usepackage[super]{nth}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=blue,      
+    urlcolor=blue,
+    citecolor=black,
+}
+
+\apptocmd{\frame}{}{\justifying}{} % Allow optional arguments after frame.
+
+\setbeamertemplate{frametitle continuation}{}
+
+\newcommand\setItemnumber[1]{\setcounter{enumi}{\numexpr#1-1\relax}}
+
+\DeclareMathOperator{\tr}{tr}
+\DeclareMathOperator*{\plim}{plim}
+
+\newcommand{\ts}{\textsuperscript}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\F}{\mathcal{F}}
+\newcommand{\T}{\mathbb{T}}
+\newcommand{\C}{\mathbb{C}}
+
+
+\newcommand{\vertiii}[1]{{\left\vert\kern-0.25ex\left\vert\kern-0.25ex\left\vert #1 
+    \right\vert\kern-0.25ex\right\vert\kern-0.25ex\right\vert}}
+
+
+\title[]{Heteroscedasticity autocorrelation consistent estimator}
+%\author[Kaveh S. Nobari]{Kaveh S. Nobari}
+%\institute[]{Lectures in High-Dimensional Statistics}
+\date[27/10/2020]
+%{Department of Mathematics and Statistics\\ Lancaster University}
+	
+
+\begin{document}
+\begin{frame}
+\titlepage
+\end{frame}
+
+
+\begin{frame}{Contents}
+\tableofcontents
+\end{frame}
+
+
+\section{GLS with known covariance matrix}
+\frame{\tableofcontents[currentsection,currentsubsection]}
+\begin{frame}[allowframebreaks]
+Consider the model
+\begin{equation}\label{eq: regression}
+Y=X\beta+\epsilon
+\end{equation}
+where
+\[
+Y=
+\begin{bmatrix}
+y_1\\
+y_2\\
+\vdots\\
+y_T
+\end{bmatrix}
+\quad
+X=
+\begin{bmatrix}
+x_{1,1}&x_{1,2}&\cdots&x_{1,p}\\
+x_{2,1}&x_{2,2}&\cdots&x_{2,p}\\
+\vdots&\vdots&\ddots&\vdots\\
+x_{T,1}&x_{n,2}&\cdots&x_{n,p}
+\end{bmatrix}
+\]
+where $X$ is an $T\times p$ matrix of fixed or stochastic explanatory variables, such that $T\ll p$, $\beta\in\R^p$ is a vector of parameters, and
+\begin{equation}\label{eq: covariance matrix}
+\epsilon=
+\begin{bmatrix}
+\varepsilon_1\\
+\varepsilon_2\\
+\vdots\\
+\varepsilon_T
+\end{bmatrix}
+\quad
+\text{s.t.}
+\quad
+\epsilon\mid X\sim N(0,\sigma^2\Sigma)
+\end{equation}
+where 
+\[
+\sigma^2\Sigma=\E\left[\epsilon\epsilon'\mid X\right]
+\]
+Matrix $\Sigma$ is symmetric and positive definite, and there exists a non-singular $T\times T$ matrix $C$, such that
+\[
+\Sigma^{-1}=C'C
+\]
+\begin{proof}
+We know that there exists a non-singular matrix $L$ such that $\Sigma=LL'$, and so $\Sigma^{-1}=[L']^{-1}L^{-1}$. Let $C=L^{-1}$, which yields the earlier results.
+\end{proof}
+Imagine transforming the population residuals $\epsilon$ by $C$:
+\[
+\tilde{\epsilon}=C\epsilon
+\]
+which would generate a new set of residuals $\tilde{\epsilon}$ with zero mean and conditional covariance matrix, given by 
+\[
+\E[\tilde{\epsilon}\tilde{\epsilon}'\mid X]=C\E[\epsilon\epsilon'\mid X]C'=C\Sigma C'.
+\]
+But $\Sigma=\left[\Sigma^{-1}\right]^{-1}=[C'C]^{-1}$; hence,
+\[
+\E[\tilde{\epsilon}\tilde{\epsilon}'\mid X]=C[C'C]^{-1}C'=\sigma^2I
+\]
+We may now transform regression equation (\ref{eq: regression}) by premultiplying both its sides by $C$, which yields
+\[
+\tilde{Y}=\tilde{X}\beta+\tilde{\epsilon}
+\]
+where
+\[
+\tilde{Y}\equiv CY,\quad\tilde{X}\equiv CX,\quad\tilde{\epsilon}\equiv C\epsilon
+\]
+and 
+\[
+\tilde{\epsilon}\mid X\sim N(0,\sigma^2I).
+\]
+The Lasso estimator on the transformed model is as follows
+\[
+\tilde{\beta}=\arg\min_{\beta\in\R^p}\frac{1}{2}\lVert \tilde{Y}-\tilde{X}\beta\rVert_2^2+\lambda\lVert\beta\rVert_1
+\]
+\end{frame}
+\subsection{Heteroskedasticity}
+\frame{\tableofcontents[currentsection,currentsubsection]}
+\begin{frame}[allowframebreaks]
+A simple case is when the variance of $\varepsilon_t$ is presumed to be proportional to the square of the explanatory variable for that equation, say $x_{1,t}^2$:
+\[
+\E[\epsilon \epsilon'\mid X]=\sigma^2
+\begin{bmatrix}
+x_{1,1}^2 &0&\cdots&0\\
+0&x_{1,2}^2&\cdots&0\\
+\vdots&\vdots&\cdots&\vdots\\
+0&0&\cdots&x_{1,T}^2
+\end{bmatrix}
+=\sigma^2\Sigma
+\]
+Then, it is easy to see that 
+\[
+C=
+\begin{bmatrix}
+1/\lvert x_{1,1}\rvert &0&\cdots&0\\
+0&1/\lvert x_{1,2}\rvert&\cdots&0\\
+\vdots&\vdots&\cdots&\vdots\\
+0&0&\cdots&1/\lvert x_{1,T}\rvert
+\end{bmatrix}
+\]
+Hence, the estimation of Lasso will be conducted by using the transformed variables $\tilde{y}_t=y_t/\lvert x_{1,t}\rvert$ and $x_t/\lvert x_{1,t}\rvert$. 
+\end{frame}
+
+\subsection{Autocorrelation}
+\frame{\tableofcontents[currentsection,currentsubsection]}
+\begin{frame}[allowframebreaks]
+Consider the case were 
+\begin{equation}\label{eq: autocorrelation}
+\varepsilon_t=\rho\varepsilon_{t-1}+u_t,\quad u_t\sim N(0,\sigma^2)
+\end{equation}
+and $\lvert\rho\rvert<1$, then
+\[
+\E[\epsilon\epsilon'\mid X]=\frac{\sigma^2}{1-\rho^2}
+\begin{bmatrix}
+1&\rho&\rho^2&\cdots&\rho^{T-1}\\
+\rho&1&\rho&\cdots&\rho^{T-2}\\
+\vdots&\vdots&\vdots&\cdots&\vdots\\
+\rho^{T-1}&\rho^{T-2}&\rho^{T-3}&\cdots&1
+\end{bmatrix}
+=\sigma^2\Sigma
+\]
+and subsequently,
+\begin{equation}\label{eq: cholesky auto}
+C=
+\begin{bmatrix}
+\sqrt{1-\rho^2}&0&0&\cdots&0&0\\
+-\rho&1&0&\cdots&0&0\\
+0&-\rho&1&\cdots&0&0\\
+\vdots&\vdots&\vdots&\cdots&\vdots&\vdots\\
+0&0&0&\cdots&-\rho&1
+\end{bmatrix}
+\end{equation}
+In other words, the transformation must take the form $\tilde{y_1}\equiv y_1\sqrt{1-\rho^2}$ and $\tilde{x_1}\equiv x_1\sqrt{1-\rho^2}$ and $\tilde{y_t}\equiv y_t-\rho y_{t-1}$ and $x_t-\rho x_{t-1}$ for $t=2,\cdots,T$.
+\end{frame}
+\subsection{GLS and maximum likelihood estimation}
+\frame{\tableofcontents[currentsection,currentsubsection]}
+\begin{frame}[allowframebreaks]
+Under the earlier assumptions that 
+\begin{itemize}
+\item $x_t$ is stochastic;
+\item Conditional on the full matrix $X$, the vector $\epsilon\sim N(0,\sigma^2\Sigma)$;
+\item $\Sigma$ is a known positive definite matrix. 
+\end{itemize}
+it is known that 
+\[
+Y\mid X\sim N(X\beta,\sigma^2\Sigma)
+\]
+Hence,
+\begin{align*}
+L(Y\mid X;\beta,\sigma^2\Sigma)&=(2\pi)^{-T/2}\lvert\det{(\sigma^2\Sigma)}\rvert^{-1/2}\\
+&\times\exp\left(\left(-\frac{1}{2}\right)(Y-X\beta)'(\sigma^2\Sigma)^{-1}(Y-X\beta)\right)
+\end{align*}
+and subsequently
+\begingroup
+\allowdisplaybreaks
+\begin{align*}
+\log\{L(Y\mid X;\beta,\sigma^2\Sigma)\}&\equiv l(Y\mid X;\beta,\sigma^2\Sigma)\\
+&=\left(-\frac{T}{2}\right)\log(2\pi)-\left(\frac{1}{2}\right)\log\left\lvert\det\left(\sigma^2\Sigma\right)\right\rvert\\
+&\textcolor{white}{=}-\left(\frac{1}{2}\right)(Y-X\beta)'(\sigma^2\Sigma)^{-1}(Y-X\beta)
+\end{align*}
+\endgroup
+From earlier recall that $(\Sigma)^{-1}=C'C$. Hence, we may express the right hand terms of the above log-likelihood function as 
+\begin{align*}
+\left(\frac{1}{2}\right)(Y-X\beta)'(\sigma^2\Sigma)^{-1}(Y-X\beta)&=\left(\frac{1}{2}\right)(Y-X\beta)'(\sigma^2)^{-1}(C'C)(Y-X\beta)\\
+&=\left(\frac{1}{2\sigma^2}\right)(Y-X\beta)'(C'C)(Y-X\beta)\\
+&=\left(\frac{1}{2\sigma^2}\right)(CY-CX\beta)'(CY-CX\beta)\\
+&=\left(\frac{1}{2\sigma^2}\right)(\tilde{Y}-\tilde{X}\beta)'(\tilde{Y}-\tilde{X}\beta)
+\end{align*}
+Moreover,
+\begingroup
+\allowdisplaybreaks
+\begin{align*}
+-\left(\frac{1}{2}\right)\log\left\lvert\det\left(\sigma^2\Sigma\right)\right\rvert&=-\left(\frac{1}{2}\right)\log\left\lvert\sigma^{2T}\det\left( \Sigma\right)\right\rvert\\
+&=-\left(\frac{1}{2}\right)\log\left\lvert\sigma^{2T}\det\left\{\left(C'C \right)^{-1}\right\}\right\rvert\\
+&=-\left(\frac{1}{2}\right)\log\left\lvert\sigma^{2T}\det\left\{\left(C'C \right)\right\}^{-1}\right\rvert\\
+&=-\left(\frac{1}{2}\right)\log\sigma^{2T}-\left(\frac{1}{2}\right)\log\left\lvert\det\left\{\left(C'C \right)\right\}^{-1}\right\rvert\\
+&=-\left(\frac{T}{2}\right)\log\sigma^{2}+\left(\frac{1}{2}\right)\log\left\lvert\det\left\{\left(C'C \right)\right\}\right\rvert\\
+&=-\left(\frac{T}{2}\right)\log\sigma^{2}+\log\left\lvert\det\left(C \right)\right\rvert
+\end{align*}
+\endgroup
+Therefore, the conditional log-likelihood function can be expressed as
+\begingroup
+\allowdisplaybreaks
+\begin{align}\label{eq: MLE}
+l(Y\mid X;\beta,\sigma^2\Sigma)&=-\left(\frac{T}{2}\right)\log(2\pi)-\left(\frac{T}{2}\right)\log(\sigma^2)\\
+&\textcolor{white}{=}+\log\lvert\det(C)\rvert-\left(\frac{1}{2\sigma^2}\right)(\tilde{Y}-\tilde{X}\beta)'(\tilde{Y}-\tilde{X}\beta)
+\end{align}
+\endgroup
+Thus, the likelihood is maximized with respect to $\beta$ by an OLS regression of $\tilde{Y}$ on $\tilde{X}$.
+\end{frame}
+\section{GLS with unknown covariance matrix}
+\frame{\tableofcontents[currentsection,currentsubsection]}
+\begin{frame}
+Once again consider the conditional covariance matrix of the error terms in (\ref{eq: covariance matrix}). Up to this point, it was assumed that the elements of $\Sigma$ are known a priori. In reality, $\Sigma$ is of a particular form $\Sigma(\theta)$, where $\theta$ is a vector of parameters that must be estimated from the data, - i.e.
+\[
+\epsilon\mid X\sim N(0,\sigma^2\Sigma(\theta))
+\]
+For instance, for the autocorrelated residual case (\ref{eq: autocorrelation}), $\theta$ is the scalar $\rho$.
+
+Our task is then to estimate $\rho$ and $\beta$ jointly from the data. One approach is to estimate $\rho$ and $\beta$ jointly from the data and find the values that maximize (\ref{eq: MLE}). The latter can be formed and maximized numerically and has the appeal of offering a single rule to follow whenever $\E[\epsilon\epsilon'\mid X]$ is not of the simple form $\sigma^2 I$. However, quite often simple estimator can have desirable properties. In a classical asymptotics setting, its turn out that
+\begin{align*}
+\sqrt{T}(X'[\Sigma(\hat{\rho})]^{-1}X)^{-1}(X'[\Sigma(\hat{\rho})]^{-1}Y)\overset{p}{\to}\sqrt{T}(X'[\Sigma(\rho_0)]^{-1}X)^{-1}(X'[\Sigma(\rho_0)]^{-1}Y)
+\end{align*}
+\end{frame}
+\subsection{AR(1) errors with exogenous regressors}
+\frame{\tableofcontents[currentsection,currentsubsection]}
+
+\begin{frame}[allowframebreaks]
+Let us maintain the earlier assumption that
+\[
+\epsilon\mid X\sim N(0,\sigma^2\Sigma(\rho))
+\]
+which rules out endogenous variables; in other words it is assumed that $x_t$ is uncorrelated with $\varepsilon_{t-s}$. 
+
+Recall that the determinant of a lower triangular matrix is simply the product of the terms on the principal diagonal. From (\ref{eq: cholesky auto}), it is evident that
+\[
+\det(C)=\sqrt{1-\rho^2}.
+\]
+Thus, the log-likelihood function (\ref{eq: MLE}) is expressed as 
+\begingroup
+\allowdisplaybreaks
+\begin{align}\label{eq: MLEAR}
+\begin{split}
+l(Y\mid X;\beta,\rho,\sigma)&=-\left(\frac{T}{2}\right)\log(2\pi)-\left(\frac{T}{2}\right)\log(\sigma^2)+\left(\frac{1}{2}\right)\log(1-\rho^2)\\
+&\textcolor{white}{=}-\left[\frac{(1-\rho^2)}{2\sigma^2}\right](y_1-x_1'\beta)^2\\
+&\textcolor{white}{=}-\left(\frac{1}{2\sigma^2}\right)\sum\limits_{t=2}^{T}[(y_t-x_t'\beta)-\rho(y_{t-1}-x_{t-1}'\beta)]^2
+\end{split}
+\end{align}
+\endgroup
+One approach as mentioned in the earlier section, is to maximize (\ref{eq: MLEAR}) with respect to $\beta$, $\rho$ and $\sigma^2$.
+\begin{itemize}
+\setlength\itemsep{0.5em}
+\item If we knew the value of $\rho$, then the value of $\beta$ that maximizes (\ref{eq: MLEAR}), could be found by an OLS regression of $y_t-\rho y_{t-1}$ on $x_t-\rho x_{t-1})$ for $t=2,\cdots,T$ [let us call this regression \textcolor{red}{A}]; 
+\item Conversely, if we knew the value of $\rho$ that maximizes (\ref{eq: MLEAR}) would be found by an OLS regression of $(y_t-x_t'\beta)$ on $(y_{t-1}-x_{t-1}'\beta)$ [let us call this regression \textcolor{red}{B}].
+\item We can thus, start by an initial guess of $\rho$, say $\rho=0$. Perform regression \textcolor{red}{A} to get an initial estimate of $\beta$.
+\item This estimate $\beta$ can then be used in regression \textcolor{red}{B} to get an updated estimate of $\rho$, for example, by regressing the OLS residuals $\hat{\varepsilon}_t=y_t-x_t'\beta$ on its own lagged value.
+\item The new estimate of $\rho$ can be used to repeat the two regressions. Zigzagging back and forth between \textcolor{red}{A} and \textcolor{red}{B} is known as the \textcolor{red}{iterated Cochrane-Orcutt} method, and will converge to a local maximum of (\ref{eq: MLEAR}).
+\end{itemize}
+Consider the estimator of $\rho$ that results from the first iteration alone
+\begin{equation}\label{eq: AROLS}
+\hat{\rho}=\frac{(1/T)\sum\limits_{t=1}^{T}\hat{\varepsilon}_t\hat{\varepsilon}_{t-1}}{(1/T)\sum\limits_{t=1}^{T}\hat{\varepsilon}_{t-1}^2}
+\end{equation}
+where $\hat{\varepsilon}_t=y_t-\hat{\beta}'x_t$ and $\hat{\beta}$ is the OLS estimate of $\beta$. Notice that
+\[
+\hat{\varepsilon_t}=(y_t-\beta'x_t+\beta'x_t-\hat{\beta}'x_t)=\varepsilon_t+(\beta-\hat{\beta})'x_t
+\] 
+allowing the numerator of (\ref{eq: AROLS}) to be written
+\begingroup
+\allowdisplaybreaks
+\begin{align}\label{eq: proof1}
+\begin{split}
+(1/T)\sum\limits_{t=1}^{T}\hat{\varepsilon}_t\hat{\varepsilon}_{t-1}&=(1/T)\sum\limits_{t=1}^{T}[\varepsilon_t+(\beta-\hat{\beta})'x_t][\varepsilon_{t-1}+(\beta-\hat{\beta})'x_{t-1}]\\
+&=(1/T)\sum\limits_{t=1}^{T}\varepsilon_t\varepsilon_{t-1}+(\beta-\hat{\beta})'(1/T)\sum\limits_{t=1}^{T}(\varepsilon_tx_{t-1}+\varepsilon_{t-1}x_{t})\\
+&\textcolor{white}{=}+(\beta-\hat{\beta})'\left[(1/T)\sum\limits_{t=1}^{T}x_tx_{t-1}'\right](\beta-\hat{\beta})
+\end{split}
+\end{align}
+\endgroup
+As long as, $\hat{\beta}$ is a consistent estimate of $\beta$ and boundedness conditions ensure that plims of
+\begin{itemize}
+\item $(1/T)\sum\limits_{t=1}^{T}\varepsilon_tx_{t-1}$;
+\item $(1/T)\sum\limits_{t=1}^{T}\varepsilon_{t-1}x_{t}$;
+\item $(1/T)\sum\limits_{t=1}^{T}x_tx_{t-1}'$
+\end{itemize}
+exist, then
+\begin{align*}
+(1/T)\sum\limits_{t=1}^T\hat{\varepsilon}_t\hat{\varepsilon}_{t-1} &\overset{p}{\to}(1/T)\sum\limits_{t=1}^T\varepsilon_t\varepsilon_{t-1}\\
+ &=(1/T)\sum\limits_{t=1}^T(u_t+\rho\varepsilon_{t-1})\varepsilon_{t-1}\\
+ &\overset{p}{\to}\rho\text{var}(\varepsilon)
+\end{align*}
+Similar analysis determines that the denominator of (\ref{eq: AROLS}) converges in probability to $\text{var}(\varepsilon)$, where they cancel each other out, and as such it can be established that
+\[
+\hat{\rho}\overset{p}{\to}\rho.
+\]
+Now if $\varepsilon_t$ is uncorrelated with $x_s$ for $s=t-1,t,t+1$ stronger claims can be made about the estimate of $\rho$ based on an autoregression of the OLS residuals $\hat{\varepsilon}$. Specifically, if 
+\[
+\plim\left[(1/T)\sum\limits_{t=1}^{T}\varepsilon_tx_{t-1}\right]=\plim\left[(1/T)\sum\limits_{t=1}^{T}\varepsilon_{t-1}x_{t}\right]=0
+\] 
+then multiplying (\ref{eq: proof1}) by $\sqrt{T}$, we find
+\begingroup
+\allowdisplaybreaks
+\begin{align}\label{eq: proof2}
+\begin{split}
+(1/\sqrt{T})\sum\limits_{t=1}^{T}\hat{\varepsilon}_t\hat{\varepsilon}_{t-1}&=(1/\sqrt{T})\sum\limits_{t=1}^{T}\varepsilon_t\varepsilon_{t-1}\\
+&\textcolor{white}{=}+\sqrt{T}(\beta-\hat{\beta})'(1/T)\sum\limits_{t=1}^{T}(\varepsilon_tx_{t-1}+\varepsilon_{t-1}x_{t})\\
+&\textcolor{white}{=}+\sqrt{T}(\beta-\hat{\beta})'\left[(1/T)\sum\limits_{t=1}^{T}x_tx_{t-1}'\right](\beta-\hat{\beta})'\\
+&\overset{p}{\to}(1/\sqrt{T})\sum\limits_{t=1}^{T}\varepsilon_t\varepsilon_{t-1}+\sqrt{T}(\beta-\hat{\beta})'0\\
+&\textcolor{white}{=}+\sqrt{T}(\beta-\hat{\beta})'\plim\left[(1/T)\sum\limits_{t=1}^{T}x_tx_{t-1}'\right]0\\
+&=(1/\sqrt{T})\sum\limits_{t=1}^{T}\varepsilon_t\varepsilon_{t-1}
+\end{split}
+\end{align}
+\endgroup
+Hence,
+\[
+\sqrt{T}\left[\frac{(1/T)\sum\limits_{t=1}^{T}\hat{\varepsilon}_t\hat{\varepsilon}_{t-1}}{(1/T)\sum\limits_{t=1}^{T}\hat{\varepsilon}_{t-1}^2}\right]\overset{p}{\to}\sqrt{T}\left[\frac{(1/T)\sum\limits_{t=1}^{T}\varepsilon_t\varepsilon_{t-1}}{(1/T)\sum\limits_{t=1}^{T}\varepsilon_{t-1}^2}\right]
+\]
+The OLS estimate of $\rho$ based on the population residuals would have an asymptotic distribution given by 
+\[
+\sqrt{T}\left[\frac{(1/T)\sum\limits_{t=1}^{T}\hat{\varepsilon}_t\hat{\varepsilon}_{t-1}}{(1/T)\sum\limits_{t=1}^{T}\hat{\varepsilon}_{t-1}^2}\right]\overset{L}{\to} N(0,1-\rho^2)
+\]
+\end{frame}
+\begin{frame}[allowframebreaks]
+%\frametitle{References}
+%\bibliographystyle{apa}
+%\bibliography{References_HDStat}
+\end{frame}
+\end{document}

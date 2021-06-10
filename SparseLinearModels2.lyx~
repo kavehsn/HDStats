@@ -1,0 +1,2908 @@
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass beamer
+\begin_preamble
+\usetheme{Warsaw}
+\usepackage{graphicx}
+\usepackage{placeins}
+\usepackage{tabu}
+\usepackage{bbm}
+\usepackage{booktabs}
+\usepackage{bm}
+\usepackage{ragged2e}
+\usepackage{xcolor}
+\usepackage[super]{nth}
+
+
+\apptocmd{\frame}{}{\justifying}{} % Allow optional arguments after frame.
+
+\setbeamertemplate{frametitle continuation}{}
+
+\newcommand{\setItemnumber}[1]{\setcounter{enumi}{\numexpr#1-1\relax}}
+
+\DeclareMathOperator{\tr}{tr}
+
+\newcommand{\ts}{\textsuperscript}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\F}{\mathcal{F}}
+\newcommand{\vertiii}[1]{{\left\vert\kern-0.25ex\left\vert\kern-0.25ex\left\vert #1 
+    \right\vert\kern-0.25ex\right\vert\kern-0.25ex\right\vert}}
+
+
+\title[]{Random matrices and covariance estimation}
+\author[Kaveh S. Nobari]{Kaveh S. Nobari}
+\institute[]{Lectures in High-Dimensional Statistics}
+[27/10/2020]
+{Department of Mathematics and Statistics\\ Lancaster University}
+	
+\end_preamble
+\options handout
+\use_default_options false
+\begin_modules
+theorems-std
+\end_modules
+\maintain_unincluded_children false
+\language english
+\language_package none
+\inputencoding auto
+\fontencoding default
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize 10
+\spacing single
+\use_hyperref true
+\pdf_bookmarks false
+\pdf_bookmarksnumbered false
+\pdf_bookmarksopen false
+\pdf_bookmarksopenlevel 1
+\pdf_breaklinks false
+\pdf_pdfborder false
+\pdf_colorlinks true
+\pdf_backref section
+\pdf_pdfusetitle false
+\pdf_quoted_options "linkcolor=blue,filecolor=blue,urlcolor=blue,citecolor=black,"
+\papersize default
+\use_geometry true
+\use_package amsmath 2
+\use_package amssymb 2
+\use_package cancel 0
+\use_package esint 1
+\use_package mathdots 0
+\use_package mathtools 0
+\use_package mhchem 0
+\use_package stackrel 0
+\use_package stmaryrd 0
+\use_package undertilde 0
+\cite_engine natbib
+\cite_engine_type authoryear
+\biblio_style plainnat
+\biblio_options round
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date true
+\justification true
+\use_refstyle 0
+\use_minted 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{document}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset FormulaMacro
+\newcommand{\E}{\mathbb{{E}}}
+{\mathbb{E}}
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset FormulaMacro
+\newcommand{\R}{\mathbb{{R}}}
+{\mathbb{R}}
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset FormulaMacro
+\newcommand{\T}{\mathbb{{T}}}
+{\mathbb{T}}
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset FormulaMacro
+\newcommand{\C}{\mathbb{{C}}}
+{\mathbb{C}}
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset FormulaMacro
+\newcommand{\vertiii}{\vert\vert\vert}
+{\vert\vert\vert}
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+now let us consider the tangent cone of the 
+\begin_inset Formula $l_{1}$
+\end_inset
+
+-ball at 
+\begin_inset Formula $\theta^{*}$
+\end_inset
+
+, given by
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\T(\theta^{*})={\Delta\in\R^{d}\mid\lVert\theta^{*}+t\Delta\rVert_{1}\leq\lVert\theta^{*}\rVert_{1}\quad\text{for some\ensuremath{\quad} \ensuremath{t>0}}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The set 
+\begin_inset Formula $\T(\theta^{*})$
+\end_inset
+
+ captures the set of all directions relative to 
+\begin_inset Formula $\theta^{*}$
+\end_inset
+
+along which the 
+\begin_inset Formula $l_{1}$
+\end_inset
+
+-norm remains constant decreases.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+Proof
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename TangentCone.png
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The solid line 
+\begin_inset Formula $\theta^{*}+\textnormal{null}(X)$
+\end_inset
+
+ corresponds to the set of all vectors that are feasible for the basis pursuit
+ linear programme, in the sense that 
+\begin_inset Formula $X(\theta^{*}+\text{null}(X))=y$
+\end_inset
+
+.
+ In the above figures, if 
+\begin_inset Formula $\theta^{*}$
+\end_inset
+
+is optimal, then the tanget line 
+\begin_inset Formula $\theta^{*}+\text{null}(X)$
+\end_inset
+
+ must only intersect with the tangent cone at 
+\begin_inset Formula $\theta^{*}$
+\end_inset
+
+implying that 
+\begin_inset Formula $\text{null}(X)$
+\end_inset
+
+ at this point is zero vector.
+ The latter leads to the restricted nullspace property.
+ Let us define the cone set
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\C(S)={\Delta\in\R^{d}\mid\lVert\Delta_{S^{c}}\rVert_{1}\leq\lVert\Delta_{S}\rVert_{1}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+which corresponds to the cone of vectors whose 
+\begin_inset Formula $l_{1}$
+\end_inset
+
+-norm off the support 
+\begin_inset Formula $S^{c}$
+\end_inset
+
+ is dominated by the 
+\begin_inset Formula $l_{1}$
+\end_inset
+
+norm on the support 
+\begin_inset Formula $S$
+\end_inset
+
+.
+ Using the defined cone set, we can now formally define the restricted nullspace
+ property
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Definition:
+\end_layout
+
+\begin_layout Standard
+The matrix 
+\begin_inset Formula $X$
+\end_inset
+
+ is said to satisfy the restricted nullspace property wrt 
+\begin_inset Formula $S$
+\end_inset
+
+ if 
+\begin_inset Formula $\C(S)\cap\text{null}(X)={0}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Let us now consider an alternative way of capturing the behavior of the
+ tangent cone 
+\begin_inset Formula $\T(\theta^{*})$
+\end_inset
+
+ that is independent of 
+\begin_inset Formula $\theta^{*}$
+\end_inset
+
+, one which establishes that for any 
+\begin_inset Formula $S$
+\end_inset
+
+-sparse vector 
+\begin_inset Formula $\theta^{*}$
+\end_inset
+
+, the tangent cone 
+\begin_inset Formula $\T(\theta^{*})$
+\end_inset
+
+ is contained within 
+\begin_inset Formula $\C(S)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Theorem:
+\end_layout
+
+\begin_layout Enumerate
+For any vector 
+\begin_inset Formula $\theta^{*}\in\R^{d},$
+\end_inset
+
+with support 
+\begin_inset Formula $S$
+\end_inset
+
+, the basis pursuit programme applied with 
+\begin_inset Formula $y=X\theta$
+\end_inset
+
+ has a unique solution - i.e., 
+\begin_inset Formula $\hat{\theta}=\theta^{*}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+The matrix 
+\begin_inset Formula $X$
+\end_inset
+
+ satisfies the restricted null space property wrt 
+\begin_inset Formula $S$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Proof:
+\end_layout
+
+\begin_layout Standard
+Since both 
+\begin_inset Formula $\hat{\theta}$
+\end_inset
+
+ and 
+\begin_inset Formula $\theta^{*}$
+\end_inset
+
+ are feasible for the basis pursuit programme, and since 
+\begin_inset Formula $\theta^{*}$
+\end_inset
+
+is optimal, we have 
+\begin_inset Formula $\lVert\hat{\theta}\rVert_{1}\leq\lVert\theta^{*}\rVert_{1}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Define the error vector 
+\begin_inset Formula $\hat{\Delta}$
+\end_inset
+
+as follows
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\hat{\Delta}:=\hat{\theta}-\theta^{*}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+from here we have
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+\lVert\theta_{S}^{*}\lVert_{1}=\lVert\theta^{*}\lVert_{1}\geq & \lVert\theta^{*}+\hat{\Delta}\rVert_{1}\\
+= & \lVert\theta_{S}^{*}+\hat{\Delta}_{S}\rVert_{1}+\lVert\hat{\Delta}_{S^{c}}\rVert_{1}
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+From the triangle inequality, we know that
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\lVert\theta_{S}^{*}\rVert_{1}-\lVert\hat{\Delta}_{S}\rVert_{1}\leq\lVert\theta_{S}^{*}+\hat{\Delta}_{S}\rVert_{1}\leq\lVert\theta_{S}^{*}+\hat{\Delta}_{S}\rVert_{1}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+therefore
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+\lVert\theta_{S}^{*}\lVert_{1}=\lVert\theta^{*}\lVert_{1}\geq & \lVert\theta^{*}+\hat{\Delta}\rVert_{1}\\
+= & \lVert\theta_{S}^{*}+\hat{\Delta}_{S}\rVert_{1}+\lVert\hat{\Delta}_{S^{c}}\rVert_{1}\\
+\geq & \lVert\theta_{S}^{*}\rVert_{1}-\lVert\hat{\Delta}_{S}\rVert_{1}+\lVert\hat{\Delta}_{S^{c}}\rVert_{1}
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+rearranging the above yields
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+\lVert\theta^{*}\rVert_{1}\geq & \lVert\theta_{S}^{*}\rVert_{1}-\lVert\hat{\Delta}_{S}\rVert_{1}+\lVert\hat{\Delta}_{S^{c}}\rVert_{1}\\
+\lVert\theta^{*}\rVert_{1}-\lVert\theta_{S}^{*}\rVert_{1}\geq & -\lVert\hat{\Delta}_{S}\rVert_{1}+\lVert\hat{\Delta}_{S^{c}}\rVert_{1}\\
+0\geq & -\lVert\hat{\Delta}_{S}\rVert_{1}+\lVert\hat{\Delta}_{S^{c}}\rVert_{1}\\
+\lVert\hat{\Delta}_{S}\rVert_{1}\geq & \lVert\hat{\Delta}_{S^{c}}\rVert_{1}
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+which proves that 
+\begin_inset Formula $\hat{\Delta}\in\C(S)$
+\end_inset
+
+.
+ However, by construction, 
+\begin_inset Formula $X\hat{\Delta}=0$
+\end_inset
+
+, which means that 
+\begin_inset Formula $\hat{\Delta}\in\text{null}(X)$
+\end_inset
+
+ too.
+ By the assumption imposed earlier, this implies that 
+\begin_inset Formula $\hat{\Delta}=0$
+\end_inset
+
+ or that 
+\begin_inset Formula $\hat{\theta}=\theta^{*}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Sufficient conditions for restricted nullspace
+\end_layout
+
+\begin_layout Standard
+In order to ensure that for any vector 
+\begin_inset Formula $\R^{d}$
+\end_inset
+
+with support 
+\begin_inset Formula $S$
+\end_inset
+
+, the basis pursuit programme applied with 
+\begin_inset Formula $y=X\theta^{*}$
+\end_inset
+
+has unique solution 
+\begin_inset Formula $\hat{\theta}=\theta^{*}$
+\end_inset
+
+, the matrix 
+\begin_inset Formula $X$
+\end_inset
+
+ has to satisfy the restricted nullspace property.
+ The earliest sufficient conditions were based on the incoherence parameter
+ of the design matrix, which is the quantity
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\delta_{pw}(X)=\max_{j,k=1,\cdots,d}\lvert\frac{\langle X_{j},X_{k}\rangle}{n}-1{j=k}\rvert
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where 
+\begin_inset Formula $X_{j}$
+\end_inset
+
+and 
+\begin_inset Formula $X_{k}$
+\end_inset
+
+are the 
+\begin_inset Formula $k$
+\end_inset
+
+th and 
+\begin_inset Formula $j$
+\end_inset
+
+th columns of the matrix 
+\begin_inset Formula $X$
+\end_inset
+
+ respectively and 
+\begin_inset Formula $1{.}$
+\end_inset
+
+ denotes an indicator function.
+ If 
+\begin_inset Formula $X$
+\end_inset
+
+ is rescaled by dividing by 
+\begin_inset Formula $\sqrt{n}$
+\end_inset
+
+, then 
+\begin_inset Formula $X_{j}'X_{j}=1$
+\end_inset
+
+, which makes is more readily interpretable.
+ The parameter 
+\begin_inset Formula $\delta_{pw}(X)$
+\end_inset
+
+ essentially defines the maximum absolute value of cross-correlations between
+ the columns of 
+\begin_inset Formula $X$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+In what follows, through Exercise 7.3 of Wainright (2019), it will be shown
+ that a small mutual (pairwise) incoherence is sufficient to guarantee a
+ uniform version of the restricted nullspace property.4
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Proposition:
+\end_layout
+
+\begin_layout Standard
+If the pairwise incoherence satisfies the bound
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\delta_{pw}(X)\leq\frac{1}{3s}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+then the restricted nullspace property holds for all subsets 
+\begin_inset Formula $S$
+\end_inset
+
+ of cardinality at most 
+\begin_inset Formula $s$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Proof:
+\end_layout
+
+\begin_layout Standard
+Choose a vector 
+\begin_inset Formula $\theta$
+\end_inset
+
+ such that 
+\begin_inset Formula $X\theta=0$
+\end_inset
+
+.
+ For some set 
+\begin_inset Formula $S$
+\end_inset
+
+ subject to 
+\begin_inset Formula $\vert S\vert\leq s$
+\end_inset
+
+, we have 
+\begin_inset Formula $\theta=\theta_{S}+\theta_{S^{c}}$
+\end_inset
+
+,and 
+\begin_inset Formula $X(\theta_{S}+\theta_{S^{c}})=0$
+\end_inset
+
+.
+ Thus, 
+\begin_inset Formula $X\theta_{S}=-X\theta_{S^{c}}$
+\end_inset
+
+.
+ Let us lower bound the 
+\begin_inset Formula $l_{2}$
+\end_inset
+
+norm of the left hand side of the former equation
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+\Vert\frac{X\theta_{S}}{\sqrt{n}}\Vert_{2}^{2}= & \frac{(X\theta_{S})'X\theta_{S}}{n}=\frac{\theta_{S}'X'X\theta_{S}}{n}\\
+= & \frac{\theta_{S}'X'X\theta_{S}}{n}-\theta_{S}'\theta_{S}+\theta_{S}'\theta_{S}\\
+= & \theta_{S}'\left(\frac{X'X}{n}-I\right)\theta_{S}+\text{\ensuremath{\Vert}\ensuremath{\theta_{S}\Vert_{2}^{2}}}
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+since we have the inequality
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+u'Mv\leq\Vert M\Vert_{2}\Vert u\Vert_{1}\Vert v\Vert_{1}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The term 
+\begin_inset Formula $\theta_{S}'\left(\frac{X'X}{n}-I\right)\theta_{S}$
+\end_inset
+
+can be expressed as follows
+\begin_inset Formula 
+\[
+\theta_{S}'\left(\frac{X'X}{n}-I\right)\theta_{S}\leq\vertiii\frac{X'X}{n}-I\vertiii_{2}\Vert\theta_{S}\Vert_{1}\Vert\theta_{S}\Vert_{1}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Thus, 
+\begin_inset Formula 
+\begin{align*}
+\Vert\frac{X\theta_{S}}{\sqrt{n}}\Vert_{2}^{2}= & \theta_{S}'\left(\frac{X'X}{n}-I\right)\theta_{S}+\text{\ensuremath{\Vert}\ensuremath{\theta_{S}\Vert_{2}^{2}}}\\
+\geq & -\vertiii\frac{X'X}{n}-I\vertiii_{2}\Vert\theta_{S}\Vert_{1}^{2}+\ensuremath{\Vert}\ensuremath{\theta_{S}\Vert_{2}^{2}}
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+since the mutual incoherence parameter is the smallest constant 
+\begin_inset Formula $\delta_{pw}(X)$
+\end_inset
+
+ such that 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\vertiii\frac{X'X}{n}-I\vertiii_{2}\leq\delta_{pw}(X)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+we would thus have
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+\Vert\frac{X\theta_{S}}{\sqrt{n}}\Vert_{2}^{2}= & \theta_{S}'\left(\frac{X'X}{n}-I\right)\theta_{S}+\text{\ensuremath{\Vert}\ensuremath{\theta_{S}\Vert_{2}^{2}}}\\
+\geq & -\vertiii\frac{X'X}{n}-I\vertiii_{2}\Vert\theta_{S}\Vert_{1}^{2}+\ensuremath{\Vert}\ensuremath{\theta_{S}\Vert_{2}^{2}}\\
+\geq & -\delta\lVert\theta_{S}\Vert_{1}^{2}+\lVert\theta_{S}\lVert_{2}^{2}
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Moreover, we have the inequality
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\lVert\theta_{S}\rVert_{1}\leq\sqrt{s}\lVert\theta_{S}\rVert_{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+which leads to 
+\begin_inset Formula 
+\begin{align}
+\Vert\frac{X\theta_{S}}{\sqrt{n}}\Vert_{2}^{2}= & \theta_{S}'\left(\frac{X'X}{n}-I\right)\theta_{S}+\text{\ensuremath{\Vert}\ensuremath{\theta_{S}\Vert_{2}^{2}}}\\
+\geq & -\vertiii\frac{X'X}{n}-I\vertiii_{2}\Vert\theta_{S}\Vert_{1}^{2}+\ensuremath{\Vert}\ensuremath{\theta_{S}\Vert_{2}^{2}}\\
+\geq & -\delta\lVert\theta_{S}\Vert_{1}^{2}+\lVert\theta_{S}\lVert_{2}^{2}\\
+\geq & -\delta s\lVert\theta_{S}\rVert_{2}^{2}+\lVert\theta_{S}\lVert_{2}^{2}=(1-\delta s)\lVert\theta_{S}\rVert_{2}^{2}
+\end{align}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Since 
+\begin_inset Formula $X\theta_{S}=-X\theta_{S^{c}}$
+\end_inset
+
+we would also have
+\begin_inset Formula 
+\begin{align}
+\Vert\frac{X\theta_{S}}{\sqrt{n}}\Vert_{2}^{2} & =\vert\theta_{S}'\left(\frac{X'X}{n}-I\right)\theta_{S}+\underbrace{\theta_{S}'\theta_{S^{c}}}_{=0}\vert\\
+ & \leq\delta\lVert\theta_{S}\rVert_{1}\lVert\theta_{S^{c}}\rVert_{1}\\
+ & \leq\delta\sqrt{s}\lVert\theta_{S}\rVert_{2}\lVert\theta_{S^{c}}\rVert_{1}
+\end{align}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Relating equations (1) and (5), we have
+\begin_inset Formula 
+\[
+(1-\delta s)\lVert\theta_{S}\rVert_{2}^{2}\leq\Vert\frac{X\theta_{S}}{\sqrt{n}}\Vert_{2}^{2}\leq\delta\sqrt{s}\lVert\theta_{S}\rVert_{2}\lVert\theta_{S^{c}}\rVert_{1}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Hence, we may write the above as
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align}
+(1-\delta s)\lVert\theta_{S}\rVert_{2}^{2} & \leq\delta\sqrt{s}\lVert\theta_{S}\rVert_{2}\lVert\theta_{S^{c}}\rVert_{1}\\
+\lVert\theta_{S}\rVert_{2}^{2} & \leq\frac{\delta\sqrt{s}}{(1-\delta s)}\lVert\theta_{S}\rVert_{2}\lVert\theta_{S^{c}}\rVert_{1}
+\end{align}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Recall the inequality 
+\begin_inset Formula $\lVert\theta_{S}\rVert_{1}\leq\sqrt{s}\lVert\theta_{S}\rVert_{2}$
+\end_inset
+
+.
+ Thus, multiplying equation (9) by 
+\begin_inset Formula $\sqrt{s}$
+\end_inset
+
+, we will have
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+\sqrt{s}\lVert\theta_{S}\rVert_{2}^{2} & \leq\frac{s\delta}{(1-\delta s)}\lVert\theta_{S}\rVert_{2}\lVert\theta_{S^{c}}\rVert_{1}\\
+\lVert\theta_{S}\rVert_{1}\leq\sqrt{s}\lVert\theta_{S}\rVert_{2} & \leq\frac{s\delta}{(1-\delta s)}\lVert\theta_{S}\rVert_{2}\lVert\theta_{S^{c}}\rVert_{1}
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Exercise 7.3:
+\series default
+ Given a matrix 
+\begin_inset Formula $X\in\R^{n\times d}$
+\end_inset
+
+, suppose that it has pairwise incoherence upper bounded as 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\delta_{pw}(X)<\frac{\gamma}{s},
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+Let 
+\begin_inset Formula $S\subset\{1,\cdots,d\}$
+\end_inset
+
+be any subset of size 
+\begin_inset Formula $s$
+\end_inset
+
+.
+ Show that there is a function 
+\begin_inset Formula $\gamma\to c(\gamma)$
+\end_inset
+
+ such that 
+\begin_inset Formula $\gamma_{\min}(\frac{X_{S}'X_{S}}{n})\geq c(\gamma)>0$
+\end_inset
+
+, as long as 
+\begin_inset Formula $\gamma$
+\end_inset
+
+ is sufficiently small.
+\end_layout
+
+\begin_layout Enumerate
+Prove that 
+\begin_inset Formula $X$
+\end_inset
+
+ satisfies the restricted nullspace property wrt 
+\begin_inset Formula $S$
+\end_inset
+
+ as long as 
+\begin_inset Formula $\gamma<\frac{1}{3}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+A more related but sophisticated sufficient condition is the Restricted
+ Isometry Property (RIP).
+ This can be understood as a generalisation of the pairwise incoherence
+ condition, based on looking at conditioning of larger subsets of columns.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Definion (Restricted isometry property): 
+\end_layout
+
+\begin_layout Standard
+For a given integer 
+\begin_inset Formula $s\in\{1,\cdots,d\}$
+\end_inset
+
+, we say that 
+\begin_inset Formula $X\in\R^{n\times d}$
+\end_inset
+
+ satisfies the RIP of order 
+\begin_inset Formula $s$
+\end_inset
+
+ with constant 
+\begin_inset Formula $\delta_{s}(X)>0$
+\end_inset
+
+, if 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\vertiii\frac{X_{S}'X_{S}}{n}-I_{s}\vertiii_{2}\leq\delta_{s}(X)\quad\text{for all subests \ensuremath{S} of size at most \ensuremath{s}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+For 
+\begin_inset Formula $s=1$
+\end_inset
+
+,we would have
+\begin_inset Formula 
+\begin{align*}
+\vertiii\frac{X_{j}'X_{j}}{n}-1\vertiii_{2} & \leq\delta_{1}\\
+\lvert\frac{\lVert X_{j}\rVert_{2}^{2}}{n}-1\rvert & \leq\delta_{1}
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+which implies
+\begin_inset Formula 
+\[
+1-\delta_{1}\leq\frac{\lVert X_{j}\rVert_{2}^{2}}{n}\leq1+\delta_{1}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+for all 
+\begin_inset Formula $j=1,\cdots,d$
+\end_inset
+
+.
+ Now consider 
+\begin_inset Formula $s=2$
+\end_inset
+
+, and suppose the matrix 
+\begin_inset Formula $X/\sqrt{n}$
+\end_inset
+
+ has unit-norm columns.
+ Then we would have
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\frac{X_{\{j,k\}}'X_{\{j,k\}}}{n}-\begin{bmatrix}1 & 0\\
+0 & 1
+\end{bmatrix}=\begin{bmatrix}\frac{\lVert X_{j}\rVert_{2}^{2}}{n}-1 & \frac{\langle X_{j,}X_{k}\rangle}{n}\\
+\frac{\langle X_{j},X_{k}\rangle}{n} & \frac{\lVert X_{k}\rVert_{2}^{2}}{n}-1
+\end{bmatrix}=\begin{bmatrix}0 & \frac{\langle X_{j,}X_{k}\rangle}{n}\\
+\frac{\langle X_{j,}X_{k}\rangle}{n} & 0
+\end{bmatrix}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Now let us consider the 
+\begin_inset Formula $l_{2}$
+\end_inset
+
+-matrix norm, which is the maximum singular value - i.e.,
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\vert\vert\vert\frac{X_{\{j,k\}}'X_{\{j,k\}}}{n}-I_{2}\vertiii_{2}=\max_{j\neq k}\lvert\frac{\langle X_{j,}X_{k}\rangle}{n}\rvert=\delta_{pw}(X)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{definition}[Sandwich relation]
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+For any matrix 
+\begin_inset Formula $X$
+\end_inset
+
+ any sparsity level 
+\begin_inset Formula $s\in{2,\cdots,d}$
+\end_inset
+
+, we have the sandwich relation
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\delta_{pw}(X)\leq\delta_{s}(X)\leq s\delta_{pw}(X)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+and neither bound can be improved in general.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{definition}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Although RIP imposes constraints on much larger submatrices than pairwise
+ incoherence, the magnitude of the constraints required to guarantee uniform
+ RNS property can be milder.
+ Suitable control on the RIP constants implies that the RNS property holds:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{proposition}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+If the RIP constant of order 
+\begin_inset Formula $2s$
+\end_inset
+
+ is bounded as 
+\begin_inset Formula $\delta_{2s}(X)<1/2$
+\end_inset
+
+, then the uniform RNS holds for any subset 
+\begin_inset Formula $S$
+\end_inset
+
+ of cardinality 
+\begin_inset Formula $\lvert S\rvert\leq s$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{proposition}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Like pairwise incoherence constant, control on the RIP constants is sufficient
+ condition for the BPLP to succeed.
+ A major advantage of the RIP is that for various classes of random design
+ matrices, it can be used to guarantee exactness of basis pursuit using
+ a sample size 
+\begin_inset Formula $n$
+\end_inset
+
+ 
+\bar under
+that is much smaller than that guaranteed by pairwise incoherence
+\bar default
+.
+ The RIP approach overcomes the 
+\begin_inset Quotes eld
+\end_inset
+
+quadratic barrier
+\begin_inset Quotes erd
+\end_inset
+
+ - i.e., the requirement that the sample size 
+\begin_inset Formula $n$
+\end_inset
+
+ scales quadratically in the sparsity 
+\begin_inset Formula $s$
+\end_inset
+
+, as in the pairwise incoherence approach.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+section{Estimation in noisy settings}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We now consider the noisy setting, in which we observe 
+\begin_inset Formula $(y,X)\in\R^{d}\times\R^{n\times d}$
+\end_inset
+
+, which are linked by the model
+\begin_inset Formula 
+\[
+y=X\theta^{*}+\underbrace{\varepsilon}_{\text{noise}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where 
+\begin_inset Formula $\varepsilon\in\R^{n}$
+\end_inset
+
+.
+ Thus, a natural extension of the basis pursuit programme introduced in
+ the noiseless setting is the Lasso programme, which is based on minimizing
+ a weighted combination of the term 
+\begin_inset Formula $\lVert y-X\theta\rVert_{2}^{2}$
+\end_inset
+
+ with the 
+\begin_inset Formula $l_{1}$
+\end_inset
+
+-norm penalty, say of the form
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\hat{\theta}\in\arg\min_{\theta\in\R^{d}}\left\{ \frac{1}{2n}\lVert y-X\theta\rVert_{2}^{2}+\lambda_{n}\lVert\theta\rVert_{1}\right\} 
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where 
+\begin_inset Formula $\lambda_{n}>0$
+\end_inset
+
+ is a regularisation parameter, which is chosen by the user.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{block}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Different constrained forms of Lasso are as follows
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\min_{\theta\in\R^{d}}\left\{ \frac{1}{2n}\lVert y-X\theta\rVert_{2}^{2}\right\} \quad\text{s.t. \ensuremath{\lVert\theta\rVert_{1}\leq R}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+for some 
+\begin_inset Formula $R>0$
+\end_inset
+
+, or 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\min_{\theta\in\R^{d}}\lVert\theta\rVert_{1}\quad\text{s.t. \ensuremath{\lVert y-X\theta\rVert_{2}^{2}\leq b^{2}}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+for some noise tolerance 
+\begin_inset Formula $b>0$
+\end_inset
+
+.
+ The latter is referred to as 
+\bar under
+relaxed basis pursuit
+\bar default
+ by 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+citet{Chenetal}
+\end_layout
+
+\end_inset
+
+.
+ By Lagrangian duality theory, all three families of convex programmes are
+ equivalent.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{block}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+subsection{Restricted eigenvalue condition}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Achieving perfect recovery is no longer feasible in noisy setting.
+ Therefore, we focus on bounding the 
+\begin_inset Formula $l_{2}$
+\end_inset
+
+-error 
+\begin_inset Formula $\lVert\hat{\theta}-\theta^{*}\rVert_{2}$
+\end_inset
+
+, between a Lasso solution 
+\begin_inset Formula $\hat{\theta}$
+\end_inset
+
+ and the unknown regression vector 
+\begin_inset Formula $\theta^{*}$
+\end_inset
+
+.
+ In noisy setting, the required condition is one that is slightly stronger
+ than the RNS property - namely that the 
+\bar under
+restricted eigenvalues of the matrix 
+\begin_inset Formula $\frac{X'X}{n}$
+\end_inset
+
+ are lower bounded over a cone
+\bar default
+.
+ In particular, for a constant 
+\begin_inset Formula $\alpha\geq1$
+\end_inset
+
+, let us define the set
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\C_{\alpha}(S):=\{\Delta\in\R^{d}\mid\lVert\Delta_{S^{c}}\rVert_{1}\leq\alpha\lVert\Delta_{S}\rVert_{1}\}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Notice that the above set is a special case of our definition in the RNS
+ property, which corresponds to the special case of 
+\begin_inset Formula $\alpha=1$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{definition}[Restricted eigenvalue condition]
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The matrix 
+\begin_inset Formula $X$
+\end_inset
+
+ satisfies the RE condition over 
+\begin_inset Formula $S$
+\end_inset
+
+ with parameters 
+\begin_inset Formula $(\kappa,\alpha)$
+\end_inset
+
+, if
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\frac{1}{n}\lVert X\Delta\rVert_{2}^{2}\geq\kappa\lVert\Delta\rVert_{2}^{2},\quad\forall\Delta\in\C_{\alpha}(S)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{definition}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The RE condition, strengthens the RNS property.
+ In particular, if the RE condition holds with parameters 
+\begin_inset Formula $(\kappa,1)$
+\end_inset
+
+ for any 
+\begin_inset Formula $\kappa>0$
+\end_inset
+
+, then the RNS property holds.
+ In what follows, we will prove that the error 
+\begin_inset Formula $\lVert\hat{\theta}-\theta^{*}\rVert_{2}$
+\end_inset
+
+in the Lasso condition is well controlled.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Intuition for the RE condition:
+\end_layout
+
+\begin_layout Standard
+In the optimisation problem
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\min_{\theta\in\R^{d}}\left\{ \frac{1}{2n}\lVert y-X\theta\rVert_{2}^{2}\right\} \quad\text{s.t. \ensuremath{\lVert\theta\rVert_{1}\leq R}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+let us consider the radius 
+\begin_inset Formula $R=\lVert\theta^{*}\lVert_{1}$
+\end_inset
+
+.
+ With this setting, the true parameter vector 
+\begin_inset Formula $\theta^{*}$
+\end_inset
+
+is feasible for the problem.
+ By definition, the Lasso estimate 
+\begin_inset Formula $\hat{\theta}$
+\end_inset
+
+minimised the quadratic cost function 
+\begin_inset Formula 
+\[
+L_{n}(\theta)=\frac{1}{2n}\lVert y-X\theta\rVert_{2}^{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+over the 
+\begin_inset Formula $l_{1}$
+\end_inset
+
+-ball of radius 
+\begin_inset Formula $R$
+\end_inset
+
+.
+ As 
+\begin_inset Formula $n\to\infty$
+\end_inset
+
+, it is expected that 
+\begin_inset Formula $\theta^{*}$
+\end_inset
+
+becomes a near-minimiser of the same cost function, so that 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+L_{n}(\hat{\theta})\approx L_{n}(\theta).
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+But when does closeness in cost imply that the error vector 
+\begin_inset Formula $\Delta:=\hat{\theta}-\theta^{*}$
+\end_inset
+
+is small? Let us first take a look at the following image
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename StrongConvex.png
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Standard
+As it is evident from the figure above there is a link between the cost
+ difference of the one-dimensional function 
+\begin_inset Formula $\delta L_{n}:=L_{n}(\theta^{*})-L_{n}(\hat{\theta})$
+\end_inset
+
+ and the error 
+\begin_inset Formula $\Delta=\hat{\theta}-\theta^{*}$
+\end_inset
+
+is controlled by the curvature of the cost function.
+ Which of the figures above are favorable and why? For a function in 
+\begin_inset Formula $d$
+\end_inset
+
+ dimensions, the curvature of a cost function is captured by the structure
+ of its Hessian matrix 
+\begin_inset Formula $\nabla^{2}L_{n}(\theta)$
+\end_inset
+
+, which is symmetric positive semidefinite matrix.
+\end_layout
+
+\begin_layout Standard
+Notice that in the special case of the quadratic cost function that underlies
+ the Lasso
+\begin_inset Formula 
+\[
+\nabla L_{n}(\theta)=\frac{1}{n}(\theta X'X-X'y)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+and the Hessian is calculated as 
+\begin_inset Formula 
+\[
+\nabla^{2}L_{n}(\theta)=\frac{1}{n}X'X
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+If we could guarantee that the eigenvalues of this matrix were uniformly
+ bounded away from zero, say that
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\frac{\lVert X\Delta\rVert_{2}^{2}}{n}\geq\kappa\lVert\Delta\rVert_{2}^{2}>0,\quad\forall\Delta\in\R^{d}\backslash\{0\}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+then we would be assured of having curvature in all directions.
+\end_layout
+
+\begin_layout Standard
+In the high-dimensional setting 
+\begin_inset Formula $d>n$
+\end_inset
+
+ and the Hessian is a 
+\begin_inset Formula $d\times d$
+\end_inset
+
+ with rank at most 
+\begin_inset Formula $n$
+\end_inset
+
+, so it is impossible to guarantee that it has positive curvature in all
+ directions.
+ The quadratic cost function always has the below form
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename StrongConvex1.png
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Although, it is curved in some directions, there is always 
+\begin_inset Formula $(d-n)$
+\end_inset
+
+-dimensional subspace of directions in which it is completely flat, and
+ consequently the uniform lower bound above is never satisfied.
+ Thus, it is necessary to relax the stringency of the uniform curvature
+ condition and 
+\bar under
+require that it holds only for a subset 
+\begin_inset Formula $\C_{\alpha}(S)$
+\end_inset
+
+ of vectors
+\bar default
+.
+ If we can be assured that the subset 
+\begin_inset Formula $\C_{\alpha}(S)$
+\end_inset
+
+ is well aligned with the curved direction of the Hessian, then a small
+ difference in the cost function will translate into bounds on the difference
+ between 
+\begin_inset Formula $\hat{\theta}$
+\end_inset
+
+ and 
+\begin_inset Formula $\theta^{*}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+subsection{Bounds on $l_2$-error for hard sparse models}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Let us now provide the bound on the error 
+\begin_inset Formula $\lVert\hat{\theta}-\theta^{*}\rVert_{2}$
+\end_inset
+
+in the case of a 
+\begin_inset Quotes eld
+\end_inset
+
+hard sparse
+\begin_inset Quotes erd
+\end_inset
+
+ vector 
+\begin_inset Formula $\theta^{*}$
+\end_inset
+
+.
+ In particular, let us impose the following conditions:
+\end_layout
+
+\begin_layout Enumerate
+The vector 
+\begin_inset Formula $\theta^{*}$
+\end_inset
+
+is supported on the subset 
+\begin_inset Formula $S\subseteq\{1,2,\cdots,d\}$
+\end_inset
+
+ with 
+\begin_inset Formula $\lvert S\rvert=s$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+The design matrix 
+\begin_inset Formula $X$
+\end_inset
+
+ satisfies the restricted eigenvalue condition
+\begin_inset Formula 
+\[
+\frac{1}{n}\lVert X\Delta\rVert_{2}^{2}\geq\kappa\lVert\Delta\rVert_{2}^{2},\quad\forall\Delta\in\C_{\alpha}(S)
+\]
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+with parameter 
+\begin_inset Formula $(\kappa,3)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+The following results provides bounds on the 
+\begin_inset Formula $l_{2}$
+\end_inset
+
+-error between any Lasso solution 
+\begin_inset Formula $\hat{\theta}$
+\end_inset
+
+ and the true vector 
+\begin_inset Formula $\theta^{*}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{theorem}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Under the above assumptions:
+\end_layout
+
+\begin_layout Enumerate
+Any solutions of the 
+\series bold
+Lagrangian Lasso
+\series default
+
+\begin_inset Formula 
+\[
+\hat{\theta}\in\min_{\theta\in\R^{d}}\left\{ \frac{1}{2n}\lVert y-X\theta\rVert_{2}^{2}+\lambda_{n}\lVert\theta\lVert_{1}\right\} 
+\]
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+with 
+\begin_inset Formula 
+\[
+\lambda_{n}\geq2\lVert\frac{X'\varepsilon}{n}\rVert_{\infty}
+\]
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+satisfies the bound
+\begin_inset Formula 
+\[
+\lVert\hat{\theta}-\theta^{*}\rVert_{2}\leq\frac{3}{\kappa}\sqrt{s}\lambda_{n}.
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+Any solution of the 
+\series bold
+constrained Lasso
+\series default
+
+\begin_inset Formula 
+\[
+\min_{\theta\in\R^{d}}\left\{ \frac{1}{2n}\lVert y-X\theta\rVert_{2}^{2}\right\} ,\quad\text{such that \ensuremath{\lVert\theta\rVert_{1}\leq\lVert\theta^{*}\rVert_{1},}}
+\]
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+satisfies the bound 
+\begin_inset Formula 
+\[
+\lVert\hat{\theta}-\theta^{*}\rVert_{2}\leq\frac{4}{\kappa}\sqrt{s}\lVert\frac{X'\varepsilon}{n}\rVert_{\infty}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+Finally, any solution to the 
+\series bold
+relaxed basis pursuit programme
+\series default
+
+\begin_inset Formula 
+\[
+\min_{\theta\in\R^{d}}\lVert\theta\rVert_{1}\quad\text{s.t. \ensuremath{\lVert y-X\theta\rVert_{2}^{2}\leq b^{2}}}
+\]
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+with 
+\begin_inset Formula $b^{2}\geq\frac{\lVert\varepsilon\rVert_{2}^{2}}{2n}$
+\end_inset
+
+ satisfies the bound
+\begin_inset Formula 
+\[
+\lVert\hat{\theta}-\theta^{*}\rVert_{2}\leq\frac{4}{\kappa}\sqrt{s}\lVert\frac{X'\varepsilon}{n}\rVert_{\infty}+\frac{2}{\sqrt{k}}\sqrt{b^{2}-\frac{\lVert\varepsilon\rVert_{2}^{2}}{2n}}
+\]
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+In addition, all these solutions satisfy the 
+\begin_inset Formula $l_{1}$
+\end_inset
+
+-bound 
+\begin_inset Formula $\lVert\hat{\theta}-\theta^{*}\rVert_{1}\leq4\sqrt{s}\lVert\hat{\theta}-\theta^{*}\rVert_{2}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{theorem}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The above results are 
+\bar under
+deterministic and apply to any set of linear regression equations
+\bar default
+.
+ However, the results involve 
+\bar under
+unknown quantities stated in terms of 
+\begin_inset Formula $\varepsilon$
+\end_inset
+
+ and/or 
+\begin_inset Formula $\theta^{*}$
+\end_inset
+
+
+\bar default
+ .
+ Obtaining results for specific statistical models - as determined by the
+ noise vector 
+\begin_inset Formula $\varepsilon$
+\end_inset
+
+ and the random design matrix 
+\begin_inset Formula $X$
+\end_inset
+
+ - involves bounding or approximating these quantities.
+ 
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Intuition:
+\end_layout
+
+\begin_layout Itemize
+Based on our earlier discussion of the role of convexity, naturally all
+ three upper bounds are inversely proportional to the restricted eigenvalue
+ constant 
+\begin_inset Formula $\kappa\geq0$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+Their scaling with 
+\begin_inset Formula $\sqrt{s}$
+\end_inset
+
+ is also natural, since we are trying to estimate the unknown regression
+ vector with 
+\begin_inset Formula $s$
+\end_inset
+
+ unknown entries.
+\end_layout
+
+\begin_layout Itemize
+The remaining terms involve the unknown noise vector.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Before, we carry on with an example for classical linear Gaussian models,
+ let us first preface the theory, with Exercise 2.12 of the second chapter.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Exercise 2.12 (Upper bounds for sub-Gaussian maxima):
+\series default
+ Let 
+\begin_inset Formula $\{X_{i}\}_{i=1}^{n}$
+\end_inset
+
+be a sequence of zero mean random variables, each sub-Gaussian with parameter
+ 
+\begin_inset Formula $\sigma$
+\end_inset
+
+.
+ (No independence assumption are needed).
+ Prove that 
+\begin_inset Formula 
+\[
+\E[\max_{i=1,\cdots,n}X_{i}]\leq\sqrt{2\sigma^{2}\log n}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+For any 
+\begin_inset Formula $\lambda>0$
+\end_inset
+
+, we can use the convexity of the exponential function and Jensen's inequality
+ to obtain 
+\begin_inset Formula 
+\[
+\exp\{\lambda\E[\max_{i=1,\cdots,n}X_{i}]\}\leq\E[\exp{\lambda\max_{i=1,\cdots,n}X_{i}}]
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+using the monotonicity of exponential function
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\E[\exp{\lambda\max_{i=1,\cdots,n}X_{i}}]=\E[\max_{i=1,\cdots,n}\exp{\lambda X_{i}}]\leq\sum_{i=1}^{n}\E[\exp{\lambda X_{i}}]\leq n\exp{\frac{\lambda^{2}\sigma^{2}}{2}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+hence, 
+\begin_inset Formula $\E[\max_{i=1,\cdots,n}X_{i}]\leq\frac{\log n}{\lambda}+\lambda\frac{\sigma^{2}}{2}$
+\end_inset
+
+ and optimising over 
+\begin_inset Formula $\lambda>0$
+\end_inset
+
+ yields 
+\begin_inset Formula $\lambda=\frac{\sqrt{2\log n}}{\sigma}$
+\end_inset
+
+; substituting 
+\begin_inset Formula 
+\[
+\E[\max_{i=1,\cdots,n}X_{i}]\leq\frac{\sigma}{\sqrt{2}}\sqrt{\log n}+\frac{\sigma}{\sqrt{2}}\sqrt{\log n}=\sqrt{2\sigma^{2}\log n}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Example (Classical linear Gaussian model):
+\series default
+ 
+\end_layout
+
+\begin_layout Standard
+Consider a classical linear Gaussian model with noise vector 
+\begin_inset Formula $\varepsilon\in\R^{n}$
+\end_inset
+
+with i.i.d.
+ 
+\begin_inset Formula $N(0,\sigma^{2})$
+\end_inset
+
+ entries.
+ Let us consider a fixed design matrix 
+\begin_inset Formula $X\in\R^{n\times d}$
+\end_inset
+
+.
+ Suppose that matrix 
+\begin_inset Formula $X$
+\end_inset
+
+ satisfies the RE condition over 
+\begin_inset Formula $S$
+\end_inset
+
+ with parameters 
+\begin_inset Formula $(\kappa,\alpha)$
+\end_inset
+
+, meaning that
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\frac{1}{n}\lVert X\Delta\rVert_{2}^{2}\geq\kappa\lVert\Delta\rVert_{2}^{2},\quad\forall\Delta\in\C_{\alpha}(S)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+and that is 
+\begin_inset Formula $C$
+\end_inset
+
+ column normalised, meaning that 
+\begin_inset Formula $\max_{j=1,\cdots,d}\frac{\lVert X_{j}\rVert_{2}}{\sqrt{n}}\leq C$
+\end_inset
+
+.
+ With this setup, the r.v.
+ 
+\begin_inset Formula $\lVert\frac{X'\varepsilon}{n}\rVert_{\infty}$
+\end_inset
+
+ corresponds to the absolute maximum of 
+\begin_inset Formula $d$
+\end_inset
+
+ zero-mean Gaussian variables, each with variance at most 
+\begin_inset Formula $\frac{C^{2}\sigma^{2}}{n}$
+\end_inset
+
+.
+ From exercise 2.12, it is evident that
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+P\left[\lVert\frac{X'\varepsilon}{n}\rVert_{\infty}\geq C\sigma\left(\sqrt{\frac{2\log d}{n}}+\delta\right)\right]\leq2\exp\left(-\frac{n\delta^{2}}{2}\right),\quad\forall\delta>0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Now let us set 
+\begin_inset Formula $\lambda_{n}=2C\sigma\left(\sqrt{\frac{2\log d}{n}}+\delta\right)$
+\end_inset
+
+, which would turn 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+\lVert\frac{X'\varepsilon}{n}\rVert_{\infty}\geq C\sigma\left(\sqrt{\frac{2\log d}{n}}+\delta\right)= & 2\lVert\frac{X'\varepsilon}{n}\rVert_{\infty}\geq2C\sigma\left(\sqrt{\frac{2\log d}{n}}+\delta\right)\\
+= & 2\lVert\frac{X'\varepsilon}{n}\rVert_{\infty}\geq\lambda_{n}
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+From Theorem 7.13, we have that the optimal solution to of the Lagrangian
+ Lasso satisfies the bound
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\lVert\hat{\theta}-\theta^{*}\rVert_{2}\leq\frac{6C\sigma}{\kappa}\sqrt{s}\left\{ \sqrt{\frac{2\log d}{n}}+\delta\right\} 
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+with probability at least 
+\begin_inset Formula $1-2\exp\left(-\frac{n\delta^{2}}{2}\right)$
+\end_inset
+
+.
+ The same Theorem can be used to show the bounds for the constrained Lasso.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{block}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The most significant difference between the constrained Lasso and the Lagrangian
+ Lasso is that the Constrained Lasso assumed exact knowledge of the 
+\begin_inset Formula $l_{1}$
+\end_inset
+
+-norm 
+\begin_inset Formula $\lVert\theta^{*}\rVert_{1}$
+\end_inset
+
+, whereas the Lagrangian Lasso only requires knowledge of the noise variance
+ 
+\begin_inset Formula $\sigma^{2}$
+\end_inset
+
+.
+ As you may suspect, in practice it is straightforward to estimate the noise
+ variance, whereas the 
+\begin_inset Formula $l_{1}$
+\end_inset
+
+-norm is a more delicate object.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{block}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Example (Compressed sensing):
+\end_layout
+
+\begin_layout Standard
+In the domain of compressed sensing,the design matrix 
+\begin_inset Formula $X$
+\end_inset
+
+ can be chosen by the user, and one standard choice is the standard Gaussian
+ matrix with i.i.d.
+ 
+\begin_inset Formula $N(0,1)$
+\end_inset
+
+ entries.
+ Suppose that the noise vector 
+\begin_inset Formula $\varepsilon\in\R^{n}$
+\end_inset
+
+is deterministic, say with bounded entries 
+\begin_inset Formula $(\lVert\varepsilon\rVert{}_{\infty}\leq\sigma$
+\end_inset
+
+).
+ Under these assumptions, each variable 
+\begin_inset Formula $\frac{X_{j}'\varepsilon}{\sqrt{n}}$
+\end_inset
+
+ is a zero mean Gaussian with variance at most 
+\begin_inset Formula $\sigma^{2}$
+\end_inset
+
+.
+ Thus, by following the same argument as in the preceding example, we conclude
+ that Lasso will again satisfy the bound
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\lVert\hat{\theta}-\theta^{*}\rVert_{2}\leq\frac{6\sigma}{\kappa}\sqrt{s}\left\{ \sqrt{\frac{2\log d}{n}}+\delta\right\} 
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+with 
+\begin_inset Formula $C=1$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+In what follows, we prove the bounds on the 
+\begin_inset Formula $l_{2}$
+\end_inset
+
+- error between any Lasso solution 
+\begin_inset Formula $\hat{\theta}$
+\end_inset
+
+and the true vector 
+\begin_inset Formula $\theta^{*}$
+\end_inset
+
+.
+ Let us first consider the constrained Lasso
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\min_{\theta\in\R^{d}}\left\{ \frac{1}{2n}\lVert y-X\theta\rVert_{2}^{2}\right\} ,\quad\text{such that \ensuremath{\lVert\theta\rVert_{1}\leq R,}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Given the choice 
+\begin_inset Formula $R=\lVert\theta^{*}\rVert_{1}$
+\end_inset
+
+, the tangent vector 
+\begin_inset Formula $\theta^{*}$
+\end_inset
+
+ is feasible.
+ Since 
+\begin_inset Formula $\hat{\theta}$
+\end_inset
+
+ is optimal,we have the inequality
+\begin_inset Formula 
+\[
+\frac{1}{2n}\lVert y-X\hat{\theta}\rVert_{2}^{2}\leq\frac{1}{2n}\lVert y-X\theta^{*}\rVert_{2}^{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Let us define the error vector 
+\begin_inset Formula $\hat{\Delta}=\hat{\theta}-\theta^{*}.$
+\end_inset
+
+ Substituting 
+\begin_inset Formula $y$
+\end_inset
+
+ with 
+\begin_inset Formula $X\theta^{*}+\varepsilon$
+\end_inset
+
+ and expanding the above inequality we get
+\begin_inset Formula 
+\begin{align*}
+\frac{1}{2n}\lVert y-X\hat{\theta}\rVert_{2}^{2}\leq & \frac{1}{2n}\lVert y-X\theta^{*}\rVert_{2}^{2}\\
+\lVert X\theta^{*}+\varepsilon-X\hat{\theta}\rVert_{2}^{2}\leq & \lVert X\theta^{*}+\varepsilon-X\theta^{*}\rVert_{2}^{2}\\
+\lVert X(\theta^{*}-\hat{\theta})+\varepsilon\rVert_{2}^{2}\leq & \lVert\varepsilon\rVert_{2}^{2}\\
+\lVert X(\theta^{*}-\hat{\theta})\rVert_{2}^{2}+\lVert\varepsilon\rVert_{2}^{2}+2\varepsilon'X(\theta^{*}-\hat{\theta})\leq & \lVert\varepsilon\rVert_{2}^{2}\\
+\lVert X(\theta^{*}-\hat{\theta})\rVert_{2}^{2}+2\varepsilon'X(\theta^{*}-\hat{\theta})\leq & 0\\
+\lVert X\hat{\Delta}\rVert_{2}^{2}\leq & 2\varepsilon'X\hat{\Delta}\\
+\frac{\lVert X\hat{\Delta}\rVert_{2}^{2}}{n}\leq & \frac{2\varepsilon'X\hat{\Delta}}{n}
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{block}[Holder's inequality]
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Recall that for any 
+\begin_inset Formula $p\geq1$
+\end_inset
+
+,
+\begin_inset Formula 
+\[
+\E\lvert XY\rvert\leq\lVert X\rVert_{p}\lVert Y\rVert_{q}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where 
+\begin_inset Formula $q=p/(p-1)$
+\end_inset
+
+ if 
+\begin_inset Formula $p>1$
+\end_inset
+
+, and 
+\begin_inset Formula $q=\infty$
+\end_inset
+
+ if 
+\begin_inset Formula $p=1$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{block}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Given the above definition, we can apply Holder inequality to the right
+ hand-side of the penultimate inequality to obtain
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Formula 
+\begin{equation}
+\frac{\lVert X\hat{\Delta}\rVert_{2}^{2}}{n}\leq2\lVert\frac{X'\varepsilon}{n}\rVert_{\infty}\lVert\hat{\Delta}\rVert_{1}
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+As it was shown in an earlier Theorem, whenever 
+\begin_inset Formula $\lVert\hat{\theta}\rVert_{1}\leq\lVert\theta^{*}\rVert_{1}$
+\end_inset
+
+for an 
+\begin_inset Formula $S$
+\end_inset
+
+-sparse vector, the error
+\begin_inset Formula $\hat{\Delta}$
+\end_inset
+
+belongs to the cone 
+\begin_inset Formula $\C_{1}(S)$
+\end_inset
+
+, whence
+\begin_inset Formula 
+\[
+\lVert\hat{\Delta}\rVert_{1}=\lVert\hat{\Delta}_{S}\rVert_{1}+\lVert\hat{\Delta}_{S^{c}}\rVert_{1}\leq2\lVert\hat{\Delta}_{S}\rVert_{1}\leq2\sqrt{s}\lVert\hat{\Delta}\rVert_{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Since 
+\begin_inset Formula $\C_{1}(S)$
+\end_inset
+
+ is a subset of 
+\begin_inset Formula $\C_{3}(S)$
+\end_inset
+
+, we may apply the restricted eigenvalue condition to the left hand side
+ of inequality (10), thereby obtaining 
+\begin_inset Formula 
+\[
+\frac{\lVert X\hat{\Delta}\rVert_{2}^{2}}{n}\geq\kappa\lVert\hat{\Delta}\rVert_{2}^{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Putting all this together yields the claimed bound.
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+section{Restricted nullspace and eigenvalues for random designs}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The earlier Theorem assumed that the design matrix 
+\begin_inset Formula $X$
+\end_inset
+
+ satisfies the restricted eigenvalue condition (RE).
+ In practice, it is difficult to verify that a given design matrix 
+\begin_inset Formula $X$
+\end_inset
+
+ satisfies this condition.
+ However, it is possible to give high-probability results in the case of
+ random design matrices.
+ As discussed previously, pairwise incoherence and RIP conditions are one
+ way in which to certify the restricted nullspace and eigenvalue properties,
+ and are well suited to isotropic designs (in which the population covariance
+ matrix of the rows 
+\begin_inset Formula $X_{i}$
+\end_inset
+
+ is the identity).
+ Many other random design matrices encountered in practice do not have such
+ an isotropic structure, so that it is desirable to have alternative direct
+ verifications of the restricted nullspace property.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{theorem}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Consider a random matrix 
+\begin_inset Formula $X\in\R^{n\times d},$
+\end_inset
+
+in which each row 
+\begin_inset Formula $x_{i}\in\R^{d}$
+\end_inset
+
+ is drawn i.i.d from 
+\begin_inset Formula $N(0,\Sigma)$
+\end_inset
+
+ distribution.
+ Then there are universal positive constants 
+\begin_inset Formula $c_{1}<1<c_{2}$
+\end_inset
+
+ such that
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\frac{\lVert X\theta\rVert_{2}^{2}}{n}\geq c_{1}\lVert\sqrt{\Sigma}\theta\rVert_{2}^{2}-c_{2}\rho^{2}(\Sigma)\frac{\log d}{n}\lVert\theta\rVert_{1}^{2}\quad\forall\theta\in\R^{d}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+with probability at least 
+\begin_inset Formula $1-\frac{\exp(-n/32)}{1-\exp(-n/32)}$
+\end_inset
+
+, where 
+\begin_inset Formula $\rho^{2}(\Sigma)$
+\end_inset
+
+ is the maximum diagonal entry of the covariance matrix 
+\begin_inset Formula $\Sigma$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{theorem}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The above Theorem can be used to establish restricted nullspace and eigenvalue
+ conditions for various matrix ensembles that do not satisfy incoherence
+ or RIP conditions.
+ 
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Example (Geometric decay): 
+\end_layout
+
+\begin_layout Standard
+Consider a covariance matrix with Toeplitz structure 
+\begin_inset Formula $\Sigma_{ij}=\nu^{\lvert i-j\rvert}$
+\end_inset
+
+for some parameter 
+\begin_inset Formula $\nu\in[0,1)$
+\end_inset
+
+.
+ This type of geometrically decaying covariance structure arises naturally
+ from autoregressive processes, e.g.,
+\begin_inset Formula 
+\[
+\begin{bmatrix}\text{1} & \nu & \nu^{2} & \cdots & \nu^{n-2} & \nu^{n-1}\\
+\nu & 1 & \nu & \nu^{2} & \vdots & \nu^{n-2}\\
+\nu^{2} & \nu & 1 & \nu & \ddots & \vdots\\
+\vdots & \nu^{2} & \ddots & \ddots & \ddots & \nu^{2}\\
+\nu^{n-2} & \vdots & \ddots & \nu & 1 & \nu\\
+\nu^{n-1} & \nu^{n-2} & \cdots & \nu^{2} & \nu & 1
+\end{bmatrix}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document
