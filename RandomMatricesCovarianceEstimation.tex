@@ -10,7 +10,6 @@
 \usepackage{bm}
 \usepackage{ragged2e}
 \usepackage{hyperref}
-\usepackage{amsmath}
 \usepackage{xcolor}
 \usepackage[super]{nth}
 \hypersetup{
@@ -33,11 +32,13 @@
 \newcommand{\E}{\mathbb{E}}
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\F}{\mathcal{F}}
+\newcommand{\T}{\mathbb{T}}
+\renewcommand{\S}{\mathbb{S}}
 \newcommand{\vertiii}[1]{{\left\vert\kern-0.25ex\left\vert\kern-0.25ex\left\vert #1 
     \right\vert\kern-0.25ex\right\vert\kern-0.25ex\right\vert}}
 
-
-\title[]{Random matrices and covariance estimation}
+	
+\title[]{Wishart matrices and their behaviour}
 \author[Kaveh S. Nobari]{Kaveh S. Nobari}
 \institute[]{Lectures in High-Dimensional Statistics}
 \date[27/10/2020]
@@ -57,14 +58,14 @@
 \begin{frame}[allowframebreaks]{Motivation}
 The issue of covariance estimation is intertwined with random matrix theory, since sample covariance is a particular type of random matrix. These slides follow the structure of chapter 6 of \citet{wainwright2019high} to shed light on random matrices in a \textcolor{red}{non-asymptotic setting}, with the aim of \textcolor{red}{obtaining explicit deviation inequalities that hold for all sample sizes and matrix dimensions.}
 {\vskip 0.5em}
-In the classical framework of covariance matrix estimation the sample size $n$ tends to infinity while the matrix dimension $d$ is fixed; in this setting the behaviour of sample covariance matrix is characterized by the usual limit theory. In contrast, in high-dimensional settings the data dimension is either comparable to the sample size $(d\asymp n)$ or possibly much larger than the sample size $d\gg n$.
+In the classical framework of covariance matrix estimation, the sample size $n$ tends to infinity while the matrix dimension $d$ is fixed; in this setting the behavior of sample covariance matrix is characterized by the usual limit theory. In contrast, in high-dimensional settings the data dimension is either comparable to the sample size $(d\asymp n)$ or possibly much larger than the sample size $d\gg n$.
 {\vskip0.5em}
 We begin with the simplest case, namely ensembles of Gaussian random matrices, and we then discuss more general sub-Gaussian ensembles, before moving to milder tail conditions.  
 \end{frame}
 
 \section{Preliminaries}
 \subsection{Notations in linear algebra}
-\frame{\tableofcontents[currentsection]}
+\frame{\tableofcontents[currentsection,currentsubsection]}
 
 
 
@@ -78,37 +79,37 @@ The maximum and minimum singular values are obtained by maximizing the \textquot
 \[
 \sigma_{\max}(A)=\max_{\forall x}\frac{\lVert Ax \rVert_2}{\lVert x\rVert_2},\quad \sigma_{\min}(A)=\min_{\forall x}\frac{\lVert Ax \rVert_2}{\lVert x\rVert_2}
 \]
-which is obtained when $x$ is the largest and smallest singular vectors respectively - i.e.
+which are obtained when $x$ is the largest and smallest singular vectors respectively - i.e.
 \[
-\sigma_{\max}(A)=\max_{v\in S^{m-1}}\frac{\lVert Av \rVert_2}{\lVert v\rVert_2},\quad \sigma_{\min}(A)=\min_{v\in S^{m-1}}\frac{\lVert Av \rVert_2}{\lVert v\rVert_2}
+\sigma_{\max}(A)=\max_{v\in \S^{m-1}}\frac{\lVert Av \rVert_2}{\lVert v\rVert_2},\quad \sigma_{\min}(A)=\min_{v\in \S^{m-1}}\frac{\lVert Av \rVert_2}{\lVert v\rVert_2}
 \]
-noting that $\lVert v\rVert_2=1$, since $S^{d-1}:=\{v\in\R^d\mid \lVert v\rVert_2=1\}$ is the Euclidean unit sphere in $\R^d$. We may denote
+noting that $\lVert v\rVert_2=1$, since $\S^{m-1}:=\{v\in\R^m\mid \lVert v\rVert_2=1\}$ is the Euclidean unit sphere in $\R^m$. We may denote
 \[
 \vertiii{A}_2=\sigma_{\max}(A)
 \]
-However, \textcolor{red}{covariance matrices are square symmetric matrices}, thus we must also focus on symmetric matrices in $\R^d$, denoted $S^{d\times d}:=\{Q\in\R^{d\times d}\mid Q=Q'\}$, as well as subset of semi-definite matrices given by
+However, \textcolor{red}{covariance matrices are square symmetric matrices}, thus we must also focus on symmetric matrices in $\R^d$, denoted $\S^{d\times d}:=\{Q\in\R^{d\times d}\mid Q=Q'\}$, as well as subset of semi-definite matrices given by
 \[
-S_{+}^{d\times d}:=\{Q\in S^{d\times d}\mid Q\geq 0\}.
+\S_{+}^{d\times d}:=\{Q\in \S^{d\times d}\mid Q\geq 0\}.
 \]
-Any matrix $Q\in S^{d\times d}$ is diagonalizable via unitary transformation, and let us denote the vector of eigenvalues of $Q$ by $\gamma(Q)\in\R^d$ ordered as 
+Any matrix $Q\in \S^{d\times d}$ is diagonalizable via unitary transformation, and let us denote the vector of eigenvalues of $Q$ by $\gamma(Q)\in\R^d$ ordered as 
 \[
 \gamma_{\max}(Q)=\gamma_1(Q)\geq \gamma_2(Q) \geq\cdots\geq\gamma_d(Q)=\gamma_{\min}(Q)
 \]
-Note the matrix $Q$ is semi-positive definite, which may be expressed as $Q\geq 0$, iff $\gamma_{\min}(Q)\geq 0$.
+Note the matrix $Q$ is positive semi-definite, which may be expressed as $Q\geq 0$, iff $\gamma_{\min}(Q)\geq 0$.
 
 The Rayleigh-Ritz variational characterization of the minimum and maximum eigenvalues 
 \[
-\gamma_{\max}(Q)=\max_{v\in S^{d-1}}v'Qv\quad\text{and}\quad\gamma_{\min}(Q)=\min_{v\in S^{d-1}}v'Qv
+\gamma_{\max}(Q)=\max_{v\in \S^{d-1}}v'Qv\quad\text{and}\quad\gamma_{\min}(Q)=\min_{v\in \S^{d-1}}v'Qv
 \]
 For symmetric matrix $Q$, the $l_2$ norm can be expressed as 
 \[
-\vertiii{Q}_2=\max\{\gamma_{\max}(Q), \lvert\gamma_{\min}(Q)\rvert\}:=\max_{v\in S^{d-1}}\lvert v'Qv\rvert
+\vertiii{Q}_2=\max\{\gamma_{\max}(Q), \lvert\gamma_{\min}(Q)\rvert\}:=\max_{v\in \S^{d-1}}\lvert v'Qv\rvert
 \]
 Finally, suppose we have a rectangular matrix $A\in\R^{n\times m}$, with $n\geq m$. We know that any rectangular matrix can be expressed using singular value decomposition (SVD hereafter), as follows 
 \[
 A=U\Sigma V'
 \]
-wher $U$ is an $n\times n$ unitary matrix, $\Sigma$ is an $n\times m$ rectangular diagonal matrix with non-negative real numbers on the diagonal up and $V$ is an $n\times n$ unitary matrix. Using SVD, we can express $A'A$ where
+where $U$ is an $n\times n$ unitary matrix, $\Sigma$ is an $n\times m$ rectangular diagonal matrix with non-negative real numbers on the diagonal up and $V$ is an $n\times n$ unitary matrix. Using SVD, we can express $A'A$ where
 \[
 A'A=V\Sigma' U'U\Sigma V'
 \]
@@ -123,7 +124,7 @@ Therefore, as the diagonal matrix $\Sigma$ contains the eigenvalues of matrix $A
 \end{frame}
 
 \subsection{Set-up of covariance estimation}
-\frame{\tableofcontents[currentsection]}
+\frame{\tableofcontents[currentsection,currentsubsection]}
 
 \begin{frame}[allowframebreaks]
 Let $\{x_1,\cdots,x_n\}$ be a collection of $n$ i.i.d samples from a distribution in $\R^d$ with zero mean and the covariance matrix $\Sigma$. A standard estimator of sample covariance matrix is
@@ -140,11 +141,11 @@ and the random matrix $\hat{\Sigma}$ is an \textcolor{red}{unbiased} estimator o
 \]
 where,
 \begin{align*}
-\vertiii{\hat{\Sigma}-\Sigma}_2&=\max_{v\in S^{d-1}}\left\lvert v'\left\{\frac{1}{n}\sum\limits_{i=1}^{n}x_ix_i'-\Sigma\right\}v \right\rvert\\
-&=\max_{v\in S^{d-1}}\left\lvert\frac{1}{n}\sum\limits_{i=1}^{n}v'x_ix_i'v-v'\Sigma v \right\rvert\\
-&=\max_{v\in S^{d-1}}\left\lvert\frac{1}{n}\sum\limits_{i=1}^{n}\langle x_i,v_i\rangle^2-v'\Sigma v \right\rvert\leq\varepsilon
+\vertiii{\hat{\Sigma}-\Sigma}_2&=\max_{v\in \S^{d-1}}\left\lvert v'\left\{\frac{1}{n}\sum\limits_{i=1}^{n}x_ix_i'-\Sigma\right\}v \right\rvert\\
+&=\max_{v\in \S^{d-1}}\left\lvert\frac{1}{n}\sum\limits_{i=1}^{n}v'x_ix_i'v-v'\Sigma v \right\rvert\\
+&=\max_{v\in \S^{d-1}}\left\lvert\frac{1}{n}\sum\limits_{i=1}^{n}\langle x_i,v_i\rangle^2-v'\Sigma v \right\rvert\leq\varepsilon
 \end{align*}
-which suggests that controlling the deviation $\vertiii{\hat{\Sigma}-\Sigma}_2$ is equivalent to establishing a ULLN for the class of functions $x\to\langle x,v \rangle^2$, indexed by vectors $v\in S^{d-1}$.
+which suggests that controlling the deviation $\vertiii{\hat{\Sigma}-\Sigma}_2$ is equivalent to establishing a ULLN for the class of functions $x\to\langle x,v \rangle^2$, indexed by vectors $v\in \S^{d-1}$.
 
 \begin{definition}[Weyl's Inequality]
 \begin{itemize}
@@ -155,9 +156,9 @@ which suggests that controlling the deviation $\vertiii{\hat{\Sigma}-\Sigma}_2$ 
 \end{align*}
 \item[(II)]Given any \textcolor{red}{real symmetric matrices} A, B,
 \[
-\lvert \gamma_k(A)-\gamma_k(B)\rvert\leq\vertiii{(A-B)}_2
+\lvert \gamma_k(A)-\gamma_k(B)\rvert\leq\vertiii{(A-B)}_2.
 \]
-(see \citet{dasgupta2008asymptotic}).
+[see \citet{dasgupta2008asymptotic}]
 \end{itemize}¸
 \end{definition}
 Control in the operator norm further guarantees that the eigenvalues of $\hat{\Sigma}$ are uniformly close to those of $\Sigma$. Furthermore, given Weyl's inequality II above, we have
@@ -170,12 +171,12 @@ Note that the random matrix $X\in\R^{n\times d}$ has the vectors $x_i'$ on its $
 \]
 and hence, the eigenvalues of $\hat{\Sigma}$ are the squares of the singular values of $X/\sqrt{n}$.
 \end{frame}
-\section{Wishart matrices and their behaviour}
+\section{Wishart matrices and their behavior}
 \frame{\tableofcontents[currentsection]}
 
 \begin{frame}
 \begin{definition}[Gaussian ensembles and Wishart distribution]
-Suppose that each sample $x_i$ of a matrix $X\in\R^{n\times d}$ is drawn from an i.i.d multivariate $N(0,\Sigma)$ distribution. In this case we say that the associated matrix $X\in n\times d$, with $x_i'$ and its $i\ts{th}$ row, is drawn from the $\Sigma$-Gaussian ensemble. The associated sample covariance $\hat{\Sigma}=\frac{1}{n}X'X$ is said to follow a multivariate Wishart distribution.
+Suppose that each sample $x_i$ of a matrix $X\in\R^{n\times d}$ is drawn from an i.i.d multivariate $N(0,\Sigma)$ distribution. In this case we say that the associated matrix $X\in n\times d$, with $x_i'$ and its $i\ts{th}$ row, is drawn from the $\Sigma$-Gaussian ensemble. The associated sample covariance $\hat{\Sigma}=\frac{1}{n}X'X$ is said to follow a \textcolor{red}{multivariate Wishart distribution}.
 \end{definition}
 Following \citet{wainwright2019high}, we present deviation inequalities for $\Sigma$-Gaussian ensembles and present a few examples before proving said inequalities.
 \end{frame}
@@ -183,16 +184,17 @@ Following \citet{wainwright2019high}, we present deviation inequalities for $\Si
 \begin{theorem}
 Let $X\in\R^{n\times d}$ be drawn according to the $\Sigma$-Gaussian ensemble. Then for $\delta>0$, the maximum singular value $\sigma_{\max}(X)$ satisfies the upper deviation inequality
 \[
-P\left[\frac{\sigma_{\max}(X)}{\sqrt{n}}\geq \gamma_{\max}(\sqrt{\Sigma})(1+\delta)+\sqrt{\frac{\tr(\Sigma)}{n}}\right]\leq\exp\left(-\frac{n\delta^2}{2}\right)
+P\left[\frac{\sigma_{\max}(X)}{\sqrt{n}}\geq \gamma_{\max}(\sqrt{\Sigma})(1+\delta)+\sqrt{\frac{\tr(\Sigma)}{n}}\right]\leq\exp\left(-\frac{n\delta^2}{2}\right).
 \]
 Furthermore, for $n\geq d$, the minimum singular value $\sigma_{\min}(X)$ satisfies the lower deviation inequality
 \[
-P\left[\frac{\sigma_{\min}(X)}{\sqrt{n}}\leq \gamma_{\min}(\sqrt{\Sigma})(1-\delta)-\sqrt{\frac{\tr(\Sigma)}{n}}\right]\leq\exp\left(-\frac{n\delta^2}{2}\right)
+P\left[\frac{\sigma_{\min}(X)}{\sqrt{n}}\leq \gamma_{\min}(\sqrt{\Sigma})(1-\delta)-\sqrt{\frac{\tr(\Sigma)}{n}}\right]\leq\exp\left(-\frac{n\delta^2}{2}\right).
 \]
 \end{theorem} 
 \end{frame}
 \begin{frame}[allowframebreaks]
 \textbf{Example (Norm bounds for standard Gaussian ensemble):} 
+
 Consider $W\in\R^{n\times d}$ generated with i.i.d $N(0,1)$ entries, which leads to the $I_d$-Gaussian ensemble. Given the above Theorem, it can be concluded that for $n\geq d$
 \[
 \frac{\sigma_{\max}(W)}{\sqrt{n}}\leq 1+\delta+\sqrt{\frac{d}{n}}\quad\text{and}\quad \frac{\sigma_{\min}(W)}{\sqrt{n}}\geq 1-\delta-\sqrt{\frac{d}{n}}
@@ -212,13 +214,13 @@ P\left[\frac{\sigma_{\min}(W)}{\sqrt{n}}\geq 1-\delta-\sqrt{\frac{d}{n}}\right]\
 \]
 Thus, it can easily be seen that both bounds hold with probability greater than $1-2\exp\left(-\frac{n\delta^2}{2}\right)$. As we recall, the eigenvalues of the symmetric covariance matrix $\hat{\Sigma}$ is the square of the singular values $W/\sqrt{n}$. Furthermore,
 \begin{align*}
-\vertiii{\hat{\Sigma}-\Sigma}_2&=\max_{v\in S^{d-1}}\left\lvert v'\left\{\frac{1}{n}W'W-I_d\right\}v\right\rvert\\
-&=\max_{v\in S^{d-1}}\left\lvert \frac{1}{n}v'(W'W)v-v'I_dv\right\rvert
+\vertiii{\hat{\Sigma}-\Sigma}_2&=\max_{v\in \S^{d-1}}\left\lvert v'\left\{\frac{1}{n}W'W-I_d\right\}v\right\rvert\\
+&=\max_{v\in \S^{d-1}}\left\lvert \frac{1}{n}v'(W'W)v-v'I_dv\right\rvert
 \end{align*}
 Note that $v'I_dv=\lVert v\rVert_2^2=1$. Thus,
 \begin{align*}
 \vertiii{\hat{\Sigma}-\Sigma}_2&=\vertiii{\frac{1}{n}W'W-I_d}_2\\
-&=\max_{v\in S^{d-1}}\left\lvert \frac{1}{n}v'(W'W)v-1\right\rvert
+&=\max_{v\in \S^{d-1}}\left\lvert \frac{1}{n}v'(W'W)v-1\right\rvert
 \end{align*}
 Moreover, we have
 \[
@@ -234,7 +236,8 @@ thus,
 \vertiii{\frac{1}{n}W'W-I_d}_2\leq 2\varepsilon+\varepsilon^2
 \]
 Note that $\frac{d}{n}\to 0$, thus, the sample covariance matrix $\hat{\Sigma}$ is a consistent estimate of the identity matrix $I_d$.
-
+\end{frame}
+\begin{frame}[allowframebreaks]
 \textbf{Example (Gaussian covariance estimation):} 
 
 Let $X\in\R^{n\times d}$ be a random matrix from the $\Sigma$-Gaussian ensemble. Noting that a if $X\sim N(0,\Sigma)$ it can equivalently be written as $X\sim\sqrt{\Sigma} N(0,I_d)$. So assuming that $W\sim N(0,I_d)$, we may express $X$ as $X=W\sqrt{\Sigma}$. Moreover, 
@@ -250,18 +253,20 @@ where $\varepsilon=\delta+\sqrt{\frac{d}{n}}$. Therefore,
 \[
 \frac{\vertiii{\hat{\Sigma}-\Sigma}_2}{\vertiii{\Sigma}_2}\leq 2\varepsilon+\varepsilon^2
 \]
-Therefore, the relative error above converges to zero, so long as $d/n\to 0$.
+with probability at least $1-2\exp{\left(\frac{-n\delta^2}{2}\right)}$. Therefore, the relative error above converges to zero, so long as $d/n\to 0$.
 \end{frame}
 \begin{frame}[allowframebreaks]
 To show the proof for the earlier Theorem first we recap a concept from the concentration inequalities chapter:
 \begin{block}{Recap (Theorem 2.26 of Wainwright):}
-Let $(X_1,\cdots,X_n)$ be a vector of i.i.d standard Gaussian variables, and let $f:\R^n\to\R$ be $L$-Lipschitz wrt to the Euclidean norm. Then the variable $f(X)-\E[f(X)]$ is sub-Gaussian with parameter at most L, and hence
+Let $(X_1,\cdots,X_n)$ be a vector of i.i.d standard Gaussian variables, and let $f:\R^n\to\R$ be $L$-Lipschitz with respect to the Euclidean norm. Then the variable $f(X)-\E[f(X)]$ is sub-Gaussian with parameter at most L, and hence
  \[
 P[\lvert f(X)-E[f(X)]\rvert\geq t]\leq2\exp\left(-\frac{t^2}{2L^2}\right),\quad \forall t\geq 0
 \]
 \end{block}
 
-\textbf{Example (Singular values of Gaussian random matrices):} For $n > d$, let $X\in \R^{n\times d}$ be a random matrix with i.i.d. $N(0,1)$ entries, and let
+\textbf{Example (Singular values of Gaussian random matrices):}
+
+ For $n > d$, let $X\in \R^{n\times d}$ be a random matrix with i.i.d. $N(0,1)$ entries, and let
 \[
 \sigma_1(X)\geq \sigma_2(X)\geq\cdots\geq\sigma_d(X)\geq 0 
 \]
@@ -288,7 +293,7 @@ Let us view the mapping $W\to\frac{\sigma_{\max}(W\sqrt{\Sigma})}{\sqrt{n}}$ as 
 \frac{\sigma_{\max}(W\sqrt{\Sigma})}{\sqrt{n}}&:= \frac{\vertiii{W\sqrt{\Sigma} }_2}{\sqrt{n}}\\
 &\leq\frac{\vertiii{W}_2\vertiii{\sqrt{\Sigma}}_2}{\sqrt{n}}
 \end{align*}
-Thus, it is evident that this function is Lipschitz function wrt to the Euclidean norm with constant at most $L=\bar{\sigma}_{\max}/\sqrt{n}$. Hence, by concentration of measure for Lipschitz functions of Gaussian random vectors, we conclude that
+Thus, it is evident that this function is Lipschitz function with respect to the Euclidean norm with constant at most $L=\bar{\sigma}_{\max}/\sqrt{n}$. Hence, by concentration of measure for Lipschitz functions of Gaussian random vectors, we conclude that
 \begin{align*}
 P\left[\frac{\sigma_{\max}(X)}{\sqrt{n}}-\frac{\E[\sigma_{\max}(X)]}{\sqrt{n}} \geq \delta\right]&\leq\exp\left(\frac{-\delta^2}{2L^2}\right)
 \end{align*}
@@ -303,43 +308,116 @@ Therefore, it is sufficient to show that
 \]
 Recall that the maximum singular value has the variational representation
 \[
-\sigma_{\max}(X)=\max_{v'\in S^{d-1}}\lVert Xv'\rVert_2,
+\sigma_{\max}(X)=\max_{v'\in \S^{d-1}}\lVert Xv'\rVert_2,
 \]
-where $S^{d-1}$ denotes the Euclidean unit sphere in $\R^d$. Since $X=W\sqrt{\Sigma}$, we may write the above expression as follows
+where $\S^{d-1}$ denotes the Euclidean unit sphere in $\R^d$. Since $X=W\sqrt{\Sigma}$, we may write the above expression as follows
 \begin{align*}
-\sigma_{\max}(X)&=\max_{v'\in S^{d-1}}\lVert W\underbrace{\sqrt{\Sigma}v'}_{v}\rVert_2\\
-&=\max_{v\in S^{d-1}(\Sigma^{-1})}\lVert Wv\rVert_2\\
-&=\max_{u\in S^{n-1}}\max_{v\in S^{d-1}(\Sigma^{-1})}u'Wv
+\sigma_{\max}(X)&=\max_{v'\in \S^{d-1}}\lVert W\underbrace{\sqrt{\Sigma}v'}_{v}\rVert_2\\
+&=\max_{v\in \S^{d-1}(\Sigma^{-1})}\lVert Wv\rVert_2\\
+&=\max_{u\in \S^{n-1}}\max_{v\in \S^{d-1}(\Sigma^{-1})}\underbrace{u'Wv}_{Z_{u,v}}
 \end{align*}
-where $S^{d-1}(\Sigma^{-1}):=\{v\in\R^d\mid\lVert\Sigma^{-\frac{1}{2}}v\rVert\}_2=1\}$ is an ellipse. 
+where $\S^{d-1}(\Sigma^{-1}):=\{v\in\R^d\mid\lVert\Sigma^{-\frac{1}{2}}v\rVert\}_2=1\}$ is an ellipse. Hence, obtaining bounds on the maximum singular value corresponds to controlling the supremum of the zero-mean Gaussian process $\{Z_{u,v},(u,v)\in \T\}$ indexed by the set $\T:=\S^{n-1}\times \S^{d-1}(\Sigma^{-1})$. 
 \end{frame}
-\section{Covariance matrices from sub-Gaussian ensembles}
-\frame{\tableofcontents[currentsection]}
+\begin{frame}[allowframebreaks]
+Let us now construct another Gaussian process, say $\{Y_{u,v},(u,v)\in\T\}$ such that 
+\[
+\E[(Z_{u,v}-Z_{\tilde{u},\tilde{v}})^2]\leq\E\left[(Y_{u,v}-Y_{\tilde{u},\tilde{v}})^2\right]\quad \forall \{(u,v),(\tilde{u},\tilde{v})\}\in\T
+\]
+\begin{Theorem}[Sudakov-Fernique]
+Given a pair of zero-mean $n$-dimensional Gaussian vectors $(X_1,\cdots,X_n)$ and $Y_1,\cdots,Y_n$, suppose that
+\[
+\E[(X_i-X_j)^2]\leq\E[(Y_i-Y_j)^2],\quad\forall (i,j)\in [n]\times [n]. 
+\]
+Then $\E[\max_{j=1,\cdots,n}X_j]\leq\E[\max_{j=1,\cdots,n}Y_j]$.
+\end{Theorem}
+Thus, from the results of the above Theorem, we can conclude that
+\[
+\E[\sigma_{\max}(X)]=\E[\max_{(u,v)\in\T}Z_{u,v}]\leq \E[\max_{(u,v)\in\T}Y_{u,v}]
+\] 
+\end{frame}
+\begin{frame}[allowframebreaks]
+Introducing the Gaussian process $Z_{u,v}:=u'Wv$, let us first compute the induced pseudo-metric $\rho_Z$. For the two pairs $(u,v)$ and $(\tilde{u},\tilde{v})$, we may assume $\lVert v\rVert_2\leq\lVert\tilde{v}\rVert_2$. Furthermore, let $\langle\langle .,.\rangle\rangle$ be the trace inner product, which is defined as follows
+\begin{definition}[Trace inner product]
+For any $n\times n$ matrix $A$, the trace is the sum of the diagonal entries, -i.e. $Tr(A)=\sum\limits_{i}a_{ii}$. On the other hand, for two $m\times n$ matrices $A$ and $B$, the Frobenius or Trace inner product is
+\[
+\langle\langle A,B\rangle\rangle=\sum_{ij}a_{ij}b_{ij}.
+\]
+Furthermore, 
+\[
+\langle\langle A,B\rangle\rangle=Tr(A'B)=Tr(BA').
+\]
+\end{definition} 
 
-\section{Bounds for general matrices}
-\subsection{Background on matrix analysis}
-\frame{\tableofcontents[currentsection,currentsubsection]}
-
-
-\subsection{Tail conditions for matrices}
-\frame{\tableofcontents[currentsection,currentsubsection]}
-
-
-\subsection{Matrix Chernoff approach and independent decompositions}
-\frame{\tableofcontents[currentsection,currentsubsection]}
-
-
-\subsection{Upper tail bounds for random matrices}
-\frame{\tableofcontents[currentsection,currentsubsection]}
-
-
-\subsection{Consequences for covariance matrices}
-\frame{\tableofcontents[currentsection,currentsubsection]}
-
-\section{Bounds for structured covariance matrices}
-\subsection{Unknown sparsity and thresholding}
-\frame{\tableofcontents[currentsection,currentsubsection]}
-
+It can be observed that $Z_{u,v}:=\langle\langle W,uv'\rangle\rangle$. Since the matrix $W$ has i.i.d $N(0,1)$ entries, we have
+\[
+\E[(Z_{u,v}-Z_{\tilde{u},\tilde{v}})^2]=\E\left[\left(\langle\langle W,uv'-\tilde{u}\tilde{v}\rangle\rangle\right)^2\right]=\vertiii{uv'-\tilde{u}\tilde{v}'}_F^2
+\]
+We may rearrange and expand the above Frobenius norm
+\begingroup
+\allowdisplaybreaks
+\begin{align*}
+\vertiii{uv'-\tilde{u}\tilde{v}'}_F^2&=\vertiii{u(v-\tilde{v})'+(u-\tilde{u})\tilde{v}'}_F^2\\
+&=\vertiii{u(v-\tilde{v})'}_F^2+\vertiii{(u-\tilde{u})\tilde{v}'}_F^2+2\langle\langle u(v-\tilde{v})',(u-\tilde{u})\tilde{v}\rangle\rangle\\
+&\leq \lVert u\rVert_2^2\lVert v-\tilde{v}\rVert_2^2+\lVert \tilde{v}\rVert_2^2\lVert u-\tilde{u}\rVert_2^2\\
+&\textcolor{white}{=}+2(\lVert u\rVert_2^2-\langle u,\tilde{u}\rangle)(\langle v,\tilde{v}\rangle-\lVert\tilde{v}\rVert_2^2)
+\end{align*}
+By the definition of set $\T$, we know that $\lVert u\rVert_2=\lVert \tilde{u}\rVert_2=1$, and we further have $\lVert u\rVert_2^2-\langle u,\tilde{u}\rangle\geq 0$. Recall the Cauchy-Schwarz inequality 
+\begin{definition}[Cauchy-Schwarz inequality]
+If $p=q=2$ and $1/p+1/q=1$, and if $\E[\lvert Y\rvert^p]<\infty$ and $\E[\lvert Z\rvert^q]<\infty$, then 
+\[
+\E[\lvert YZ\rvert]\leq [\E[\lvert Y\rvert]^2]^{1/2}[\E[\lvert Z\rvert]^2]^{1/2}
+\] 
+[see \citet{white2014asymptotic}]
+\end{definition}
+\endgroup
+Thus, using the Cauchy-Schwarz inequality, we have
+\[
+\lvert\langle v,\tilde{v}\rangle\rvert\leq \lVert v\rVert_2\lVert \tilde{v}\rVert_2
+\]
+Since from our earlier assumption $\lVert v\rVert_2\leq \lVert \tilde{v}\rVert_2$, it can further be concluded that
+\[
+\lvert\langle v,\tilde{v}\rangle\rvert\leq \lVert v\rVert_2\lVert \tilde{v}\rVert_2\leq\lVert\tilde{v}\rVert_2^2.
+\]
+Combining the above and the earlier results, it can be concluded that
+\[
+2(\lVert u\rVert_2^2-\langle u,\tilde{u}\rangle)(\langle v,\tilde{v}\rangle-\lVert\tilde{v}\rVert_2^2)\leq 0.
+\]
+Putting these findings together with the expansion of the Frobenius norm, we obtain
+\[
+\vertiii{uv'-\tilde{u}\tilde{v}'}_F^2\leq \lVert v-\tilde{v}\rVert_2^2+\lVert \tilde{v}\rVert_2^2\lVert u-\tilde{u}\rVert_2^2
+\]
+Furthermore, by the definition of the set $\S^{d-1}(\Sigma^{-1})$, we have $\lVert\tilde{v}\rVert_2\leq\bar{\sigma}_{\max}=\gamma_{\max}(\sqrt{\Sigma})$, and as a result
+\[
+\E[(Z_{u,v}-Z_{\tilde{u},\tilde{v}})^2]\leq \bar{\sigma}^2_{\max}\lVert u-\tilde{u}\rVert_2^2+\lVert v-\tilde{v}\rVert_2^2.
+\]
+Now let us  define the Gaussian process $Y_{u,z}:=\bar{\sigma}_{\max}\langle g,u\rangle+\langle h,v\rangle$, where $g\in\R^n$ and $h\in \R^d$ are standard Gaussian random vectors. By construction, 
+\[
+\E[(Y_{\theta}-Y_{\tilde{\theta}})^2]=\bar{\sigma}^2_{\max}\lVert u-\tilde{u}\rVert_2^2+\lVert v-\tilde{v}\rVert_2^2.
+\]
+\end{frame}
+\begin{frame}[allowframebreaks]
+Once again using the Sudakov-Fernique bound we conclude that
+\begingroup
+\allowdisplaybreaks
+\begin{align*}
+\E[\sigma_{\max}(X)]&\leq \E\left[\sup_{(u,v)\in\T} Y_{u,v}\right]\\
+&=\E\left[\bar{\sigma}_{\max}\sup_{u\in\S^{n-1}}\langle g,u\rangle+\sup_{v\in\S^{d-1}(\Sigma^{-1})}\langle h,v\rangle\right]\\
+&=\bar{\sigma}_{\max}\E\left[\sup_{u\in\S^{n-1}}\langle g,u\rangle\right]+\E\left[\sup_{v\in\S^{d-1}(\Sigma^{-1})}\langle h,v\rangle\right]\\
+&=\bar{\sigma}_{\max}\E\left[\lVert g\rVert_2\right]+\E\left[\lVert\sqrt{\Sigma}h\rVert_2\right]
+\end{align*}
+\endgroup
+\end{frame}
+\begin{frame}[allowframebreaks]
+By Jensen's inequality, we have
+\[
+\E[\lVert g\rVert_2]\leq\sqrt{n}
+\]
+and similarly
+\[
+\E[\lVert \sqrt{\Sigma}h\rVert_2]\leq \sqrt{\E[h'\Sigma h]}=\sqrt{Tr(\Sigma)}
+\]
+which establishes the result of the Theorem.
+\end{frame}
 \begin{frame}[allowframebreaks]
 \frametitle{References}
 \bibliographystyle{apa}
