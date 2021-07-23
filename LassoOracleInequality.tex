@@ -1,0 +1,299 @@
+\documentclass[10pt,handout,english]{beamer}
+\usetheme{Warsaw}
+\usepackage{graphicx}
+\usepackage{placeins}
+\usepackage{amsmath, amssymb}
+\usepackage{tabu}
+\usepackage{bbm}
+\usepackage{booktabs}
+\usepackage[round]{natbib}
+\usepackage{bm}
+\usepackage{ragged2e}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage[super]{nth}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=blue,      
+    urlcolor=blue,
+    citecolor=black,
+}
+
+\apptocmd{\frame}{}{\justifying}{} % Allow optional arguments after frame.
+
+\setbeamertemplate{frametitle continuation}{}
+
+\newcommand\setItemnumber[1]{\setcounter{enumi}{\numexpr#1-1\relax}}
+
+\DeclareMathOperator{\tr}{tr}
+
+\newcommand{\ts}{\textsuperscript}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\F}{\mathcal{F}}
+\newcommand{\T}{\mathbb{T}}
+\newcommand{\K}{\mathbb{K}}
+\newcommand{\A}{\mathcal{A}}
+\renewcommand{\S}{\mathbb{S}}
+\newcommand{\vertiii}[1]{{\left\vert\kern-0.25ex\left\vert\kern-0.25ex\left\vert #1 
+    \right\vert\kern-0.25ex\right\vert\kern-0.25ex\right\vert}}
+
+	
+\title[]{Restricted nullspace and eigenvalues for random designs}
+\author[Kaveh S. Nobari]{Kaveh S. Nobari}
+\institute[]{Lectures in High-Dimensional Statistics}
+\date[27/10/2020]
+{Department of Mathematics and Statistics\\ Lancaster University}
+	 
+
+\begin{document}
+\begin{frame}
+\titlepage
+\end{frame}
+
+\begin{frame}{Contents}
+\tableofcontents
+\end{frame}
+\section{Motivation}
+\frame{\tableofcontents[currentsection,currentsubsection]}
+\begin{frame}[allowframebreaks]{Motivation}
+\begin{itemize}
+\item Recall Theorem 7.13 of \citet{wainwright2019high}, which provides the bounds $\lVert\hat{\theta}-\theta^*\rVert_2$ for the Lagrangian Lasso, Constrained Lasso and the Relaxed Basis Pursuit Program, on the premise that the design matrix $X$ satisfies the restricted eigenvalue (RE) condition.\justifying
+\item In practice it is difficult to verify that a given design matrix $X$ satisfies this condition.\justifying
+\item It is, however, possible to give \textcolor{red}{high-probability results} in the case of \textcolor{red}{random design matrices}.\justifying
+\item \textcolor{red}{Pairwise incoherence} and \textcolor{red}{RIP} conditions are \textcolor{red}{sufficient} conditions to certify the restricted nullspace and eigenvalue properties, and are suitable for \textcolor{red}{isotropic} designs (i.e. Identity population covariance matrix for the rows $X_i$ of the matrix).
+\item The following Theorem provides results for random design matrices that do not necessarily have isotropic structure.
+\end{itemize}  
+\end{frame}
+
+\section{Preliminaries: Gaussian comparison inequalities}
+\subsection{A general comparison result}
+\frame{\tableofcontents[currentsection,currentsubsection]}
+\begin{frame}[allowframebreaks]{A general comparison result}
+We are given two Gaussian processes, say $\{Y_{\theta},\theta\in\T\}$ and $\{Z_{\theta},\theta\in\T\}$, both indexed by the same set $\T$. Suppose we wish to compare the two processes in some sense. Let 
+\[
+F(X):=\sup_{\theta\in\T}X_{\theta}
+\]
+and suppose we would like to assess the conditions under which $\E[F(X)]>\E[F(Y)]$ or vice-versa. The results which permit such comparisons are known as \textcolor{red}{Gaussian comparison inequalities}. 
+
+In general, it is useful to have a uniform control (or have a bound) on a random process, $(X_{\theta})_{\theta\in\T}$
+\[
+\E[\sup_{\theta\in\T}X_{\theta}].
+\]
+
+The suprema of Gaussain processes are defined by taking limits of maxima over finite subsets. Hence, it is sufficient to consider a \textcolor{red}{finite} $\T$, say $\T=\{1,\cdots,N\}$ for some integer $N$, where for convenience, we denote 
+\[
+[N]=\{1,\cdots,N\}.
+\]
+
+In what follows, we first consider general comparison inequalities and subsequently Slepian's comparison inequality for Gaussian processes. It essentially suggests that \textcolor{red}{the faster the process grows, the farther it gets} [see \citet{vershynin2018high}].
+\end{frame}
+\begin{frame}
+\begin{theorem}[A general comparison result]
+Let $(X_1,\cdots,X_N)$ and $(Y_1,\cdots,Y_N)$ be a pair of centered Gaussian random vectors, and suppose there exist disjoint subsets $A$ and $B$ of $[N]\times[N]$, such that\justifying
+\begin{align*}
+\E[X_iX_j]&\leq \E[Y_iY_j],\quad\forall (i,j)\in A,\\
+\E[X_iX_j]&\geq \E[Y_iY_j],\quad\forall (i,j)\in B,\\
+\E[X_iX_j]&= \E[Y_iY_j],\quad\forall (i,j)\notin A\cup B. 
+\end{align*}
+Let $F:\R^{N}\to\R$ be a twice-differentiable function, and suppose that
+\begin{align*}
+\frac{\partial^2F}{\partial u_i\partial u_j}(u)&\geq 0\quad \forall (i,j)\in A\\
+\frac{\partial^2F}{\partial u_i\partial u_j}(u)&\leq 0\quad \forall (i,j)\in B.
+\end{align*}
+Then, we are guaranteed that $\E[F(X)]\leq\E[F(Y)]$.
+\end{theorem}
+\end{frame}
+\begin{frame}
+An important Corollary of the above Theorem is \textcolor{red}{Slepian's inequality}.
+\begin{corollary}[Slepian's inequality]
+Let $X\in\R^N$ and $Y\in\R^N$ be centered Gaussian random vectors, such that
+\begin{align*}
+\E[X_iX_j]&\geq\E[Y_iY_j],\quad \forall i\neq j,\\
+\E[X_i^2]&=\E[Y_i^2],\quad\forall i=1,\cdots,N.
+\end{align*}
+Then for every $\tau\in\R$, we have
+\[
+P\left[\max_{i=1,\cdots,N}X_i\geq \tau\right]\leq P\left[\max_{i=1,\cdots,N}Y_i\geq \tau\right].
+\]
+Then we are guaranteed
+\[
+\E\left[\max_{i=1,\cdots,N}X_i\right]\leq\E\left[\max_{i=1,\cdots,N}Y_i\right]. 
+\]
+\end{corollary}
+In what follows, we show an extension of Slepian's inequality - namely, Gordon's inequality.  
+\end{frame}
+
+\begin{frame}
+\begin{Corollary}[Gordon's inequality]
+Let $\left(X_{ui}\right)_{u\in U,i\in N}$ and $\left(Y_{ui}\right)_{u\in U,i\in N}$ be two centered Gaussian processes indexed by pair of points $(u,i)$ in a product set $U\times N$. Assume that we have\justifying
+\begin{align*}
+\E[X_{ui}^2]=\E[Y_{ui}^2],\quad\E[(X_{ui}-X_{uj})^2]&\leq\E[(Y_{ui}-Y_{uj})^2],\quad\forall u,i,j\\
+\E[(X_{ui}-X_{vj})^2]&\geq\E[(Y_{ui}-Y_{vj})^2],\quad\forall u\neq v,\;\forall i,j
+\end{align*}
+Then fore every $\tau\geq 0$, we have
+\[
+P\left[\inf_{u\in U}\sup_{i\in [N]}X_{ui}\geq\tau\right]\leq P\left[\inf_{u\in U}\sup_{i\in [N]}Y_{ui}\geq\tau\right].
+\]
+Consequently,
+\[
+\E\left[\inf_{u\in U}\sup_{i\in [N]}X_{ui}\right]\leq \E\left[\inf_{u\in U}\sup_{i\in [N]}Y_{ui}\right]. 
+\]
+\end{Corollary}
+\end{frame}
+\subsection{Sudakov-Fernique inequality \& Gordon's inequality}
+\frame{\tableofcontents[currentsection,currentsubsection]}
+\begin{frame}{Sudakov-Fernique inequality}
+Note that the earlier results are expressed in terms of variances and covariances. In many cases, it is more convenient to compare two Gaussian processes in terms of their associated \textcolor{red}{pseudomatrics}
+\[
+\rho_X^{(i,j)}=\E\left[(X_i-X_j)^2\right],\quad\text{and}\quad \rho_Y^{(i,j)}=\E\left[(Y_i-Y_j)^2\right],
+\] 
+which leads to the Sudakov-Fernique Theorem.
+\begin{Theorem}[Sudakov-Fernique inequality]
+Given a pair of centered $N-$dimensional Gaussian vectors $(X_1,\cdots,X_n)$ and $(Y_1,\cdots,Y_N)$, suppose that
+\[
+\E[(X_i-X_j)^2]\leq \E[(Y_i-Y_j)^2],\quad\forall (i,j)\in[N]\times[N]. 
+\]
+Then $\E[\max_{j=1,\cdots,N}X_j]\leq\E[\max_{j=1,\cdots,N}Y_j] $
+\end{Theorem}
+\end{frame}
+\section{Theorem 7.16}
+\subsection{Restricted eigenvalue condition}
+\frame{\tableofcontents[currentsection,currentsubsection]}
+\begin{frame}{Theorem 7.16}
+\begin{theorem}[7.16]
+Consider a random matrix $X\in\R^{n\times d}$, in which each row $x_i\in \R^d$ is drawn i.i.d. from $N(0,\Sigma)$. Moreover, let $\rho^2\left(\Sigma\right)$ be the maximum diagonal entry of a covariance matrix $\Sigma$. Then there are universal positive constants $c_1<1<c_2$, such that\justifying
+\begin{equation}\label{eq: thequation}
+\frac{\lVert X\theta\rVert_2^2}{n}\geq c_1\lVert\sqrt{\Sigma}\theta\rVert_2^2-c_2\rho^2\left(\Sigma\right)\frac{\log d}{n}\lVert\theta\rVert_1^2,\quad\forall \theta\in\R^d
+\end{equation}
+with probability at least $1-\frac{\exp{(-n/32)}}{1-\exp{(-n/32)}}$.
+\end{theorem}
+\end{frame}
+
+\subsection{Proof}
+\frame{\tableofcontents[currentsection,currentsubsection]}
+\begin{frame}[allowframebreaks]{Proof}
+Let us restrict our attention to vectors belonging in the ellipse $\S^{d-1}(\Sigma)=\{\theta\in\R^d\mid \lVert\sqrt{\Sigma}\theta\rVert_2=1\}$. In which case, the results of the Theorem simplifies to
+\begin{equation*}\label{eq: simplified}
+\frac{\lVert X\theta\rVert_2^2}{n}\geq c_1-c_2\rho^2\left(\Sigma\right)\frac{\log d}{n}\lVert\theta\rVert_1^2,\quad\forall \theta\in\R^d
+\end{equation*}
+ Furthermore, we define the function $g(t):=2\rho(\Sigma)\sqrt{\frac{\log d}{n}}t$, and the associated \textcolor{red}{bad} event
+\begin{equation}\label{eq: badevent}
+\xi:=\left\{X\in\R^{n\times d}\middle\vert\inf_{\theta\in\S^{d-1}(\Sigma)}\frac{\lVert X\theta\rVert_2}{\sqrt{n}}\leq \frac{1}{4}-2g(\lVert\theta\rVert_1)\right\}.
+\end{equation}
+Note that squaring both sides of the bound (\ref{eq: badevent}) yields
+\[
+\inf_{\theta\in\S^{d-1}(\Sigma)}\frac{\lVert X\theta\rVert_2^2}{n}\leq \frac{1}{16}-g(\lVert\theta\rVert_1)+4g^2(\lVert\theta\rVert_1).
+\] 
+It is first claimed that on $\xi^C$, the lower bound (\ref{eq: simplified}) holds. Defining $a=\frac{1}{4}$, $b=2g(\lVert\theta\rVert_1)$ and $c=\frac{\lVert X\theta\rVert_2}{\sqrt{n}}$, we have
+\[
+c\geq max\{a-b,0\}
+\]
+on the event $\xi^c$. Further, this lower bound implies 
+\[
+c^2\geq (1-\delta)^2a^2-\frac{b^2}{\delta^2}\quad\text{for any}\quad\delta\in(0,1).
+\]
+If $\frac{b}{\delta}\geq a$, then the lower bound is trivial. Otherwise, we may assume that $b\leq \delta a$, in which case the bound $c\geq a-b$ implies that $c\geq (1-\delta)a$, and hence that $c^2\geq (1-\delta)^2a^2$. Settings $(1-\delta)^2=\frac{1}{2}$ then yields the claim. Hence, the remainder of the proof is devoted to upper bounding $P[\xi]$
+{\vskip 1em}
+\end{frame}
+\begin{frame}[allowframebreaks]{Proof}
+For radii $(r_{\ell},r_u)$ such that $0\leq r_{\ell}\leq r_u$, let us define the sets
+\begin{equation}\label{eq: 7.56a}
+\K(r_{\ell},r_u):=\{\theta\in\S^{d-1}(\Sigma)\mid g(\lVert\theta\rVert_1)\in[r_{\ell},r_u]\}
+\end{equation}
+along with the events
+\begin{equation}\label{eq: 7.56b}
+\A(r_{\ell},r_u):=\left\{\inf_{\theta\in\K(r_{\ell},r_u)}\frac{\lVert X\theta\rVert_2}{\sqrt{n}}\leq \frac{1}{2}-2r_u\right\}.
+\end{equation}
+\begin{lemma}
+For any pair of radii $0\leq r_{\ell}\leq r_u$, we have
+\begin{equation}\label{eq: lemma1}
+P[\A(r_{\ell},r_u)]\leq \exp\left(-\frac{n}{32}\right)\exp\left(-\frac{n}{2}r_u^2\right).
+\end{equation}
+Moreover, for $\mu=1/4$, we have
+\begin{equation}\label{eq: lemma2}
+\xi\subseteq \A(0,\mu)\cup\left(\bigcup\limits_{\ell=1}^{\infty}\A(2^{\ell-1}\mu,2^\ell\mu)\right).
+\end{equation}
+\end{lemma}
+Before completing the proof, first, recall Boole's inequality:
+\begin{definition}[Boole's inequality]
+For a countable set of events $E_1,E_2,\cdots,$ we have
+\[
+P\left(\bigcup\limits_{i}E_i\right)\leq\sum\limits_{i}P(E_i)
+\]
+For more details see \citet{grimmett2020probability}.
+\end{definition}
+
+
+Therefore, from (\ref{eq: lemma2}) and the union bound provided by Boole's inequality, we have
+\begin{align*}
+P[\xi]\leq P[\A(0,\mu)]+\sum\limits_{l=1}^{\infty}P\left[\A(2^{\ell-1}\mu,2^{\ell}\mu)\right]\\
+\leq \exp\left(-\frac{n}{32}\right)\left\{\sum\limits_{\ell=0}^{\infty}\exp\left(-\frac{n}{2}\right)2^{2\ell}\mu^2\right\}.
+\end{align*}
+Since $\mu=1/4$ and $2^{2\ell}\geq 2\ell$, we have
+\begin{align*}
+P[\xi]\leq\exp\left(-\frac{n}{32}\right)\sum\limits_{\ell=0}^{\infty}\exp\left(-\frac{n}{2}2^{2\ell}\mu^2\right)\leq\exp\left(-\frac{n}{32}\right) \sum\limits_{\ell=0}^{\infty}\exp\left(-n\mu^2\right)^{\ell}\\
+\leq\frac{\exp\left(-\frac{n}{32}\right)}{1-\exp\left(-\frac{n}{32}\right)}
+\end{align*}
+\textbf{Proof of the Lemma:}
+
+
+Let us begin with (\ref{eq: lemma2}). Let $\theta\in\S^{d-1}(\Sigma)$ validate the event $\xi$; then it must belong either to $\K(0,\mu)$ or to a set $\K(2^{\ell-1}\mu,2^{\ell}\mu)$, for some $l=1,2,\cdots,$.
+{\vskip 1em}
+\textbf{Case 1:} First suppose $\theta\in\K(0,\mu)$, so that $g(\lVert\theta\rVert_1)\leq \mu=1/4$. Since $\theta$ validates $\xi$, we have
+\[
+\frac{\lVert X\theta\rVert_2}{\sqrt{n}}\leq\frac{1}{4}-2g(\lVert\theta\rVert_1)\leq\frac{1}{4}=\frac{1}{2}-\mu,
+\]
+showing that event $\A(0,\mu)$ must happen.
+{\vskip 1em}
+\textbf{Case 2:} Otherwise, we must have $\theta\in\K(2^{\ell-1}\mu,2^{\ell} \mu)$ for some $\ell=1,2,\cdots,$ and moreover
+\[
+\frac{\lVert X\theta\rVert_2}{\sqrt{n}}\leq \frac{1}{4}-2g(\lVert\theta\rVert_1)\leq\frac{1}{2}-2(2^{\ell}\mu)\leq\frac{1}{2}-2^{\ell}\mu.
+\]
+which shows that the event $\A(2^{\ell-1}\mu,2^{\ell}\mu)$ must happen.
+
+Let us now establish the tail bound (\ref{eq: lemma1}). It is equivalent to upper bound the random variable $T(r_{\ell},r_u):=-\inf_{\theta\in\K(r_{\ell},r_u)}\frac{\lVert X\theta\rVert_2}{\sqrt{n}}$. By the dual representation of the $l_2$-norm [see \citet{muscat2014functional}], we have
+\[
+T(r_{\ell},r_u)=-\inf_{\theta\in\K(r_{\ell},r_u)}\sup_{u\in\S^{n-1}}\frac{\langle u, X\theta\rangle}{\sqrt{n}}=\sup_{\theta\in\K(r_{\ell},r_u)}\inf_{u\in\S^{n-1}}\frac{\langle u,X\theta\rangle}{\sqrt{n}}.
+\]
+We now may write $X=W\sqrt{\Sigma}$, where $W\in\R^{n\times d}$ is standard Gaussian matrix and define the vector $v=\sqrt{\Sigma}\theta$, then
+\begin{equation}\label{eq: lemma3}
+-\inf_{\theta\in\K(r_{\ell},r_u)}\frac{\lVert X\theta\rVert_2}{\sqrt{n}}=\sup_{v\in\tilde{\K}(r_{\ell},r_u)}\inf_{u\in \S^{n-1}}\underbrace{\frac{\langle u, Wv\rangle}{\sqrt{n}}}_{Z_{u,v}}
+\end{equation}
+where $\tilde{\K}(r_{\ell},r_u)=\{v\in\R^d\mid\lVert v\rVert_2=1, g(\Sigma^{-\frac{1}{2}}v)\in[r_{\ell},r_u]\}$.
+
+The pair $(u,v)$ range over a subset of $\S^{n-1}\times\S^{d-1}$, hence each $Z_{u,v}$ is a centered Gaussian variable with variance $n^{-1}$. Furthermore, Gordon's \textcolor{red}{Gaussian comparison principle} introduced earlier may be applied - i.e. to compare the Gaussian process $\{Z_{u,v}\}$ to the centered Gaussian process with elements
+\[
+Y_{u,v}:=\frac{\langle g,u\rangle}{\sqrt{n}}+\frac{\langle h,v\rangle}{\sqrt{n}},
+\]
+where $g\in\R^n$, $h\in\R^d$ have i.i.d. $N(0,1)$ entries. Applying Gordon's inequality  we find that
+\begin{align*}
+\E[T(r_{\ell},r_u)]=\E\left[\sup_{v\in\tilde{\K}(r_{\ell},r_u)}\inf_{u\in \S^{n-1}}Z_{u,v}\right]&\leq \E\left[\sup_{v\in\tilde{\K}(r_{\ell},r_u)}\inf_{u\in\S^{n-1}}Y_{u,v}\right]\\
+&=\E\left[\sup_{v\in\tilde{\K}(r_{\ell},r_u)}\frac{\langle h,v\rangle}{\sqrt{n}}\right]\\
+&\textcolor{white}{==========}+\E\left[\inf_{u\in \S^{n-1}}\frac{\langle g,u\rangle}{\sqrt{n}}\right]\\
+&=\E\left[\sup_{\theta\in\K(r_{\ell},r_u)}\frac{\langle\sqrt{\Sigma}h,\theta\rangle}{\sqrt{n}}\right]-\E\left[\frac{\lVert g\rVert_2}{\sqrt{n}}\right].
+\end{align*}
+On one hand, we have $\E[\lVert g\rVert_2]\geq \sqrt{n}\sqrt{\frac{2}{\pi}}$. On the other hand, applying Holder's inequality yields
+\[
+\E\left[\sup_{\theta\in\K(r_{\ell},r_u)}\frac{\langle \sqrt{\Sigma h},\theta\rangle}{\sqrt{n}}\right]\leq \E\left[\sup_{\theta\in\K(r_{\ell},r_u)}\lVert\theta\rVert_1\frac{\lVert\sqrt{\Sigma}h\rVert_{\infty}}{\sqrt{n}}\right]\overset{(i)}{\leq} r_u
+\]
+where step (i) follows since $\E\left[\frac{\lVert \sqrt{\Sigma}h\rVert_{\infty}}{\sqrt{n}}\right]\leq 2\rho(\Sigma)\sqrt{\frac{\log d}{n}}$ and $\sup_{\theta\in\K(r_{\ell},r_u)}\lVert\theta\rVert_1\leq \frac{r_u}{2\rho(\Sigma)\sqrt{(\log d)/n}}$ from (\ref{eq: 7.56a}) of $\K$. Putting it all together, we have shown that
+\begin{equation}\label{eq: lemma4}
+\E[T(r_{\ell},r_u)]\leq-\sqrt{\frac{2}{\pi}}+r_u.
+\end{equation}
+From the dual representation (\ref{eq: lemma3}), we see that the random variable $\sqrt{n}T(r_{\ell},r_u)$ is a 1-Lipschitz function of standard Gaussian matrix $W$, so that it implies the upper tail bound $P[T(r_{\ell},r_u)\geq \E[T(r_{\ell},r_u)]+\delta]$ for all $\delta>0$. Define the constant $C=\sqrt{\frac{2}{\pi}}-\frac{1}{2}\geq \frac{1}{4}$. Setting $\delta=C+r_u$ and using our upper bound on the mean (\ref{eq: lemma4}) yields
+\begin{align*}
+P[T(r_{\ell},r_u)\geq -\frac{1}{2}+2r_u]&\leq \exp\left(-\frac{n}{2}C^2\right)\exp\left(-\frac{n}{2}Cr_u^2\right)\\
+&\textcolor{white}{========}\leq \exp\left(-\frac{n}{32}\right)\exp\left(-\frac{n}{2}r_u^2\right)
+\end{align*}
+as claimed.
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+\frametitle{References}
+\bibliographystyle{apa}
+\bibliography{References_HDStat}
+\end{frame}
+
+\end{document}
