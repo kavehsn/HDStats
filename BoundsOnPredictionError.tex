@@ -1,0 +1,309 @@
+\documentclass[10pt,handout,english]{beamer}
+\usetheme{Warsaw}
+\usepackage{graphicx}
+\usepackage{placeins}
+\usepackage{amsmath, amssymb}
+\usepackage{tabu}
+\usepackage{bbm}
+\usepackage{booktabs}
+\usepackage[round]{natbib}
+\usepackage{bm}
+\usepackage{ragged2e}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage[super]{nth}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=blue,      
+    urlcolor=blue,
+    citecolor=black,
+}
+
+\apptocmd{\frame}{}{\justifying}{} % Allow optional arguments after frame.
+
+\setbeamertemplate{frametitle continuation}{}
+
+\newcommand\setItemnumber[1]{\setcounter{enumi}{\numexpr#1-1\relax}}
+
+\DeclareMathOperator{\tr}{tr}
+
+\newcommand{\ts}{\textsuperscript}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\F}{\mathcal{F}}
+\newcommand{\T}{\mathbb{T}}
+\newcommand{\K}{\mathbb{K}}
+\newcommand{\A}{\mathcal{A}}
+\renewcommand{\S}{\mathbb{S}}
+\newcommand{\vertiii}[1]{{\left\vert\kern-0.25ex\left\vert\kern-0.25ex\left\vert #1 
+    \right\vert\kern-0.25ex\right\vert\kern-0.25ex\right\vert}}
+
+	
+\title[]{Lasso oracle inequality and prediction error bounds}
+\author[Kaveh S. Nobari]{Kaveh S. Nobari}
+\institute[]{Lectures in High-Dimensional Statistics}
+\date[27/10/2020]
+{Department of Mathematics and Statistics\\ Lancaster University}
+	 
+
+\begin{document}
+\begin{frame}
+\titlepage
+\end{frame}
+
+\begin{frame}{Contents}
+\tableofcontents
+\end{frame}
+\section{Motivation}
+\frame{\tableofcontents[currentsection,currentsubsection]}
+\begin{frame}[allowframebreaks]{Motivation}
+\begin{itemize}
+\item In the presence of a restricted eigenvalue condition on random designs, it is possible to obtain a more general result on the Lasso error, which is known as \textcolor{red}{oracle inequality}.\justifying
+\item Said results hold without any assumptions on the vector of parameters $\theta^*\in\R^d$, and it provides a \textcolor{red}{family of upper bounds}, with a \textcolor{red}{tunable parameter} to be optimized. 
+\item The flexibility in tuning this parameter is akin to that of an oracle, which would have access to the ordered coefficients of $\theta^*$.
+\item Finally, we divert our attention from the problem of parameter recovery (i.e. $\lVert\hat{\theta}-\theta^*\rVert_2$) to finding a good predictor $\hat{\theta}\in\R^d$, such that
+\[
+\frac{\lVert X(\hat{\theta}-\theta^*)\rVert_2^2}{n}=\frac{1}{n}\sum\limits_{i=1}^{n}\left(\langle x_i,\hat{\theta}-\theta^*\rangle\right)^2
+\]
+is small.
+\end{itemize}  
+\end{frame}
+
+\section{Lasso oracle inequality}
+\subsection{The Theorem}
+\frame{\tableofcontents[currentsection,currentsubsection]}
+\begin{frame}{Lasso oracle inequality}
+\begin{theorem}[Lasso oracle inequality]
+Let $X\in\R^{n\times d}$ be a random matrix, with rows $x_i\in\R^d\sim N(0,\Sigma)$. Then there are universal positive constants $c_1<1<c_2$, such that for all $\theta\in\R^d$
+\[
+P\left[\frac{\lVert X\theta\rVert_2^2}{n}\geq c_1\lVert\sqrt{\Sigma}\theta\rVert_2^2-c_2\rho^2(\Sigma)\frac{\log d}{n}\lVert\theta\rVert_1^2\right]\geq 1-\frac{\exp\left(-n/32 \right)}{1-\exp\left(-n/32 \right)}
+\]
+Given this condition and considering the Lagrangian Lasso with $\lambda_n\geq 2\lVert X'w/n\rVert_{\infty}$ for any $\theta^*\in\R^d$, any optimal solution $\hat{\theta}$ satisfies the bound
+\[
+\lVert\hat{\theta}-\theta^*\rVert_2^2\leq \underbrace{\frac{144}{c_1^2}\frac{\lambda_n^2}{\tilde{\kappa}^2}\lvert S\rvert}_{\text{estimation error}}+\underbrace{\frac{16}{c_1}\frac{\lambda_n}{\tilde{\kappa}}\lVert\theta_{S^c}^*\rVert_1+\frac{32c_2}{c_1}\frac{\rho^2(\Sigma)}{\tilde{\kappa}}\frac{\log d}{n}\lVert\theta_{S^c}^*\rVert_1^2}_{\text{approximation error}}
+\]
+valid for any subset $S$ with cardinaltiy $S\leq\frac{c_1}{64c_2}\frac{\tilde{\kappa}}{\rho^2(\Sigma)}\frac{n}{\log d}$.
+\end{theorem}  
+\end{frame}
+
+\begin{frame}
+\begin{itemize}
+\item In the above inequalities $\tilde{\kappa}:=\gamma_{\min}(\Sigma)$ and $\rho^2(\Sigma)$ is the maximum diagonal entry of the covariance matrix $\Sigma$.
+
+\item It is evident that for each choice of $S$ the Lasso oracle inequality provides a family of upper bounds.
+
+\item Obtaining the optimal choice  $S$ is based on trading off between the \textcolor{red}{approximation error} and \textcolor{red}{estimation error}.
+
+\item Estimation error grows linearly with $\lvert S\rvert$ and corresponds to the error associated with estimating $\lvert S\rvert$ unknown coefficients.
+
+\item Approximation error depends on the unknown regression regression vector through \textcolor{red}{tail sum} $\lVert \theta_{S^c}^*\rVert_1=\sum_{j\notin S}\lvert \theta_j^*\rvert$.
+
+\item Optimal bound requires nominating a choice of $S$ to balance between said two errors. 
+\end{itemize}
+\end{frame}
+\subsection{proof}
+\frame{\tableofcontents[currentsection,currentsubsection]}
+\begin{frame}[allowframebreaks]{Proof}
+Following \citet{wainwright2019high}, let us denote $\rho^2(\Sigma)$ using $\rho^2$. Returning to the derivation of the the error bounds for Lagrangian Lasso using the restricted eigenvalue condition for fixed designs, the initial arguments are identical: we wish to show that under the condition $\lambda_n\geq 2\lVert\frac{X'w}{n}\rVert_{\infty}$, the error vector $\hat{\Delta}:=\hat{\theta}-\theta^* \in \mathbb{C}_{3}(S)$. Defining the Lagrangian Lasso by
+\[
+L(\theta;\lambda_n)=\frac{1}{2n}\lVert y-X\theta\rVert_2^2+\lambda_n\lVert\theta\rVert_1,
+\]
+since $\hat{\theta}$ is optimal, we have
+\[
+L(\hat{\theta};\lambda_n)\leq L(\theta^*;\lambda_n)=\frac{1}{2n}\lVert w\rVert_2^2+\lambda_n\lVert \theta^*\rVert_1.
+\]
+which by expanding and rearranging both sides of the inequality, we obtain the \textcolor{red}{Lagrangian basic inequality}
+\[
+0\leq\frac{1}{2n}\lVert X\hat{\Delta}\rVert_2^2\leq \frac{w'X\hat{\Delta}}{n}+\lambda_n\{\lVert\theta^*\rVert_1-\lVert\hat{\theta}\rVert_1\}.
+\]
+Knowing that $\theta^*$ is $S$-sparse, we can write
+\begin{align*}
+\lVert\theta^*\rVert_1-\lVert\hat{\theta}\rVert_1&=\lVert\theta_S^*\rVert_1+\lVert\theta_{S^c}^*\rVert_1-\lVert\theta^*+\hat{\Delta}\rVert_1\\
+&=\lVert\theta_S^*\rVert_1-\lVert\theta_S^*+\hat{\Delta}_S\rVert_1-\lVert\hat{\Delta}_{S
+^c}\rVert_1.
+\end{align*}
+Thus, substituting the above in the Lagrangian basic inequality, we obtain
+\[
+0\leq\frac{1}{2n}\lVert X\hat{\Delta}\rVert_2^2\leq \frac{w'X\hat{\Delta}}{n}+\lambda_n\{\lVert\theta_S^*\rVert_1-\lVert\theta_S^*+\hat{\Delta}_S\rVert_1-\lVert\hat{\Delta}_{S
+^c}\rVert_1\}.
+\]
+Applying Holder's inequality, the lower bound of the triangle inequality, and multiplying both sides by $2$, we will obtain
+\[
+\frac{1}{n}\lVert X\hat{\Delta}\rVert_2^2\leq 2\Big\lVert \frac{X'w}{n}\Big\rVert_{\infty}\lVert \hat{\Delta}\rVert_1+2\lambda_n\{\lVert\hat{\Delta}_S\rVert_1-\lVert\hat{\Delta}_{S^c}\rVert_1\},
+\]
+which using $\lambda_n\geq 2\lVert X'w/n\rVert_{\infty}$, yields
+\[
+\frac{1}{n}\lVert X\hat{\Delta}\rVert_2^2\leq \lambda_n \{3\lVert\hat{\Delta}_S\rVert_1-\lVert\hat{\Delta}_{S^c}\rVert_1\}.
+\]
+
+A similar argument can be used in this case. However, in this scenario the vanishing terms $\lVert\theta_{S^c}^*\rVert_1$ must be tracked. If said values are not eliminated, we would instead obtain
+\[
+0\leq\frac{1}{n}\lVert X\hat{\Delta}\rVert_2^2\leq \lambda_n \{3\lVert\hat{\Delta}_S\rVert_1-\lVert\hat{\Delta}_{S^c}\rVert_1+2\lVert\theta_{S^c}^*\rVert_1\}.
+\]
+Notice that $\lambda_n\geq 0$ and hence 
+\[
+0\leq 3\lVert\hat{\Delta}_S\rVert_1-\lVert\hat{\Delta}_{S^c}\rVert_1+2\lVert\theta_{S^c}^*\rVert_1.
+\]
+Adding and subtracting $\lVert\hat{\Delta}_S\rVert_1$ to the right-hand side of the above inequality yields
+\[
+0\leq 3\lVert\hat{\Delta}_S\rVert_1+\lVert\hat{\Delta}_S\rVert_1-\underbrace{(\lVert\hat{\Delta}_S\rVert_1+\lVert\hat{\Delta}_{S^c}\rVert_1)}_{\lVert\hat{\Delta}\rVert_1}+2\lVert\theta_{S^c}^*\rVert_1.
+\]
+Rearranging and squaring yields
+\[
+\lVert\hat{\Delta}\rVert_1^2\leq (4\lVert\hat{\Delta}_{S}\rVert_1+2\lVert\theta_{S^c}^*\rVert_1)^2.
+\]
+Recall (using Cauchy-Schwarz inequality), the relationship between $\ell_1$ and $\ell_2$ norms - i.e. for $\nu\in\R^s$, $\lVert \nu\rVert_1\leq \sqrt{s}\lVert\nu\rVert_2$. Therefore,
+\[
+\lVert\hat{\Delta}\rVert_1^2\leq (4\lVert\hat{\Delta}_{S}\rVert_1+2\lVert\theta_{S^c}^*\rVert_1)^2\leq (4\sqrt{s}\lVert\hat{\Delta}_{S}\rVert_2+2\lVert\theta_{S^c}^*\rVert_1)^2.
+\]
+Hence, it can be concluded that
+\[
+\lVert\hat{\Delta}\rVert_1^2\leq (4\lVert\hat{\Delta}_{S}\rVert_1+2\lVert\theta_{S^c}^*\rVert_1)^2\leq 32\lvert S\rvert\lVert\hat{\Delta}\rVert_2^2+8\lVert\theta_{S^c}\rVert_1^2.
+\]
+Returning to the Theorem concerning the restricted eigenvalue condition of random design matrices, we can substitute $\hat{\Delta}$ for $\theta$, to obtain
+\[
+\frac{\lVert X\hat{\Delta}\rVert_2^2}{n}\geq c_1\lVert\sqrt{\Sigma}\hat{\Delta}\rVert_2^2-c_2\rho^2(\Sigma)\frac{\log d}{n}\lVert\hat{\Delta}\rVert_1^2,\quad\forall\hat{\Delta}\in\R^d.
+\]
+Combining this with the earlier inequality - i.e. 
+\[
+\lVert\hat{\Delta}\rVert_1^2\leq 32\lvert S\rvert\lVert\hat{\Delta}\rVert_2^2+8\lVert\theta_{S^c}\rVert_1^2.
+\] 
+yields the following results
+\begin{align*}
+\frac{\lVert X\hat{\Delta}\rVert_2^2}{n}&\geq c_1\lVert\sqrt{\Sigma}\hat{\Delta}\rVert_2^2-c_2\rho^2\frac{\log d}{n}\left\{32\lvert S\rvert\lVert\hat{\Delta}\rVert_2^2+8\lVert\theta_{S^c}\rVert_1^2\right\}.\\
+&\geq c_1\lVert\sqrt{\Sigma}\hat{\Delta}\rVert_2^2-c_232\lvert S\rvert\rho^2\frac{\log d}{n}\lVert\hat{\Delta}\rVert_2^2-c_28\rho^2\frac{\log d}{n}\lVert\theta_{S^c}\rVert_1^2.
+\end{align*}
+Moreover, we know that 
+\begingroup
+\allowdisplaybreaks
+\begin{align*}
+\lVert\sqrt{\Sigma}\hat{\Delta}\rVert_2&\geq \vertiii{\sqrt{\Sigma}}_2\lVert\hat{\Delta}\rVert_2\\
+&\geq\sqrt{\tilde{\kappa}}\lVert\hat{\Delta}\rVert_2.
+\end{align*}
+\endgroup
+Therefore,
+\begin{align*}
+\frac{\lVert X\hat{\Delta}\rVert_2^2}{n}&\geq c_1\lVert\sqrt{\Sigma}\hat{\Delta}\rVert_2^2-c_232\lvert S\rvert\rho^2\frac{\log d}{n}\lVert\hat{\Delta}\rVert_2^2-c_28\rho^2\frac{\log d}{n}\lVert\theta_{S^c}\rVert_1^2\\
+&\geq c_1\tilde{\kappa}\lVert\hat{\Delta}\rVert_2^2-c_232\lvert S\rvert\rho^2\frac{\log d}{n}\lVert\hat{\Delta}\rVert_2^2-c_28\rho^2\frac{\log d}{n}\lVert\theta_{S^c}\rVert_1^2\\
+&\geq  \left\{c_1\tilde{\kappa}-c_232\lvert S\rvert\rho^2\frac{\log d}{n}\right\}\lVert\hat{\Delta}\rVert_2^2-c_28\rho^2\frac{\log d}{n}\lVert\theta_{S^c}\rVert_1^2
+\end{align*}
+Now recall the cardinality condition from the Theorem - i.e.
+\begin{align*}
+\lvert S\rvert\leq \frac{c_1}{64c_2}\frac{\tilde{\kappa}}{\rho^2}\frac{n}{\log d}\\
+32\lvert S\rvert\leq \frac{c_1}{2c_2}\frac{\tilde{\kappa}}{\rho^2}\frac{n}{\log d}\\
+32 c_2\rho^2\lvert S\rvert\frac{\log d}{n}\leq c_1\frac{\tilde{\kappa}}{2}.
+\end{align*}
+Thus, we may express the earlier derivation as follows
+\begin{align*}
+\frac{\lVert X\hat{\Delta}\rVert_2^2}{n}&\geq \left\{c_1\tilde{\kappa}-c_232\lvert S\rvert\rho^2\frac{\log d}{n}\right\}\lVert\hat{\Delta}\rVert_2^2-c_28\rho^2\frac{\log d}{n}\lVert\theta_{S^c}\rVert_1^2\\
+&\geq \left\{c_1\tilde{\kappa}-c_1\frac{\tilde{\kappa}}{2}\right\}\lVert\hat{\Delta}\rVert_2^2-c_28\rho^2\frac{\log d}{n}\lVert\theta_{S^c}\rVert_1^2\\
+&\geq c_1\frac{\tilde{\kappa}}{2}\lVert\hat{\Delta}\rVert_2^2-c_28\rho^2\frac{\log d}{n}\lVert\theta_{S^c}\rVert_1^2.
+\end{align*}
+The analysis is now split into two cases:
+
+\noindent\textcolor{red}{Case 1:}
+
+First, suppose that $c_1\frac{\tilde{\kappa}}{4}\lVert\hat{\Delta}\rVert_2^2\geq 8c_2\rho^2\frac{\log d}{n}\lVert\theta_{S^c}^*\rVert_1^2$. Combining the bounds
+\[
+\frac{\lVert X\hat{\Delta}\rVert_2^2}{n}\geq c_1\frac{\tilde{\kappa}}{2}\lVert\hat{\Delta}\rVert_2^2-c_28\rho^2\frac{\log d}{n}\lVert\theta_{S^c}\rVert_1^2.
+\]
+and
+\[
+0\leq\frac{1}{2n}\lVert X\hat{\Delta}\rVert_2^2\leq \frac{\lambda_n}{2} \{3\lVert\hat{\Delta}_S\rVert_1-\lVert\hat{\Delta}_{S^c}\rVert_1+2\lVert\theta_{S^c}^*\rVert_1\}.
+\]
+we would obtain 
+\begingroup
+\allowdisplaybreaks
+\begin{align*}
+0&\leq c_1\frac{\tilde{\kappa}}{4}\lVert\hat{\Delta}\rVert_2^2-c_24\rho^2\frac{\log d}{n}\lVert\theta_{S^c}\rVert_1^2\leq \frac{\lambda_n}{2} \{3\lVert\hat{\Delta}_S\rVert_1-\lVert\hat{\Delta}_{S^c}\rVert_1+2\lVert\theta_{S^c}^*\rVert_1\}\\
+&\leq c_1\frac{\tilde{\kappa}}{4}\lVert\hat{\Delta}\rVert_2^2-\frac{1}{2}c_28\rho^2\frac{\log d}{n}\lVert\theta_{S^c}\rVert_1^2\leq \frac{\lambda_n}{2} \{3\lVert\hat{\Delta}_S\rVert_1-\lVert\hat{\Delta}_{S^c}\rVert_1+2\lVert\theta_{S^c}^*\rVert_1\}\\
+&\leq c_1\frac{\tilde{\kappa}}{4}\lVert\hat{\Delta}\rVert_2^2-\frac{1}{2}c_1\frac{\tilde{\kappa}}{4}\lVert\hat{\Delta}\rVert_2^2\leq \frac{\lambda_n}{2} \{3\lVert\hat{\Delta}_S\rVert_1-\lVert\hat{\Delta}_{S^c}\rVert_1+2\lVert\theta_{S^c}^*\rVert_1\}\\
+&\leq c_1\frac{\tilde{\kappa}}{8}\lVert\hat{\Delta}\rVert_2^2\leq\frac{\lambda_n}{2} \{3\lVert\hat{\Delta}_S\rVert_1-\lVert\hat{\Delta}_{S^c}\rVert_1+2\lVert\theta_{S^c}^*\rVert_1\}. 
+\end{align*}
+\endgroup
+Moreover, recall from earlier that
+\[
+\lVert\hat{\Delta}\rVert_1=\lVert\hat{\Delta}_{S}\rVert_1+\lVert\hat{\Delta}_{S^c}\rVert_1\leq 3\lVert\hat{\Delta}_S\rVert_1\leq 3\sqrt{\lvert S\rvert}\lVert \hat{\Delta}\rVert_2
+\]
+Thus, 
+\[
+0\leq c_1\frac{\tilde{\kappa}}{8}\lVert\hat{\Delta}\rVert_2^2\leq\frac{\lambda_n}{2} \{3\sqrt{\lvert S\rvert}\lVert\hat{\Delta}\rVert_2+2\lVert\theta_{S^c}^*\rVert_1\}.
+\]
+Notice that the bounds involve a quadratic form in $\lVert\hat{\Delta}\rVert_2$ - i.e.
+\begin{align*}
+c_1\frac{\tilde{\kappa}}{8}\lVert\hat{\Delta}\rVert_2^2-\frac{3\sqrt{\lvert S\rvert}\lambda_n}{2}\lVert\hat{\Delta}\rVert_2-\lambda_n\lVert\theta_{S^c}^*\rVert_1&\leq0\\
+c_1\tilde{\kappa}\lVert\hat{\Delta}\rVert_2^2-12\sqrt{\lvert S\rvert}\lambda_n\lVert\hat{\Delta}\rVert_2-8\lambda_n\lVert\theta_{S^c}^*\rVert_1&\leq 0
+\end{align*}
+where calculating the zeros of this quadratic form, we obtain
+\[
+\lVert\hat{\Delta}\rVert_2^2\leq \frac{144\lambda_n^2}{c_1^2\tilde{\kappa}^2}\lvert S\rvert+\frac{16\lambda_n\lVert\theta_{S^c}^*\rVert_1}{c_1\tilde{\kappa}}
+\]
+
+\noindent\textcolor{red}{Case 2:}
+Otherwise, we must have 
+\[
+c_1\frac{\tilde{\kappa}}{4}\lVert\hat{\Delta}\rVert_2^2<8c_2\rho^2\frac{\log d}{n}\lVert \theta_{S^c}\rVert_1^2
+\]
+Taking into account both cases, we combine this bound with earlier inequality to derive the claim of the Theorem.
+\end{frame}
+
+\section{Bounds on prediction error}
+\frame{\tableofcontents[currentsection,currentsubsection]}
+\begin{frame}[allowframebreaks]{Bounds on prediction error}
+\begin{itemize}
+\item In the earlier Section, we focused mainly on the problem of \textcolor{red}{parameter recovery} in either \textcolor{red}{noisy} or \textcolor{red}{noiseless} settings.
+
+\item In many situations the true value of $\theta^*$ may not be of interest and our interest may lie in finding a good predictor $\hat{\theta}\in\R^d$, such that the \textcolor{red}{mean-squared prediction error}
+\[
+\frac{\lVert X(\hat{\theta}-\theta^*)\rVert_2^2}{n}=\frac{1}{n}\sum\limits_{i=1}^n\left(\langle x_i,\hat{\theta}-\theta^*\rangle\right)^2
+\]
+is small.
+\item To understand why the above quantity is a measure of prediction error, we provide the following example.
+\end{itemize}
+Suppose $\hat{\theta}$ is estimated  using the response vector 
+\[
+y=X\theta^*+w.
+\]
+Now let us assume that we obtain a \textcolor{red}{fresh} vector of responses -i.e.
+\[
+\tilde{y}=X\theta^*+\tilde{w},\quad\tilde{w}\sim i.i.d(0,\sigma^2) 
+\]
+The quality of our estimated vector $\hat{\theta}$ can then be assessed by measuring its success in predicting vector $\tilde{y}$ in terms of squared error. Using some algebra, it can be shown
+\begin{align*}
+\frac{1}{n}\E[\lVert\tilde{y}-X\hat{\theta}\rVert_2^2]=\frac{1}{n}\lVert X(\hat{\theta}-\theta^*) \rVert_2^2+\sigma^2.
+\end{align*}
+
+\noindent\textbf{Proof:}
+\begin{align*}
+\frac{1}{n}\E[\lVert\tilde{y}-X\hat{\theta}\rVert_2^2]&=\frac{1}{n}\E[\lVert\tilde{y}-X\theta^*+X\theta^*-X\hat{\theta}\rVert_2^2]\\
+&=\frac{1}{n}\E[\lVert\tilde{w}+X(\theta^*-\hat{\theta})\rVert_2^2]\\
+&=\frac{1}{n}\E[\lVert\tilde{w}\rVert_2^2+2\langle X(\theta^*-\hat{\theta}),\tilde{w} \rangle+\lVert X(\theta^*-\hat{\theta})\rVert_2^2]\\
+&=\frac{1}{n}\E[\lVert\tilde{w}\rVert_2^2]+\frac{1}{n}\underbrace{\E[2\langle X(\theta^*-\hat{\theta}),\tilde{w} \rangle]}_{=0}+\frac{1}{n}\E[\lVert X(\theta^*-\hat{\theta})\rVert_2^2]\\
+&=\sigma^2+\frac{1}{n}\lVert X(\theta^*-\hat{\theta})\rVert_2^2
+\end{align*}
+Hence, apart from additive factor $\sigma^2$, the \textcolor{red}{mean-squared prediction error} measures how well we can predict.
+
+In general the problem of finding a good predictor must be easier than estimating $\theta^*$ in the $\ell_2$-norm. Prediction does not require that $\theta^*$ is identifiable, and unlike the parameter recovery setting, we may solve the problem if two columns of the designs matrix $X$ are identical.
+\begin{theorem}[Prediction error bounds]
+Once again consider the Lagrangian Lasso with a strictly positive $\lambda_n\geq 2\lVert X'w/n\rVert_{\infty}$.
+\begin{itemize}
+\item[(a)] Any optimal solution $\hat{\theta}$ satisfies
+\[
+\frac{\lVert X(\hat{\theta}-\theta^*)\rVert_2^2}{n}\leq 12\lVert \theta^*\rVert_1\lambda_n
+\]
+\item[(b)] If $\theta^*$ is supported on subset $S$, such that $\lvert S\rvert=s$, and the design matrix satisfies the $(\kappa, 3)$-RE condition over $S$, then any optimal solution satisfies the bound
+\[
+\frac{\lVert X(\hat{\theta}-\theta^*)\rVert_2^2}{n}\leq \frac{9}{\kappa}s\lambda_n^2
+\]
+\end{itemize}
+\end{theorem}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+\frametitle{References}
+\bibliographystyle{apa}
+\bibliography{References_HDStat}
+\end{frame}
+
+\end{document}
