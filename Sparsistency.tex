@@ -1,0 +1,352 @@
+\documentclass[10pt,handout,english]{beamer}
+\usetheme{Warsaw}
+\usepackage{graphicx}
+\usepackage{placeins}
+\usepackage{amsmath, amssymb}
+\usepackage{tabu}
+\usepackage{bbm}
+\usepackage{booktabs}
+\usepackage[round]{natbib}
+\usepackage{bm}
+\usepackage{ragged2e}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage[super]{nth}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=blue,      
+    urlcolor=blue,
+    citecolor=black,
+}
+
+\apptocmd{\frame}{}{\justifying}{} % Allow optional arguments after frame.
+
+\setbeamertemplate{frametitle continuation}{}
+
+\newcommand\setItemnumber[1]{\setcounter{enumi}{\numexpr#1-1\relax}}
+
+\DeclareMathOperator{\tr}{tr}
+
+\newcommand{\ts}{\textsuperscript}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\F}{\mathcal{F}}
+\newcommand{\T}{\mathbb{T}}
+\newcommand{\K}{\mathbb{K}}
+\newcommand{\A}{\mathcal{A}}
+\renewcommand{\S}{\mathbb{S}}
+\newcommand{\vertiii}[1]{{\left\vert\kern-0.25ex\left\vert\kern-0.25ex\left\vert #1 
+    \right\vert\kern-0.25ex\right\vert\kern-0.25ex\right\vert}}
+
+	
+\title[]{Proof of prediction error bounds and sparsistency}
+\author[Kaveh S. Nobari]{Kaveh S. Nobari}
+\institute[]{Lectures in High-Dimensional Statistics}
+\date[27/10/2020]
+{Department of Mathematics and Statistics\\ Lancaster University}
+	 
+
+\begin{document}
+\begin{frame}
+\titlepage
+\end{frame}
+
+\begin{frame}{Contents}
+\tableofcontents
+\end{frame}
+\section{Motivation}
+\frame{\tableofcontents[currentsection,currentsubsection]}
+\begin{frame}[allowframebreaks]{Motivation}
+\begin{itemize}
+\item At the end of the previous sessions, we had diverted our attention from the problem of parameter recovery (i.e. recovering the actual value of the regression vector $\theta^*$) to finding a good predictor $\hat{\theta}\in\R^d$, such that the \textcolor{red}{mean-squared prediction error} \justifying
+\[
+\frac{\lVert X(\hat{\theta}-\theta^*)\rVert_2^2}{n}=\frac{1}{n}\sum\limits_{i=1}^{n}\left(\langle x_i,\hat{\theta}-\theta^*\rangle\right)^2
+\]
+is minimized.
+\item In this session, we provide proofs for the prediction error bounds outlined in the previous session.\justifying 
+\item Finally, we focus our attention on \textcolor{red}{sparsistency} or \textcolor{red}{variable selection}. As the Lasso behaves like a soft-thresholding operator, the solutions are sparse, which motivates the investigator to assess whether Lasso recovers the right support - i.e., estimate\justifying 
+
+\[
+S:=\text{supp}\left(\theta^*\right) 
+\]
+exactly.
+\end{itemize}  
+\end{frame}
+
+\section{Prediction error bounds}
+\subsection{The Theorem}
+\frame{\tableofcontents[currentsection,currentsubsection]}
+\begin{frame}{Lasso oracle inequality}
+\begin{theorem}[Prediction error bounds]
+Once again consider the Lagrangian Lasso with a strictly positive $\lambda_n\geq 2\lVert X'w/n\rVert_{\infty}$.
+\begin{itemize}
+\item[(a)] Any optimal solution $\hat{\theta}$ satisfies
+\[
+\frac{\lVert X(\hat{\theta}-\theta^*)\rVert_2^2}{n}\leq 12\lVert \theta^*\rVert_1\lambda_n
+\]
+\item[(b)] If $\theta^*$ is supported on subset $S$, such that $\lvert S\rvert=s$, and the design matrix satisfies the $(\kappa, 3)$-RE condition over $S$, then any optimal solution satisfies the bound
+\[
+\frac{\lVert X(\hat{\theta}-\theta^*)\rVert_2^2}{n}\leq \frac{9}{\kappa}s\lambda_n^2
+\]
+\end{itemize}
+\end{theorem}
+\end{frame}
+
+\subsection{Proof}
+\frame{\tableofcontents[currentsection,currentsubsection]}
+\begin{frame}[allowframebreaks]{Proof}
+\noindent\textbf{Proof of (a):}
+{\vskip 1em}
+Let $\Delta=\hat{\theta}-\theta^*$. Recall from the \textcolor{red}{Lagrangian basic inequality}, we have
+\begin{align*}
+\frac{1}{2n}\lVert y-X\hat{\theta}\rVert_2^2+\lambda_n\lVert\hat{\theta}\rVert_1&\leq \frac{1}{2n}\lVert y-X\theta^*\rVert_2^2+\lambda_n\lVert\theta^*\rVert_1\\
+0\leq \frac{1}{2n}\lVert X\Delta \rVert_2^2&\leq\frac{\varepsilon'X\Delta}{n}+\lambda_n\{\lVert\theta^*\rVert_1-\lVert\hat{\theta}\rVert_1\}.
+\end{align*}
+Using Holder's inequality, we know that
+\[
+\Bigg\lvert\frac{\varepsilon'X\Delta}{n}\Bigg\rvert\leq\Bigg\lVert\frac{X'\varepsilon}{n}\Bigg\rVert_{\infty}\lVert\Delta\rVert_1
+\]
+Noting the choice of the regularization parameter - i.e., $\lambda_n\geq 2\lVert X'\varepsilon/n\rVert_{\infty}$, it can be claimed that
+\[
+\Bigg\lvert\frac{\varepsilon'X\Delta}{n}\Bigg\rvert\leq\Bigg\lVert\frac{X'\varepsilon}{n}\Bigg\rVert_{\infty}\lVert\Delta\rVert_1\leq \frac{\lambda_n}{2}\lVert\hat{\theta}-\theta^* \rVert_1\leq \frac{\lambda_n}{2}\{\lVert\theta^*\rVert_1+\lVert\hat{\theta}\rVert_1\}
+\]
+Combining all the above information yields
+\begin{align*}
+0&\leq \frac{\lambda_n}{2}\{\lVert\theta^*\rVert_1+\lVert\hat{\theta}\rVert_1\}+\lambda_n\{\lVert\theta^*\rVert_1-\lVert\hat{\theta}\rVert_1\}\\
+&\leq \lambda_n\{3\lVert\theta^*\rVert_1-\lVert\hat{\theta}\rVert_1\}
+\end{align*}
+which implies $3\lVert\theta^*\rVert_1\geq \lVert\hat{\theta}\rVert_1$. Using the triangle inequality on $\Delta=\hat{\theta}-\theta^*$, we obtain
+\[
+\lVert\Delta\rVert_1=\lVert\hat{\theta}-\theta^*\rVert_1\leq\lVert\theta^*\rVert_1+\lVert\hat{\theta}\rVert_1 \leq \lVert\theta^*\rVert_1+3\lVert\theta^*\rVert_1=4\lVert\theta^*\rVert_1
+\]
+Noting that $\lVert\hat{\theta}\rVert_1=\lVert \theta^*+\Delta\rVert_1$ and using the lower bound of the triangle inequality, we have
+\[
+\lVert \theta^*\rVert_1-\lVert\Delta\rVert_1\leq \lVert \theta^*+\Delta\rVert_1
+\]
+Returning to Lagrangian basic inequality, recall
+
+\begin{align*}
+\frac{\lVert X\Delta\rVert_2^2}{2n}&\leq \frac{\lambda_n}{2}\lVert\Delta\rVert_1+\lambda_n\{\lVert\theta^*\rVert_1-\lVert \theta^*+\Delta\rVert_1\}\\
+&\leq \frac{\lambda_n}{2}\lVert\Delta\rVert_1+\lambda_n\{\lVert\theta^*\rVert_1-\lVert \theta^*\rVert_1+\lVert\Delta\rVert_1\}\\
+&\leq \frac{3\lambda_n}{2}\lVert\Delta\rVert_1.
+\end{align*}
+furthermore, we have established that $\lVert\Delta\rVert_1\leq 4\lVert\theta^*\rVert_1$, which in turn implies
+\[
+\frac{\lVert X\Delta\rVert_2^2}{2n}\leq \frac{12\lambda_n}{2}\lVert\Delta\rVert_1 
+\]
+or
+\[
+\frac{\lVert X(\hat{\theta}-\theta^*)\rVert_2^2}{n}\leq 12\lambda_n\lVert\Delta\rVert_1 
+\]
+as \textcolor{red}{(a)} suggests.
+{\vskip 1em}
+\textbf{Proof of (b):}
+{\vskip 1em}
+Once again using \textcolor{red}{Lagrangian basic inequality}, we have
+\[
+0\leq \frac{1}{2n}\lVert X\Delta \rVert_2^2\leq\frac{\varepsilon'X\Delta}{n}+\lambda_n\{\lVert\theta^*\rVert_1-\lVert\hat{\theta}\rVert_1\}.
+\]
+We know $\theta^*$ is $S$-sparse, so we may write
+\begin{align*}
+\lVert\theta^*\rVert_1-\lVert\hat{\theta}\rVert_1&=\lVert\theta_S^*+\theta_{S^c}^*\rVert_1-\lVert\theta_S^*+\theta_{S^c}^*+\Delta_S\rVert_1-\lVert\Delta_{S^c}\rVert_1\\
+&=\lVert\theta_S^*\rVert_1-\lVert\theta_S^*+\Delta_S\rVert_1-\lVert\Delta_{S^c}\rVert_1
+\end{align*}
+where substituting the above into the Lagrangian basic inequality yields,
+\begin{align*}
+0&\leq \frac{1}{2n}\lVert X\Delta \rVert_2^2\leq\frac{\varepsilon'X\Delta}{n}+\lambda_n\{\lVert\theta_S^*\rVert_1-\lVert\theta_S^*+\Delta_S\rVert_1-\lVert\Delta_{S^c}\rVert_1\}\\
+0&\leq \frac{1}{n}\lVert X\Delta \rVert_2^2\leq 2\frac{\varepsilon'X\Delta}{n}+2\lambda_n\{\lVert\theta_S^*\rVert_1-\lVert\theta_S^*+\Delta_S\rVert_1-\lVert\Delta_{S^c}\rVert_1\}
+\end{align*}
+Once again using the Holder's inequality, we have
+\[
+0\leq \frac{1}{n}\lVert X\Delta \rVert_2^2\leq 2\Bigg\lVert\frac{X'\varepsilon}{n}\Bigg\rVert_{\infty}\lVert\Delta\rVert_1+2\lambda_n\{\lVert\theta_S^*\rVert_1-\lVert\theta_S^*+\Delta_S\rVert_1-\lVert\Delta_{S^c}\rVert_1\}
+\]
+Once again, substituting the choice of the regularization parameter yields,
+\[
+0\leq \frac{1}{n}\lVert X\Delta \rVert_2^2\leq \lambda_n\lVert\Delta\rVert_1+2\lambda_n\{\lVert\theta_S^*\rVert_1-\lVert\theta_S^*+\Delta_S\rVert_1-\lVert\Delta_{S^c}\rVert_1\}
+\] 
+From the lower bound of the triangle inequality, we know that
+\[
+\lVert\theta_S^*\rVert_1-\lVert\Delta_S\rVert_1\leq\lVert\theta_S^*+\Delta_S\rVert_1 
+\]
+which leads to
+\begin{align*}
+0\leq \frac{1}{n}\lVert X\Delta \rVert_2^2&\leq \lambda_n\lVert\Delta\rVert_1+2\lambda_n\{\lVert\Delta_S\rVert_1-\lVert\Delta_{S^c}\rVert_1\}\\
+&\leq\lambda_n\{3\lVert\Delta_S\rVert_1-\lVert\Delta_{S^c}\rVert_1\}
+\end{align*}
+For the above inequality to hold, $3\lVert\Delta_S\rVert_1\geq \lVert\Delta_{S^c}\rVert_1$. Thus, using Cauchy-Schwarz inequality, we have
+\[
+3\lVert\Delta_S\rVert_1-\lVert\Delta_{S^c}\rVert_1\leq 3\lVert\Delta_S\rVert_1\leq 3\sqrt{s}\lVert\Delta\rVert_2
+\]
+Hence, 
+\[
+\frac{\lVert X\Delta\rVert_2^2}{n}\leq 3\lambda_n\sqrt{s}\lVert\Delta\rVert_2. 
+\]
+Since, $\Delta\in\mathbb{C}_3(S)$, whence the $(\kappa,3)$-RE condition can be applied. 
+\[
+\frac{\lVert X\Delta\rVert_2^2}{n}\leq 3\lambda_n\sqrt{s}\lVert\Delta\rVert_2. 
+\]
+we have
+\[
+\lVert\Delta\rVert_2^2\leq\frac{1}{\kappa}\frac{\lVert X\Delta\rVert_2^2}{n}. 
+\]
+Henceforth
+\[
+\frac{\lVert X\Delta\rVert_2^2}{\sqrt{n}}\leq \frac{3}{\sqrt{\kappa}}\sqrt{s}\lambda_n	. 
+\]
+\end{frame}
+\section{Sparsistency for the Lasso}
+\subsection{Assumptions for variable selection consistency}
+\frame{\tableofcontents[currentsection,currentsubsection]}
+\begin{frame}[allowframebreaks]{Sparsistency}
+Following \citet{wainwright2019high}, let us begin by a deterministic design matrix $X$, and denote $X_S$ as a sub-matrix of $X$ that is composed of the columns of $X$ belonging to an index set $S$. Variable selection requires some assumptions that are related, but distinct from the restricted eigenvalue condition:
+\begin{itemize}
+\item \textcolor{red}{Lower eigenvalue:}
+\[
+\gamma_{\min}\left(\frac{X_S'X_S}{n}\right)\geq c_{\min}>0 
+\]
+\item \textcolor{red}{Mutual incoherence:} $\exists\alpha\in[0,1)$ such that
+\[
+\max_{j\in S^c}\lVert (X_S'X_S)^{-1}X_S'X_j\rVert_1\leq \alpha
+\] 
+\end{itemize}
+\end{frame}
+\begin{frame}[allowframebreaks]
+The intuition for these assumptions is as follows:
+{\vskip 1em}
+\textbf{Lower eigenvalue:}
+{\vskip 1em}
+\begin{enumerate}
+\item The lower eigenvalue assumption on the sample covariance of the indexed sub-matrix is to ensure that that the model is \textcolor{red}{identifiable}, even if the support $S$ is known a priori.\justifying
+\item If the lower eigenvalue condition is violated, the sub-matrix $X_{S}$ would have a \textcolor{red}{non-trivial nullspace}, leading to a non-identifiable model.\justifying 
+\end{enumerate}
+\end{frame}
+\begin{frame}
+{\vskip 1em}
+\noindent\textbf{Mutual incoherence:}
+{\vskip 1em}
+\begin{enumerate}
+\item The general idea is that the columns of subset matrix $X_S$ and the sub-matrix $X_{S^c}$ must possess low correlation. Suppose, we wish to predict the column vector $X_j$ using a linear combination of columns of $X_S$, the best weight vector $\hat{\omega}\in\mathbb{R}^{\vert S\vert}$ is given by\justifying
+\[
+\hat{\omega}=\arg\min_{\omega\in\mathbb{R}^{\vert S\vert}}\lVert X_j-X_S\omega\rVert_2^2=(X_S'X_S)^{-1}X_S'X_j.
+\] 
+\item The mutual incoherence condition is a bound on $\lVert\omega\rVert_1$, with the ideal weight being zero, which suggests orthogonality between the columns of $X_S$ and $X_{S^c}$. 
+\end{enumerate}
+
+\end{frame}
+
+\subsection{The Theorem}
+\frame{\tableofcontents[currentsection,currentsubsection]}
+\begin{frame}[allowframebreaks]
+With this setup and the assumptions outlined earlier, we provide the following Theorem that applies to the Lagrangian Lasso, when applied to an instance of the linear observational model, such that the true parameter $\theta^*$ is supported on a subset $S$ with cardinality $s$. 
+{\vskip 1em}
+Before we derive the results, we introduce the orthogonal projection matrix
+\[
+\Pi_{S^{\perp}}(X)=I_{n}-X_S(X_S'X_S)^{-1}X_S'
+\]  
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+\begin{theorem}[Part I]
+Consider an $S$-sparse linear regression model, with a design matrix that satisfies the lower eigenvalue and mutual incoherence assumptions. Then, for any regularization parameter\justifying
+\[
+\lambda_n\geq\frac{2}{1-\alpha}\Bigg\lVert X_{S^c}'\Pi_{S^{\perp}}(X)\frac{\varepsilon}{n}\Bigg\rVert_{\infty}
+\]
+the Lagrangian Lasso has these properties:
+\begin{itemize}
+\item[(a)] \textcolor{red}{Uniqueness:} There exists a unique optimal solution $\hat{\theta}$.\justifying
+\item[(b)] \textcolor{red}{No erroneous inclusion:} The optimal solution has its support set $\hat{S}$ contained within the support set $S$, or in other words\justifying
+\[
+\text{supp}(\hat{S})\subseteq \text{supp}(S) 
+\]
+\end{itemize}
+\end{theorem}
+\end{frame}
+
+
+\begin{frame}
+
+\begin{theorem}[Part II]
+\begin{itemize}
+\item[(c)] \textcolor{red}{$\ell_{\infty}$ bounds:} The error $\hat{\theta}-\theta^*$ satisfies
+\[
+\lVert\hat{\theta}_S-\theta_S^*\rVert_{\infty}\leq\underbrace{\Bigg\lVert\left(\frac{X_S'X_S}{n}\right)^{-1}X_S'\frac{\varepsilon}{n}\Bigg\rVert_{\infty} +\vertiii{\left(\frac{X_S'X_S}{n}\right)^{-1}}_{\infty}\lambda_n}_{B(\lambda_n,X)},
+\]
+where $\vertiii{A}_{\infty}=\max_{i\in[S]}\sum\lvert A_{ij}\rvert$ is the matrix $\ell_{\infty}$-norm.
+\item[(d)] \textcolor{red}{No erroneous exclusion:} The Lasso includes all indices $i\in S$, such that $\lvert\theta_i^*\rvert>B(\lambda_n;X)$, and hence it is sparsistent if $\min_{i\in S}\lvert\theta_i^*\rvert>B(\lambda_n;X)$.\justifying
+\end{itemize}
+\end{theorem}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+The intuition for these results is as follows:
+{\vskip 1em}
+\noindent\textbf{Uniqueness:}
+{\vskip 1em}
+\begin{itemize}
+\item This is not trivial, as since $d>n$, although the Lasso objective is convex, it cannot be strictly convex.\justifying
+
+\item Based on the uniquness claim, we may unambiguously talk about the support $\hat{\theta}$.\justifying  
+\end{itemize}
+{\vskip 1em}
+\noindent\textbf{No erroneous inclusion (and exclusion):}
+{\vskip 1em}
+\begin{itemize}
+\item This claim guarantees that the Lasso estimate $\hat{\theta}$ does not  erroneously include variables that are not in the true support of $\theta^*$ - i.e, $\hat{\theta}_{S^c}=0$.
+
+\item Similarly (d) is a consequence of the $\sup$-norm bound (c), which suggests so long as the minimum value of $\lvert\theta_i^*\rvert$ over $i\in S$ is not too small, then the Lasso is sparsistent.\justifying 
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\begin{corollary}
+Consider the $S$-sparse linear model, with noise vector $\varepsilon$ with zero-mean i.i.d. that is sub-Gaussian with the sub-Gaussianity parameter $\sigma$. Furthermore, suppose that the deterministic design matrix $X$ satisfies the lower eigenvalue and mutual incoherence assumptions, as well as the $C$-column normalisation condition ($max_{j=1,\cdots,d}\lVert X_j\rVert_2/\sqrt{n}\leq C$). Suppose, we solve the Lagranian Lasso with regularizaion parameter\justifying 
+\[
+\lambda_n=\frac{2C\sigma}{1-\alpha}\left\{\sqrt{\frac{2\log (d-s)}{n}}+\delta\right\}
+\]
+for $\delta>0$. Then the optimal solution is unique, with $\text{supp}(\hat{\theta})\subseteq\text{supp}(\theta^*)$, and satisfied the $\ell_{\infty}$ bound
+\begin{align*}
+P\left[\lVert\hat{\theta}_S-\theta_S^*\rVert_{\infty}\leq \frac{\sigma}{\sqrt{c_{\min}}}\left\{\sqrt{\frac{2\log s}{n}}+\delta\right\}+\vertiii{\left(\frac{X_S'X_S}{n}\right)^{-1}}_{\infty}\lambda_n\right]\\\geq 1-4\exp\left(-\frac{n\delta^2}{2}\right).
+\end{align*}
+\end{corollary}
+\end{frame}
+
+%\subsection{Proof of the Corollary}
+%\frame{\tableofcontents[currentsection,currentsubsection]}
+%\begin{frame}[allowframebreaks]{Proof of the Corollary}
+%Notice that the choice of the regularization parameter $\lambda_n$, which %satisfies the bound
+%\[
+%\lambda_n\geq \frac{2}{1-\alpha}\Bigg\lVert X_{S^c}'\Pi_{S^{\perp}}(X)%\frac{\varepsilon}{n}\Bigg\rVert_{\infty}.
+%\]
+%It suffices to bound the maximum absolute value of the random variables
+%\[
+%Z_j:=X_j\underbrace{[I_n-X_S(X_S'X_S)^{-1}X_S]}_{\Pi_{S^{\perp}}(X)}%\left(\frac{\varepsilon}{n}\right),\quad\text{for}\quad j\in S^c.
+%\]
+%We know that $\Pi_{S^{\perp}}(X)$ is an orthogonal projection matrix, hence %from th Cauchy-Schwarz inequality, we have
+%\begin{align*}
+%\lVert\Pi_{S^{\perp}}(X)X_j\rVert_2^2&=\langle\Pi_{S^{\perp}}(X)X_j,%\Pi_{S^{\perp}}(X)X_j\rangle\\
+%&=\langle\Pi_{S^{\perp}}(X)X_j,X_j\rangle\leq \lVert\Pi_{S^{\perp}}%(X)X_j\rVert_2\lVert X_j\rVert_2
+%\end{align*}
+%which implies
+%\[
+%\lVert\Pi_{S^{\perp}}(X)X_j\rVert_2\leq \lVert X_j\rVert_2.
+%\]
+%Furthermore, from the $C$-column normalization assumption we know that
+%\[
+%\max_{j=1,\cdots,n}\frac{\lVert X_j\rVert_2}{\sqrt{n}}\leq C
+%\]
+%hence,
+%\[
+%\lVert\Pi_{S^{\perp}}(X)X_j\rVert_2\leq \lVert X_j\rVert_2\leq C\sqrt{n}.
+%\]
+%Therefore, each $Z_j$ is sub-Gaussian with parameter at most $C^2\sigma^2/n$. From star
+%\end{frame}
+
+\begin{frame}[allowframebreaks]
+\frametitle{References}
+\bibliographystyle{apa}
+\bibliography{References_HDStat}
+\end{frame}
+
+\end{document}
+
