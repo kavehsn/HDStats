@@ -1,0 +1,380 @@
+\documentclass[10pt,handout,english]{beamer}
+\usetheme{Warsaw}
+\usepackage{graphicx}
+\usepackage{placeins}
+\usepackage{amsmath, amssymb}
+\usepackage{tabu}
+\usepackage{bbm}
+\usepackage{booktabs}
+\usepackage[round]{natbib}
+\usepackage{bm}
+\usepackage{ragged2e}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage[super]{nth}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=blue,      
+    urlcolor=blue,
+    citecolor=black,
+}
+
+\apptocmd{\frame}{}{\justifying}{} % Allow optional arguments after frame.
+
+\setbeamertemplate{frametitle continuation}{}
+
+\newcommand\setItemnumber[1]{\setcounter{enumi}{\numexpr#1-1\relax}}
+
+\DeclareMathOperator{\tr}{tr}
+
+\newcommand{\ts}{\textsuperscript}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\F}{\mathcal{F}}
+\newcommand{\T}{\mathbb{T}}
+\newcommand{\K}{\mathbb{K}}
+\newcommand{\A}{\mathcal{A}}
+\renewcommand{\S}{\mathbb{S}}
+\newcommand{\vertiii}[1]{{\left\vert\kern-0.25ex\left\vert\kern-0.25ex\left\vert #1 
+    \right\vert\kern-0.25ex\right\vert\kern-0.25ex\right\vert}}
+
+	
+\title[]{Proof of variable selection consistency}
+\subtitle[]{(Theorem 7.21 and Corollary 7.22)}
+\author[Kaveh S. Nobari]{Kaveh S. Nobari}
+\institute[]{Lectures in High-Dimensional Statistics}
+\date[27/10/2020]
+{Department of Mathematics and Statistics\\ Lancaster University}
+	 
+
+\begin{document}
+\begin{frame}
+\titlepage
+\end{frame}
+
+
+\begin{frame}{Contents}
+\tableofcontents
+\end{frame}
+
+\section{Proof of Theorem 7.21}
+\subsection{Subdifferentials}
+
+\begin{frame}[allowframebreaks]
+\begin{theorem}[Part I]
+Consider an $S$-sparse linear regression model, with a design matrix that satisfies the lower eigenvalue and mutual incoherence assumptions. Then, for any regularization parameter\justifying
+\begin{equation}\label{eq: lambdathm}
+\lambda_n\geq\frac{2}{1-\alpha}\Bigg\lVert X_{S^c}'\Pi_{S^{\perp}}(X)\frac{\varepsilon}{n}\Bigg\rVert_{\infty}
+\end{equation}
+the Lagrangian Lasso has these properties:
+\begin{itemize}
+\item[(a)] \textcolor{red}{Uniqueness:} There exists a unique optimal solution $\hat{\theta}$.\justifying
+\item[(b)] \textcolor{red}{No erroneous inclusion:} The optimal solution has its support set $\hat{S}$ contained within the support set $S$, or in other words\justifying
+\[
+\text{supp}(\hat{S})\subseteq \text{supp}(S) 
+\]
+\end{itemize}
+\end{theorem}
+\end{frame}
+
+
+\begin{frame}
+
+\begin{theorem}[Part II]
+\begin{itemize}
+\item[(c)] \textcolor{red}{$\ell_{\infty}$ bounds:} The error $\hat{\theta}-\theta^*$ satisfies
+\begin{equation}\label{eq: linfty}
+\lVert\hat{\theta}_S-\theta_S^*\rVert_{\infty}\leq\underbrace{\Bigg\lVert\left(\frac{X_S'X_S}{n}\right)^{-1}X_S'\frac{\varepsilon}{n}\Bigg\rVert_{\infty} +\vertiii{\left(\frac{X_S'X_S}{n}\right)^{-1}}_{\infty}\lambda_n}_{B(\lambda_n,X)},
+\end{equation}
+where $\vertiii{A}_{\infty}=\max_{i\in[S]}\sum\lvert A_{ij}\rvert$ is the matrix $\ell_{\infty}$-norm.
+\item[(d)] \textcolor{red}{No erroneous exclusion:} The Lasso includes all indices $i\in S$, such that $\lvert\theta_i^*\rvert>B(\lambda_n;X)$, and hence it is sparsistent if $\min_{i\in S}\lvert\theta_i^*\rvert>B(\lambda_n;X)$.\justifying
+\end{itemize}
+\end{theorem}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Subdifferentials}
+\begin{itemize}
+\item To prove Theorem 7.21 of \citet{wainwright2019high}, we first develop the \textcolor{red}{necessary} and \textcolor{red}{sufficient} conditions for optimality in Lasso.\justifying
+\item The complication arises as the $\ell_1$-norm is not differentiable, despite being convex, as it has a kink at the origin.\justifying
+\item To show this, we will go through an example, and that is the subdifferential of $f(x)=\lvert x\rvert$ at $0$.\justifying 
+\end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+We know that 
+\[
+\lvert x\rvert=
+\begin{cases}
+x,\quad &x\geq0\\
+-x,\quad &x<0
+\end{cases}
+\].
+
+A subdifferential of a convex function $f:I\to \R$ at a point $x_0$ is $c\in\R$, such that
+\begin{equation}\label{eq: subderivative}
+f(x)-f(x_0)\geq c(x-x_0),\quad \forall x\in [a,b].
+\end{equation}
+
+where $I$ is an open interval. 
+
+We may find many subderivatives that satisfy inequality (\ref{eq: subderivative}). What subdifferentials satisfy (\ref{eq: subderivative})? We say that $c$ is in a closed interval and bounded by - i.e., $c\in[a,b]$. Furthermore, it is rather straightforward to find $a$ and $b$, where
+\begin{align*}
+a&=\lim_{x\to x_0^{-}}\frac{f(x)-f(x_0)}{x-x_0}\\
+b&=\lim_{x\to x_0^{+}}\frac{f(x)-f(x_0)}{x-x_0}
+\end{align*}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{An example}
+Let us consider $f(x)=\lvert x\rvert$, where we are interested at the subdifferential of $f(x)$ at 0. We can derive the terms $a$ and $b$ as follows:
+
+\begin{align*}
+a&=\lim_{x\to 0^{-}}\frac{\lvert x\rvert-0}{x-0}=\lim_{x\to 0^{-}}\frac{-x}{x}=-1\\
+b&=\lim_{x\to 0^{+}}\frac{\lvert x\rvert-0}{x-0}=\lim_{x\to 0^{+}}\frac{+x}{x}=+1
+\end{align*}
+thus, $c\in[-1,+1]$ and 
+\[
+\partial\lvert x \rvert=
+\begin{cases}
+-1,\quad &x<0\\
+[-1,+1],\quad &x=0\\
++1,\quad &x> 0
+\end{cases}
+\]
+\end{frame}
+\begin{frame}[allowframebreaks]
+To generalize these results to a $d$-dimensional vector space, such as $\lVert\theta\rVert_1$, we say that for a convex function $f:\R^d\to\R$, $z\in \R^d$ is a subgradient of $f$ at $\theta$, denoted by $z\in\partial f(\theta)$, if
+\[
+f(\theta+\Delta)-f(\theta)\geq \langle z,\Delta \rangle,\quad\forall\Delta\in\R^d.
+\] 
+When $f(\theta)=\lVert\theta\rVert_1$, $z\in\partial\lVert \theta\rVert_1$ iff as with the scalar example earlier
+\[
+z_j=sgn(\theta_j),\quad\text{and}\quad sgn(0)=[-1,+1].
+\]  
+\end{frame}
+\subsection{Primal Dual Witness}
+\begin{frame}[allowframebreaks]{Primal Dual Witness}
+For the Lagrangian Lasso program
+\begin{equation}\label{eq: lasso}
+\hat{\theta}=\arg\min_{\theta\in\R^d}\left\{\frac{1}{2n}\lVert y-X\theta\rVert_2^2+\lambda_n\lVert\theta\rVert_1\right\}.
+\end{equation}
+It is said that a pair $(\hat{\theta},\hat{z})$ is \textcolor{red}{primal-dual optimal}, if $\hat{\theta}$ is a minimizer and $\hat{z}\in\partial\lVert\hat{\theta}\rVert_1$.
+
+Note that (\ref{eq: lasso}) can be expressed as follows,
+\begin{align*}
+\hat{\theta}&=\arg\min_{\theta\in\R^d}\left\{\frac{1}{2n} (y-X\theta)'(y-X\theta)+\lambda_n\lVert\theta\rVert_1\right\}\\
+&=\arg\min_{\theta\in\R^d}\left\{\frac{1}{2n}\left[ y'y-\theta' X'y-y'X\theta+\theta'X'X\theta+\lambda_n\lVert\theta\rVert_1\right]\right\}
+\end{align*}
+which may alternatively be expressed as 
+\begin{align}
+\begin{split}
+\frac{1}{2n}\left[\frac{\partial}{\partial\hat{\theta}}\left\{y'y-\hat{\theta}' X'y-y'X\hat{\theta}+\hat{\theta}'X'X\hat{\theta}+\lambda_n\lVert\hat{\theta}\rVert_1\right\}\right]&=0\\
+\frac{1}{2n}\left[2X'X\hat{\theta}-2X'y+\lambda_n \hat{z}\right]&=0\\
+\frac{1}{n}X'\left(X\hat{\theta}-y\right)+\lambda_n\hat{z}&=0\label{eq: lassodiff}
+\end{split}
+\end{align}
+Thus, any pair $(\hat{\theta},\hat{z})$, must satisfy the last line of equation (\ref{eq: lassodiff}).
+\end{frame}
+\begin{frame}[allowframebreaks]
+The proof of Theorem 2.1 is based on a constructive approach, known as a \textcolor{red}{primal-dual witness}, which is as follows:
+\begin{itemize}
+\item[1.] Construct a pair $(\hat{\theta},\hat{z})$ that satisfies the zero-subgradient condition (\ref{eq: lassodiff}) and such that $\hat{\theta}$ has the correct signed-support.\justifying
+\item[2.] When this procedure is successful, the constructed pair is primal-dual optimal.\justifying
+\item[3.] The constructed pair now serves as a witness for the fact that the Lasso has a \textcolor{red}{unique optimal solution} with \textcolor{red}{correct signed-support}.\justifying 
+\end{itemize} 
+Formally, the procedure has been outlined as in the next frame in \citet{wainwright2019high}.
+\end{frame}
+
+\begin{frame}
+\begin{theorem}[Primal-dual witness (PDW) construction]
+\begin{itemize}
+\item[1.] Set $\hat{\theta}_{S^c}=0$\justifying
+\item[2.] Determine $(\hat{\theta}_S,\hat{z}_S)\in\R^s\times\R^s$ by solving the \textcolor{red}{oracle subproblem}\justifying
+\begin{equation}\label{eq: oraclesubproblem}
+\hat{\theta}_S\in \arg\min_{\theta_S\in\R^S}\left\{\underbrace{\frac{1}{2n}\lVert y-X_S \theta_S\rVert_2^2}_{=:f(\theta_S)}+\lambda_n\lVert\theta_S\rVert_1\right\},
+\end{equation}
+and then choosing $\hat{z}_S\in\partial\lVert\hat{\theta}_S\rVert_1$, such that $\nabla f(\theta_S)\Bigg\vert_{\theta_S=\hat{\theta}_S}+\lambda_n\hat{z}_S=0$.
+\item[3.] Solve for $\hat{z}_{S^c}\in\R^{d-s}$ via the zero-subgradient equation (\ref{eq: lassodiff}), and check whether or not the \textcolor{red}{strict dual feasibility condition} $\lVert\hat{z}_{S^c}\rVert_\infty<1$ holds.\justifying
+\end{itemize}
+\end{theorem}
+\end{frame}
+\begin{frame}[allowframebreaks]{PDW intuition}
+\begin{itemize}
+\item The vector $\hat{\theta}_{S^c}\in\R^{d-s}$ is determined in the first step.
+\item The remaining sub-vectors $\hat{\theta}_S,\hat{z}_S$ and $\hat{z}_{S^c}$ are determined in the second and third steps of the method.\justifying 
+\item By construction the latter three sub-vectors satisfy the zero-subgradient condition (\ref{eq: lassodiff}).\justifying
+\item Using the fact that $\hat{\theta}_{S^c}=\theta_{S^c}=0$, and writing out the zero-subgradient condition in a block matrix form, we obtain\justifying
+\begin{equation}\label{eq: lassodiff2}
+\frac{1}{n}
+\begin{bmatrix}
+X_S'X_S& X_S'X_{S^c}\\
+X_{S^c}'X_S &X_{S^c}'X_{S^c}
+\end{bmatrix}
+\begin{bmatrix}
+\hat{\theta}_S-\theta_S^*\\
+0
+\end{bmatrix}
+-\frac{1}{n} 
+\begin{bmatrix}
+X_S'\varepsilon\\
+X_{S^c}'\varepsilon
+\end{bmatrix}
++
+\lambda_n
+\begin{bmatrix}
+\hat{z}_S\\
+\hat{z}_{S^c}
+\end{bmatrix}
+=
+\begin{bmatrix}
+0\\
+0
+\end{bmatrix}
+\end{equation}
+\item It is said that the PDW construction succeeds if $\hat{z}_{S^c}$ satisfies the strict dual feasibility condition.\justifying 
+\end{itemize}
+Note that (\ref{eq: lassodiff2}) is the consequence of the following manipulation of (\ref{eq: lassodiff}):
+\begin{align*}
+\frac{1}{n}X'\left(X\hat{\theta}-y\right)+\lambda_n\hat{z}&=0\\
+\frac{1}{n}X'\left(X\hat{\theta}-\underbrace{X\theta^*+\varepsilon}_{=y}\right)+\lambda_n\hat{z}&=0\\
+\frac{1}{n}X'X\left(\hat{\theta}-\theta^*\right)+\frac{1}{n}X'\varepsilon+\lambda_n\hat{z}&=0
+\end{align*}
+\end{frame}
+\begin{frame}
+The following Lemma copied from \citet{wainwright2019high} shows that the success of PDW acts as a witness for the Lasso.
+\begin{lemma}
+If the lower eigenvalue condition
+\[
+\gamma_{\min}\left(\frac{X_S'X_S}{n}\right)\geq c_{\min}>0
+\]
+holds, then the success of the PDW construction implies that the vector $(\hat{\theta}_S,0)\in\R^d$ is the \textcolor{red}{unique optimal solution of the Lasso}.
+\end{lemma}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Proof}
+\begin{itemize}
+\item When PDW succeeds, $\hat{\theta}=(\hat{\theta}_S,0)$ is optimal solution with associated with subgradient vector $\hat{z}\in\R^d$, satisfying $\lVert\hat{z}_{S^c}\rVert_{\infty}<1$, and $\langle\hat{z},\hat{\theta} \rangle=\lVert\hat{\theta}\rVert_1$.\justifying
+\item Now suppose there exists another optimal solution $\tilde{\theta}$.\justifying
+\item Introduce the shorthand notation $F(\theta)=\frac{1}{2n}\lVert y-X\theta\rVert_2^2$. \justifying
+\item We are then guaranteed that\justifying 
+\[
+F(\hat{\theta})+\lambda_n\langle\hat{z},\hat{\theta} \rangle=F(\tilde{\theta})+\lambda_n\lVert\tilde{\theta}\rVert_1
+\]
+\item subtracting $\lambda_n\langle \hat{z}, \tilde{\theta}\rangle$ from both sides, we then obtain\justifying
+\[
+F(\hat{\theta})-\lambda_n\langle\hat{z},\tilde{\theta}-\hat{\theta} \rangle=F(\tilde{\theta})+\lambda_n\left(\lVert\tilde{\theta}\rVert_1-\langle\hat{z},\tilde{\theta}\rangle\right).
+\]
+\item But by the zero-subgradient condition (\ref{eq: lassodiff}), we know that $\nabla F(\hat{\theta})=-\lambda_n\hat{z}$, implying\justifying
+\[
+F(\hat{\theta})+\langle\nabla F(\hat{\theta}),\tilde{\theta}-\hat{\theta} \rangle-F(\tilde{\theta})=\lambda_n\left(\lVert\tilde{\theta}\rVert_1-\langle\hat{z},\tilde{\theta}\rangle\right).
+\]
+\item By convexity of $F$, the left hand side is negative, implying that $\lVert\tilde{\theta}\rVert_1\leq\langle\hat{z},\tilde{\theta}\rangle$.\justifying
+\item From Holder's inequality, we know that $\langle\hat{z},\tilde{\theta} \rangle\leq\lVert\hat{z}\rVert_{\infty}\lVert\tilde{\theta}\rVert_1$, thus we must have $\lVert\tilde{\theta}\rVert_1=\langle\hat{z},\tilde{\theta}\rangle$.\justifying
+\item However, since $\lVert\hat{z}_{S^c}\rVert_{\infty}<1$, this equality can only occur if $\tilde{\theta}_j=0$, for all $j\in S^c$.\justifying
+\item Hence, all optimal solutions are supported only on $S$, and can be obtained by solving the oracle sub-problem (\ref{eq: oraclesubproblem}).\justifying
+\item Given the lower eigenvalue condition, this sub-problem is strictly convex, and so has a unique minimizer.\justifying
+\item Therefore, to prove Theroem 7.21 (a) and (b), it is sufficient to show that $\hat{z}_{S^c}\in\R^{d-s}$ in the third step satisfies the strict dual feasibility condition.\justifying
+\item The latter can be solved using the zero-subgradient conditions (\ref{eq: lassodiff2}), - i.e.,\justifying
+\begin{align*}
+\frac{1}{n}X_{S^c}'X_S(\hat{\theta}_S-\theta_S^*)-\frac{1}{n}X_{S^c}'\varepsilon+\lambda_n\hat{z}_{S^c}=0\\
+\lambda_n\hat{z}_{S^c}=\frac{1}{n}X_{S^c}'\varepsilon-\frac{1}{n}X_{S^c}'X_S(\hat{\theta}_S-\theta_S^*)\\
+\hat{z}_{S^c}=X_{S^c}'\left(\frac{\varepsilon}{\lambda_nn}\right)-\frac{1}{\lambda_nn}X_{S^c}'X_S(\hat{\theta}_S-\theta_S^*)
+\end{align*}
+\item Similarly, using the invertibility of $X_S'X_S$, we solve for $\hat{\theta}_S-\theta_{S}^*$ as follows\justifying
+\begin{align*}
+\frac{1}{n}X_S'X_S(\hat{\theta}_S-\theta_S^*)-\frac{1}{n}X_S'\varepsilon+\lambda_n\hat{z}_S=0\\
+\frac{1}{n}X_S'X_S(\hat{\theta}_S-\theta_S^*)=\frac{1}{n}X_S'\varepsilon-\lambda_n\hat{z}_S\\
+\hat{\theta}_S-\theta_S^*=(X_S'X_S)^{-1}X_S'\varepsilon-n\lambda_n(X_S'X_S)^{-1}\hat{z}_S
+\end{align*}
+\item Combining these two, we obtain\justifying
+\begin{align*}
+\hat{z}_{S^c}&=X_{S^c}'\left(\frac{\varepsilon}{\lambda_nn}\right)-\frac{1}{\lambda_nn}X_{S^c}'X_S(\hat{\theta}_S-\theta_S^*)\\
+\hat{z}_{S^c}&=X_{S^c}'\left(\frac{\varepsilon}{\lambda_nn}\right)-\frac{1}{\lambda_nn}X_{S^c}'X_S(X_S'X_S)^{-1}X_S'\varepsilon+X_{S^c}'X_S(X_S'X_S)^{-1}\hat{z}_S\\
+\hat{z}_{S^c}&=\underbrace{X_{S^c}\left[I-X_S(X_S'X_S)^{-1}X_S'\right]\left(\frac{\varepsilon}{n\lambda_n}\right)}_{V_{S^c}}+\underbrace{X_{S^c}'X_S(X_S'X_S)^{-1}\hat{z}_S}_{\mu}
+\end{align*} 
+\item By triangle inequality, we have\justifying
+\[
+\lVert \hat{z}_{S^c}\rVert\leq \lVert V_{S^c}\rVert_{\infty}+\lVert \mu\rVert_{\infty}.
+\]
+\item By the mutual incoherence condition, - i.e.,\justifying
+\[
+\max_{j\in S^c}\lVert (X_S'X_S)^{-1}X_S'X_j\rVert_1\leq \alpha,\quad \alpha\in[0,1),
+\]
+we have $\lVert\mu\rVert_{\infty}\leq \alpha$. Furthermore, by the choice of the regularization parameter, - i.e.,
+\[
+\lambda_n\geq\frac{2}{1-\alpha}\Bigg\lVert X_{S^c}'\Pi_{S^{\perp}}(X)\frac{\varepsilon}{n}\Bigg\rVert_{\infty}
+\]
+where 
+\[
+\Pi_{S^{\perp}}(X)=I_n-X_S(X_S'X_S)^{-1}X_S'
+\] 
+is an orthogonal projection matrix, we have $\lVert V_{S^c}\rVert_{\infty}\leq \frac{1}{2}(1-\alpha)$. Putting together the pieces, it can be concluded that $\lVert\hat{z}_{S^c}\rVert_{\infty}\leq \frac{1}{2}(1+\alpha)<1$, which establishes the strict dual feasibility condition.
+
+\item Finally, it remains to establish a bound on the $\ell_{\infty}$-norm of the error $\hat{\theta}_S-\theta_S^*$. Using triangle inequality, we have\justifying
+\[
+\lVert\hat{\theta}_S-\theta_{S}^*\rVert_{\infty}\leq \Bigg\lVert \left(\frac{X_S'X_s}{n}\right)X_S'\frac{\varepsilon}{n}\Bigg\rVert_{\infty}+\vertiii{\left(\frac{X_S'X_S}{n}\right)^{-1}}_{\infty}\lambda_n
+\] 
+hence, completing the proof.
+\end{itemize}
+\end{frame}
+
+
+\section{Proof of Corollary 7.22}
+
+\begin{frame}
+\begin{corollary}
+Consider the $S$-sparse linear model, with noise vector $\varepsilon$ with zero-mean i.i.d. entries that is sub-Gaussian with the sub-Gaussianity parameter $\sigma$. Furthermore, suppose that the deterministic design matrix $X$ satisfies the lower eigenvalue and mutual incoherence assumptions, as well as the $C$-column normalization condition ($max_{j=1,\cdots,d}\lVert X_j\rVert_2/\sqrt{n}\leq C$). Suppose, we solve the Lagrangian Lasso with regularization parameter\justifying 
+\begin{equation}\label{eq: lambdacorol}
+\lambda_n=\frac{2C\sigma}{1-\alpha}\left\{\sqrt{\frac{2\log (d-s)}{n}}+\delta\right\}
+\end{equation}
+
+for $\delta>0$. Then the optimal solution is unique, with $\text{supp}(\hat{\theta})\subseteq\text{supp}(\theta^*)$, and satisfied the $\ell_{\infty}$ bound
+\begin{align*}
+P\left[\lVert\hat{\theta}_S-\theta_S^*\rVert_{\infty}\leq \frac{\sigma}{\sqrt{c_{\min}}}\left\{\sqrt{\frac{2\log s}{n}}+\delta\right\}+\vertiii{\left(\frac{X_S'X_S}{n}\right)^{-1}}_{\infty}\lambda_n\right]\\\geq 1-4\exp\left(-\frac{n\delta^2}{2}\right).
+\end{align*}
+\end{corollary}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Proof}
+\begin{itemize}
+\item First we must show that the choice of the regularization parameter $\lambda_n$ (\ref{eq: lambdacorol}) satisfies the bound (\ref{eq: lambdathm}) with high probability.\justifying
+\item This can be accomplished by bounding the maximum absolute value of the random variables,\justifying
+\[
+Z_j:=X_j'\Pi_{S^{\perp}}(X)\left(\frac{\varepsilon}{n}\right),\quad \text{for }j\in S^c.
+\]
+\item Since $\Pi_{S^{\perp}}(X)$ is an orthogonal projection matrix, we have\justifying
+\[
+\lVert\Pi_{S^{\perp}}(X)X_j\rVert_2\leq \lVert X_j\rVert_2\overset{(i)}{\leq} C\sqrt{n}
+\]
+where $(i)$ follows the column normalization assumption. 
+\item Hence, each variable $Z_j$ is sub-Gaussian with parameter at most $C^2\sigma^2/n$.\justifying 
+\item From the sub-Gaussian tail bounds, we have\justifying
+\[
+P\left[\max_{j\in S^{c}}\lvert Z_j\rvert\geq t\right]\leq 2(d-s)\exp\left(-\frac{-nt^2}{2C^2\sigma^2}\right)
+\]
+from which it is evident that the choice $\lambda_n$ in (\ref{eq: lambdacorol}) ensures that (\ref{eq: lambdathm}) holds with claimed probability.\justifying
+\item It now remains to bound the $\ell_{\infty}$-bound (\ref{eq: linfty}).\justifying
+\item As the second term is deterministic, the problem consists of bounding the first term.\justifying 
+\item For $i=1,\cdots,s$ consider the random variable\justifying 
+\[
+\tilde{Z}_j:=e_i'\left(\frac{1}{n}X_S'X_S\right)^{-1}X_s \varepsilon/n.
+\], 
+Since the elements of $\varepsilon$ are i.i.d. $\sigma$-sub-Gaussian, $Z_i$ is also zero-mean and sub-Gaussian with parameter at most\justifying
+\[
+\frac{\sigma^2}{n}\vertiii{\left(\frac{1}{n}X_S'X_S\right)^{-1}}_2\leq \frac{\sigma^2}{c_{\min}n}, 
+\] 
+where the lower eigenvalue condition has been used. Consequently, for any $\delta>0$, we have\justifying
+\[
+P\left[\max_{i=1,\cdots,s}\lvert\tilde{Z}_i\rvert>\frac{\sigma}{\sqrt{c_{\min}}}\left\{\sqrt{\frac{2\log s}{n}}+\delta\right\}\right]\leq2\exp\left(-\frac{n\delta^2}{2}\right).
+\]
+\end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+\frametitle{References}
+\bibliographystyle{apa}
+\bibliography{References_HDStat}
+\end{frame}
+
+\end{document}
+
